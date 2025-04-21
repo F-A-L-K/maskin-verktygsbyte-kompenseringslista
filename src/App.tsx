@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -29,7 +28,8 @@ const App = () => {
             
             <div className="flex-1 ml-64 p-8">
               <Routes>
-                <Route path="/" element={<ToolChangePage activeMachine={activeMachine} />} />
+                <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
+                <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
