@@ -32,6 +32,12 @@ export default {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
 				},
+                machine: {
+                    DEFAULT: 'hsl(var(--machine))',
+                    active: 'hsl(var(--machine-active))',
+                    hover: 'hsl(var(--machine-hover))',
+                    foreground: 'hsl(var(--machine-foreground))'
+                },
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
