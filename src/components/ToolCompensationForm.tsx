@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Dialog,
@@ -28,6 +27,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
+import { NumericKeypad } from "./NumericKeypad";
+import { useNumericInput } from "@/hooks/useNumericInput";
 
 const formSchema = z.object({
   coordinateSystem: z.string().optional(),
@@ -72,6 +73,20 @@ export default function ToolCompensationForm({
       signature: undefined,
     },
   });
+
+  const {
+    value: numericValue,
+    setValue: setNumericValue,
+    showKeypad,
+    keypadPosition,
+    handleFocus,
+    handleInput,
+    closeKeypad,
+  } = useNumericInput(form.getValues("value"));
+
+  React.useEffect(() => {
+    form.setValue("value", numericValue);
+  }, [numericValue, form]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newCompensation: ToolCompensation = {
@@ -177,7 +192,13 @@ export default function ToolCompensationForm({
                   <FormItem>
                     <FormLabel>Kompenseringsvärde</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ange värde (t.ex. +0.15)" />
+                      <Input
+                        {...field}
+                        value={numericValue}
+                        onChange={(e) => setNumericValue(e.target.value)}
+                        onFocus={handleFocus}
+                        placeholder="Ange värde (t.ex. +0.15)"
+                      />
                     </FormControl>
                   </FormItem>
                 )}
@@ -237,6 +258,14 @@ export default function ToolCompensationForm({
             </DialogFooter>
           </form>
         </Form>
+
+        {showKeypad && (
+          <NumericKeypad
+            onInput={handleInput}
+            onClose={closeKeypad}
+            position={keypadPosition}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
