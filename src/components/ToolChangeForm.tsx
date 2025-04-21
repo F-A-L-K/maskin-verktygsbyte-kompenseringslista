@@ -83,7 +83,10 @@ export default function ToolChangeForm({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      onOpenChange(isOpen);
+      if (!isOpen) setShowKeypad(false);
+    }}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Nytt verktygsbyte - Maskin {machineId}</DialogTitle>
@@ -188,7 +191,10 @@ export default function ToolChangeForm({
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => onOpenChange(false)}
+                onClick={() => {
+                  onOpenChange(false);
+                  setShowKeypad(false);
+                }}
               >
                 Avbryt
               </Button>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Table,
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ToolChange } from "@/types";
-import { formatDistanceToNow } from "date-fns";
+import { format } from "date-fns";
 
 interface ToolChangeListProps {
   toolChanges: ToolChange[];
@@ -36,7 +35,6 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
     );
   });
   
-  // Sort by most recent first
   const sortedChanges = [...filteredChanges].sort(
     (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
   );
@@ -91,9 +89,7 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
                   <TableCell>{change.comment || "-"}</TableCell>
                   <TableCell>{change.signature}</TableCell>
                   <TableCell>
-                    {formatDistanceToNow(change.timestamp, {
-                      addSuffix: true
-                    })}
+                    {format(change.timestamp, "yyyy-MM-dd HH:mm:ss")}
                   </TableCell>
                 </TableRow>
               ))
