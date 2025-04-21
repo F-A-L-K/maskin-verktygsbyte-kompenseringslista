@@ -125,21 +125,7 @@ export default function ToolChangeForm({
               )}
             />
             
-            <FormField
-              control={form.control}
-              name="comment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Kommentar</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      {...field} 
-                      placeholder="Skriv en kommentar (valfritt)" 
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            
             
             <FormField
               control={form.control}
@@ -162,6 +148,21 @@ export default function ToolChangeForm({
                       <SelectItem value="Per">Per</SelectItem>
                     </SelectContent>
                   </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Kommentar</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      {...field} 
+                      placeholder="Skriv en kommentar (valfritt)" 
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
