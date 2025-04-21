@@ -27,7 +27,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Keypad from "./Keypad";
 import { MachineId, ToolChange } from "@/types";
 
 const formSchema = z.object({
@@ -54,8 +53,6 @@ export default function ToolChangeForm({
   onSubmit,
   machineId
 }: ToolChangeFormProps) {
-  const [showKeypad, setShowKeypad] = useState(false);
-  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -83,10 +80,7 @@ export default function ToolChangeForm({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => {
-      onOpenChange(isOpen);
-      if (!isOpen) setShowKeypad(false);
-    }}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Nytt verktygsbyte - Maskin {machineId}</DialogTitle>
@@ -101,22 +95,7 @@ export default function ToolChangeForm({
                 <FormItem>
                   <FormLabel>Verktygsnummer</FormLabel>
                   <FormControl>
-                    <div className="space-y-2">
-                      <Input 
-                        {...field} 
-                        readOnly 
-                        onFocus={() => setShowKeypad(true)}
-                        placeholder="Klicka för att ange nummer" 
-                      />
-                      
-                      {showKeypad && (
-                        <Keypad 
-                          value={field.value} 
-                          onChange={field.onChange}
-                          maxLength={6}
-                        />
-                      )}
-                    </div>
+                    <Input {...field} placeholder="Ange verktygsnummer" />
                   </FormControl>
                 </FormItem>
               )}
@@ -191,10 +170,7 @@ export default function ToolChangeForm({
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => {
-                  onOpenChange(false);
-                  setShowKeypad(false);
-                }}
+                onClick={() => onOpenChange(false)}
               >
                 Avbryt
               </Button>

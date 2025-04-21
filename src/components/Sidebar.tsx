@@ -1,15 +1,6 @@
 
-import { Link, useLocation } from "react-router-dom";
-import { MachineId } from "@/types";
 import { cn } from "@/lib/utils";
-import { Wrench, Ruler } from "lucide-react";
-import { 
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { MachineId } from "@/types";
 
 interface SidebarProps {
   activeMachine: MachineId;
@@ -17,7 +8,6 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProps) {
-  const location = useLocation();
   const machines: MachineId[] = ["5701", "5702", "5703", "5704"];
 
   return (
@@ -44,40 +34,6 @@ export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProp
             </button>
           ))}
         </div>
-      </div>
-      
-      <div className="p-4 border-t border-sidebar-border mt-4">
-        <h2 className="text-sm font-semibold text-sidebar-foreground mb-2 opacity-70">NAVIGATION</h2>
-        <NavigationMenu orientation="vertical" className="max-w-none">
-          <NavigationMenuList className="flex-col space-y-1">
-            <NavigationMenuItem className="w-full">
-              <Link
-                to="/"
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  "w-full justify-start gap-3",
-                  location.pathname === "/" && "bg-sidebar-accent text-sidebar-accent-foreground"
-                )}
-              >
-                <Wrench size={18} />
-                <span>Verktygsbyte</span>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem className="w-full">
-              <Link
-                to="/compensation"
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  "w-full justify-start gap-3",
-                  location.pathname === "/compensation" && "bg-sidebar-accent text-sidebar-accent-foreground"
-                )}
-              >
-                <Ruler size={18} />
-                <span>Verktygskompensering</span>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
       </div>
     </div>
   );
