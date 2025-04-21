@@ -23,6 +23,9 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Verktygsbyte - {activeMachine}</h1>
+          <p className="text-muted-foreground">
+            Hantera verktygsbyten för maskin {activeMachine}
+          </p>
         </div>
         <Button 
           onClick={() => setShowDialog(true)}
