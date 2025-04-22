@@ -5,7 +5,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { 
@@ -28,8 +27,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
-import { FixedNumericKeypad } from "./FixedNumericKeypad";
-import { useNumericInput } from "@/hooks/useNumericInput";
 
 const formSchema = z.object({
   coordinateSystem: z.string().optional(),
@@ -75,16 +72,6 @@ export default function ToolCompensationForm({
     },
   });
 
-  const {
-    value: numericValue,
-    setValue: setNumericValue,
-    handleInput,
-  } = useNumericInput(form.getValues("value"));
-
-  React.useEffect(() => {
-    form.setValue("value", numericValue);
-  }, [numericValue, form]);
-
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newCompensation: ToolCompensation = {
       id: crypto.randomUUID(),
@@ -112,7 +99,7 @@ export default function ToolCompensationForm({
         </DialogHeader>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 pb-32">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
@@ -191,8 +178,6 @@ export default function ToolCompensationForm({
                     <FormControl>
                       <Input
                         {...field}
-                        value={numericValue}
-                        
                         placeholder="Ange värde (t.ex. +0.15)"
                       />
                     </FormControl>
@@ -254,7 +239,6 @@ export default function ToolCompensationForm({
             </DialogFooter>
           </form>
         </Form>
-        <FixedNumericKeypad onInput={handleInput} />
       </DialogContent>
     </Dialog>
   );

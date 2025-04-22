@@ -10,11 +10,14 @@ import ToolChangePage from "./pages/ToolChange";
 import ToolCompensationPage from "./pages/ToolCompensation";
 import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
+import { FixedNumericKeypad } from "./components/FixedNumericKeypad";
+import { useNumericInput } from "./hooks/useNumericInput";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [activeMachine, setActiveMachine] = useState<MachineId>("5701");
+  const { handleInput } = useNumericInput();
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -35,6 +38,7 @@ const App = () => {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
+            <FixedNumericKeypad onInput={handleInput} />
           </div>
         </BrowserRouter>
       </TooltipProvider>
