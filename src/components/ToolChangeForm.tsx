@@ -28,8 +28,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
+import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 
 const formSchema = z.object({
+  manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
   reason: z.enum(["Slitage", "Verktygsbrott"], {
     required_error: "Välj en anledning",
@@ -60,9 +62,12 @@ export default function ToolChangeForm({
   onSubmit,
   machineId
 }: ToolChangeFormProps) {
+  const { getLastOrder } = useLastManufacturingOrder();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      manufacturingOrder: getLastOrder(machineId) || "",
       toolNumber: "",
       reason: undefined,
       comment: "",
@@ -74,6 +79,7 @@ export default function ToolChangeForm({
     const newToolChange: ToolChange = {
       id: crypto.randomUUID(),
       machineId,
+      manufacturingOrder: values.manufacturingOrder,
       toolNumber: values.toolNumber,
       reason: values.reason,
       comment: values.comment || "",
@@ -82,7 +88,10 @@ export default function ToolChangeForm({
     };
     
     onSubmit(newToolChange);
-    form.reset();
+    form.reset({
+      ...form.formState.defaultValues,
+      manufacturingOrder: values.manufacturingOrder,
+    });
     onOpenChange(false);
   };
 
@@ -95,6 +104,19 @@ export default function ToolChangeForm({
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="manufacturingOrder"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tillverkningsorder</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Ange tillverkningsorder" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="toolNumber"
@@ -131,8 +153,6 @@ export default function ToolChangeForm({
                 </FormItem>
               )}
             />
-            
-            
             
             <FormField
               control={form.control}

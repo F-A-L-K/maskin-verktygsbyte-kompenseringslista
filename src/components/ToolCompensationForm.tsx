@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Dialog,
@@ -27,8 +28,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
+import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 
 const formSchema = z.object({
+  manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
   coordinateSystem: z.string().optional(),
   tool: z.string().optional(),
   number: z.string().optional(),
@@ -66,9 +69,12 @@ export default function ToolCompensationForm({
   onSubmit,
   machineId
 }: ToolCompensationFormProps) {
+  const { getLastOrder } = useLastManufacturingOrder();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      manufacturingOrder: getLastOrder(machineId) || "",
       coordinateSystem: "",
       tool: "",
       number: "",
@@ -83,6 +89,7 @@ export default function ToolCompensationForm({
     const newCompensation: ToolCompensation = {
       id: crypto.randomUUID(),
       machineId,
+      manufacturingOrder: values.manufacturingOrder,
       coordinateSystem: values.coordinateSystem || undefined,
       tool: values.tool || undefined,
       number: values.number || undefined,
@@ -94,7 +101,10 @@ export default function ToolCompensationForm({
     };
     
     onSubmit(newCompensation);
-    form.reset();
+    form.reset({
+      ...form.formState.defaultValues,
+      manufacturingOrder: values.manufacturingOrder,
+    });
     onOpenChange(false);
   };
 
@@ -107,6 +117,19 @@ export default function ToolCompensationForm({
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="manufacturingOrder"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tillverkningsorder</FormLabel>
+                  <FormControl>
+                    <Input {...field} placeholder="Ange tillverkningsorder" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
