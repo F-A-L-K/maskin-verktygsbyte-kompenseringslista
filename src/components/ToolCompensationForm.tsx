@@ -197,7 +197,7 @@ export default function ToolCompensationForm({
                       <Input
                         {...field}
                         value={numericValue}
-                        onChange={(e) => setNumericValue(e.target.value)}
+                        
                         onFocus={handleFocus}
                         placeholder="Ange värde (t.ex. +0.15)"
                       />
