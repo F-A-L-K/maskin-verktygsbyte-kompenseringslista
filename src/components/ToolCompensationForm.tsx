@@ -39,7 +39,14 @@ const formSchema = z.object({
     .regex(/^[+-]?\d*\.?\d+$/, "Måste vara ett nummer med eventuellt +/- tecken")
     .min(1, "Kompenseringsvärde är obligatoriskt"),
   comment: z.string().optional(),
-  signature: z.enum(["Fredrik", "Joel", "Per"], {
+  signature: z.enum(["Joel HS",
+"Antal G",
+"Christian P",
+"Tony C",
+"Roger J",
+"Fredrik F",
+"Sejad P",
+"Vu T",], {
     required_error: "Välj en signatur",
   }),
 }).refine(data => data.coordinateSystem || data.tool || data.number, {
@@ -199,9 +206,14 @@ export default function ToolCompensationForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Fredrik">Fredrik</SelectItem>
-                      <SelectItem value="Joel">Joel</SelectItem>
-                      <SelectItem value="Per">Per</SelectItem>
+                       <SelectItem value="Joel HS">Joel HS</SelectItem>
+                      <SelectItem value="Antal G">Antal G</SelectItem>
+                      <SelectItem value="Christian P">Christian P</SelectItem>
+                      <SelectItem value="Tony C">Tony C</SelectItem>
+                      <SelectItem value="Roger J">Roger J</SelectItem>
+                      <SelectItem value="Fredrik F">Fredrik F</SelectItem>
+                      <SelectItem value="Sejad P">Sejad P</SelectItem>
+                      <SelectItem value="Vu T">Vu T</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
