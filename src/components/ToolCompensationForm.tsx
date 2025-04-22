@@ -1,3 +1,4 @@
+
 import React from "react";
 import { 
   Dialog,
@@ -27,6 +28,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
+import { useNumericInput } from "@/hooks/useNumericInput";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   coordinateSystem: z.string().optional(),
@@ -59,6 +62,8 @@ export default function ToolCompensationForm({
   onSubmit,
   machineId
 }: ToolCompensationFormProps) {
+  const { value: numericInputValue, clearValue: clearNumericInput } = useNumericInput();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,6 +76,13 @@ export default function ToolCompensationForm({
       signature: undefined,
     },
   });
+
+  useEffect(() => {
+    // Sync global numeric input with form's value field
+    if (form.getValues('direction')) {
+      form.setValue('value', numericInputValue);
+    }
+  }, [numericInputValue, form]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newCompensation: ToolCompensation = {
@@ -88,6 +100,7 @@ export default function ToolCompensationForm({
     
     onSubmit(newCompensation);
     form.reset();
+    clearNumericInput();
     onOpenChange(false);
   };
 
@@ -178,6 +191,8 @@ export default function ToolCompensationForm({
                     <FormControl>
                       <Input
                         {...field}
+                        value={numericInputValue}
+                        readOnly
                         placeholder="Ange värde (t.ex. +0.15)"
                       />
                     </FormControl>

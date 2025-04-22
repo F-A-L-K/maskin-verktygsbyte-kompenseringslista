@@ -2,21 +2,20 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Plus, Minus, Delete } from "lucide-react";
+import { useNumericInput } from "@/hooks/useNumericInput";
 
-interface FixedNumericKeypadProps {
-  onInput: (value: string) => void;
-}
+export const FixedNumericKeypad = () => {
+  const { handleInput } = useNumericInput();
 
-export const FixedNumericKeypad = ({ onInput }: FixedNumericKeypadProps) => {
   return (
-    <div className="fixed bottom-4 right-4 bg-background border rounded-lg shadow-lg p-4 w-[320px]">
+    <div className="fixed bottom-4 right-4 bg-background border rounded-lg shadow-lg p-4 w-[320px] z-50">
       <div className="grid grid-cols-3 gap-2">
         {[7, 8, 9, 4, 5, 6, 1, 2, 3].map((num) => (
           <Button
             key={num}
             variant="outline"
             className="h-14 text-lg font-medium hover:bg-primary hover:text-primary-foreground"
-            onClick={() => onInput(num.toString())}
+            onClick={() => handleInput(num.toString())}
           >
             {num}
           </Button>
@@ -24,28 +23,28 @@ export const FixedNumericKeypad = ({ onInput }: FixedNumericKeypadProps) => {
         <Button
           variant="outline"
           className="h-14 text-lg font-medium hover:bg-primary hover:text-primary-foreground"
-          onClick={() => onInput("-")}
+          onClick={() => handleInput("-")}
         >
           <Minus className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
           className="h-14 text-lg font-medium hover:bg-primary hover:text-primary-foreground"
-          onClick={() => onInput("0")}
+          onClick={() => handleInput("0")}
         >
           0
         </Button>
         <Button
           variant="outline"
           className="h-14 text-lg font-medium hover:bg-primary hover:text-primary-foreground"
-          onClick={() => onInput("+")}
+          onClick={() => handleInput("+")}
         >
           <Plus className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
           className="h-14 col-span-3 text-lg font-medium hover:bg-destructive hover:text-destructive-foreground"
-          onClick={() => onInput("backspace")}
+          onClick={() => handleInput("backspace")}
         >
           <Delete className="h-4 w-4" />
         </Button>

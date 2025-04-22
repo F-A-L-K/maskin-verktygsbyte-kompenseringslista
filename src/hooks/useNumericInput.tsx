@@ -1,8 +1,17 @@
 
-import { useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback, useContext } from 'react';
 
-export const useNumericInput = (initialValue: string = '') => {
-  const [value, setValue] = useState(initialValue);
+interface NumericInputContextType {
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  handleInput: (input: string) => void;
+  clearValue: () => void;
+}
+
+const NumericInputContext = createContext<NumericInputContextType | undefined>(undefined);
+
+export const NumericInputProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [value, setValue] = useState('');
 
   const handleInput = useCallback((input: string) => {
     if (input === 'backspace') {
@@ -25,9 +34,21 @@ export const useNumericInput = (initialValue: string = '') => {
     });
   }, []);
 
-  return {
-    value,
-    setValue,
-    handleInput,
-  };
+  const clearValue = useCallback(() => {
+    setValue('');
+  }, []);
+
+  return (
+    <NumericInputContext.Provider value={{ value, setValue, handleInput, clearValue }}>
+      {children}
+    </NumericInputContext.Provider>
+  );
+};
+
+export const useNumericInput = () => {
+  const context = useContext(NumericInputContext);
+  if (!context) {
+    throw new Error('useNumericInput must be used within a NumericInputProvider');
+  }
+  return context;
 };

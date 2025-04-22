@@ -11,38 +11,39 @@ import ToolCompensationPage from "./pages/ToolCompensation";
 import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { FixedNumericKeypad } from "./components/FixedNumericKeypad";
-import { useNumericInput } from "./hooks/useNumericInput";
+import { NumericInputProvider } from "./hooks/useNumericInput";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [activeMachine, setActiveMachine] = useState<MachineId>("5701");
-  const { handleInput } = useNumericInput();
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="flex min-h-screen">
-            <Sidebar 
-              activeMachine={activeMachine} 
-              setActiveMachine={setActiveMachine} 
-            />
-            
-            <div className="flex-1 ml-64 p-8">
-              <Routes>
-                <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
-                <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+    <NumericInputProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <div className="flex min-h-screen">
+              <Sidebar 
+                activeMachine={activeMachine} 
+                setActiveMachine={setActiveMachine} 
+              />
+              
+              <div className="flex-1 ml-64 p-8">
+                <Routes>
+                  <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
+                  <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+              <FixedNumericKeypad />
             </div>
-            <FixedNumericKeypad onInput={handleInput} />
-          </div>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </NumericInputProvider>
   );
 };
 
