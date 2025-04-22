@@ -126,7 +126,7 @@ export default function ToolCompensationForm({
                   <FormItem>
                     <FormLabel>Koordinatsystem</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Ange koordinatsystem" />
+                      <Input {...field} placeholder="Ange koord. sys." />
                     </FormControl>
                   </FormItem>
                 )}
