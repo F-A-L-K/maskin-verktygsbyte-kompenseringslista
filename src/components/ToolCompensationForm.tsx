@@ -1,11 +1,13 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { 
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerFooter
-} from "@/components/ui/drawer";
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { 
   Select,
@@ -27,7 +29,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { NumericKeypad } from "./NumericKeypad";
+import { useNumericInput } from "@/hooks/useNumericInput";
 
 const formSchema = z.object({
   coordinateSystem: z.string().optional(),
@@ -73,6 +76,20 @@ export default function ToolCompensationForm({
     },
   });
 
+  const {
+    value: numericValue,
+    setValue: setNumericValue,
+    showKeypad,
+    keypadPosition,
+    handleFocus,
+    handleInput,
+    closeKeypad,
+  } = useNumericInput(form.getValues("value"));
+
+  React.useEffect(() => {
+    form.setValue("value", numericValue);
+  }, [numericValue, form]);
+
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newCompensation: ToolCompensation = {
       id: crypto.randomUUID(),
@@ -93,83 +110,56 @@ export default function ToolCompensationForm({
   };
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="px-4">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Ny verktygskompensering - Maskin {machineId}</DrawerTitle>
-        </DrawerHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Ny verktygskompensering - Maskin {machineId}</DialogTitle>
+        </DialogHeader>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-            <Tabs defaultValue="coordinateSystem" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="coordinateSystem">Koordinatsystem</TabsTrigger>
-                <TabsTrigger value="tool">Verktyg</TabsTrigger>
-                <TabsTrigger value="number">Nummer</TabsTrigger>
-              </TabsList>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={form.control}
+                name="coordinateSystem"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Koordinatsystem</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Ange koordinatsystem" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               
-              <TabsContent value="coordinateSystem" className="mt-4">
-                <FormField
-                  control={form.control}
-                  name="coordinateSystem"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Koordinatsystem</FormLabel>
-                      <FormControl>
-                        <Input 
-                          {...field} 
-                          placeholder="Ange koordinatsystem" 
-                          inputMode="numeric" 
-                          pattern="[0-9]*"
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
+              <FormField
+                control={form.control}
+                name="tool"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verktyg</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Ange verktyg" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
               
-              <TabsContent value="tool" className="mt-4">
-                <FormField
-                  control={form.control}
-                  name="tool"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Verktyg</FormLabel>
-                      <FormControl>
-                        <Input 
-                          {...field} 
-                          placeholder="Ange verktyg" 
-                          inputMode="numeric" 
-                          pattern="[0-9]*"
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
-              
-              <TabsContent value="number" className="mt-4">
-                <FormField
-                  control={form.control}
-                  name="number"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nummer</FormLabel>
-                      <FormControl>
-                        <Input 
-                          {...field} 
-                          placeholder="Ange nummer" 
-                          inputMode="numeric" 
-                          pattern="[0-9]*"
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </TabsContent>
-            </Tabs>
+              <FormField
+                control={form.control}
+                name="number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Nummer</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Ange nummer" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
             
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="direction"
@@ -204,52 +194,12 @@ export default function ToolCompensationForm({
                   <FormItem>
                     <FormLabel>Kompenseringsvärde</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
+                      <Input
+                        {...field}
+                        value={numericValue}
+                        onChange={(e) => setNumericValue(e.target.value)}
+                        onFocus={handleFocus}
                         placeholder="Ange värde (t.ex. +0.15)"
-                        inputMode="decimal"
-                        pattern="[+-]?\d*\.?\d+"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="signature"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Signatur</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Välj signatur" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Fredrik">Fredrik</SelectItem>
-                        <SelectItem value="Joel">Joel</SelectItem>
-                        <SelectItem value="Per">Per</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="comment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kommentar</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        {...field} 
-                        placeholder="Skriv en kommentar (valfritt)" 
                       />
                     </FormControl>
                   </FormItem>
@@ -257,7 +207,48 @@ export default function ToolCompensationForm({
               />
             </div>
             
-            <DrawerFooter className="gap-2 pt-2">
+            <FormField
+              control={form.control}
+              name="signature"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Signatur</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange} 
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Välj signatur" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Fredrik">Fredrik</SelectItem>
+                      <SelectItem value="Joel">Joel</SelectItem>
+                      <SelectItem value="Per">Per</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Kommentar</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      {...field} 
+                      placeholder="Skriv en kommentar (valfritt)" 
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            
+            <DialogFooter>
               <Button 
                 type="button" 
                 variant="outline" 
@@ -266,10 +257,18 @@ export default function ToolCompensationForm({
                 Avbryt
               </Button>
               <Button type="submit">Spara</Button>
-            </DrawerFooter>
+            </DialogFooter>
           </form>
         </Form>
-      </DrawerContent>
-    </Drawer>
+
+        {showKeypad && (
+          <NumericKeypad
+            onInput={handleInput}
+            onClose={closeKeypad}
+            position={keypadPosition}
+          />
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
