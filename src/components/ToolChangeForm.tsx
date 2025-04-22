@@ -143,14 +143,14 @@ export default function ToolChangeForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Joel">Joel HS</SelectItem>
-                      <SelectItem value="Antal G">Antal G</SelectItem>
-                      <SelectItem value="Christian P">Christian P</SelectItem>
-                      <SelectItem value="Tony C">Tony C</SelectItem>
-                      <SelectItem value="Roger J">Roger J</SelectItem>
-                      <SelectItem value="Fredrik F">Fredrik F</SelectItem>
-                      <SelectItem value="Sejad P">Sejad P</SelectItem>
-                      <SelectItem value="Vu T">Vu T</SelectItem>
+                      <SelectItem value="JoelHS">Joel HS</SelectItem>
+                      <SelectItem value="AntalG">Antal G</SelectItem>
+                      <SelectItem value="ChristianP">Christian P</SelectItem>
+                      <SelectItem value="TonyC">Tony C</SelectItem>
+                      <SelectItem value="RogerJ">Roger J</SelectItem>
+                      <SelectItem value="FredrikF">Fredrik F</SelectItem>
+                      <SelectItem value="SejadP">Sejad P</SelectItem>
+                      <SelectItem value="VuT">Vu T</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>
