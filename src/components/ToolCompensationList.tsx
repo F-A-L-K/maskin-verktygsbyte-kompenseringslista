@@ -63,7 +63,10 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>System/Verktyg/Nr</TableHead>
+              <TableHead>Tillverkningsorder</TableHead>
+              <TableHead>Koordinatsystem</TableHead>
+              <TableHead>Verktyg</TableHead>
+              <TableHead>Nummer</TableHead>
               <TableHead>Riktning</TableHead>
               <TableHead>Värde</TableHead>
               <TableHead>Kommentar</TableHead>
@@ -74,18 +77,17 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
           <TableBody>
             {sortedCompensations.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                   Inga kompenseringar registrerade
                 </TableCell>
               </TableRow>
             ) : (
               sortedCompensations.map((comp) => (
                 <TableRow key={comp.id}>
-                  <TableCell className="font-medium">
-                    {[comp.coordinateSystem, comp.tool, comp.number]
-                      .filter(Boolean)
-                      .join(" / ")}
-                  </TableCell>
+                  <TableCell>{comp.manufacturingOrder || "-"}</TableCell>
+                  <TableCell>{comp.coordinateSystem || "-"}</TableCell>
+                  <TableCell>{comp.tool || "-"}</TableCell>
+                  <TableCell>{comp.number || "-"}</TableCell>
                   <TableCell>{comp.direction}</TableCell>
                   <TableCell>{comp.value}</TableCell>
                   <TableCell>{comp.comment || "-"}</TableCell>

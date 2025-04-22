@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import ToolChangeForm from "@/components/ToolChangeForm";
 import ToolChangeList from "@/components/ToolChangeList";
 import { ToolChange, MachineId } from "@/types";
+import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 
 interface ToolChangePageProps {
   activeMachine: MachineId;
@@ -13,9 +14,13 @@ interface ToolChangePageProps {
 export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
   const [toolChanges, setToolChanges] = useState<ToolChange[]>([]);
   const [showDialog, setShowDialog] = useState(false);
+  const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
   
   const handleAddToolChange = (toolChange: ToolChange) => {
     setToolChanges((prev) => [...prev, toolChange]);
+    if (toolChange.manufacturingOrder) {
+      setLastOrder(activeMachine, toolChange.manufacturingOrder);
+    }
   };
 
   return (

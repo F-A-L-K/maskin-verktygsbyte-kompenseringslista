@@ -59,6 +59,7 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Tillverkningsorder</TableHead>
               <TableHead>Verktyg</TableHead>
               <TableHead>Anledning</TableHead>
               <TableHead>Kommentar</TableHead>
@@ -69,13 +70,14 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
           <TableBody>
             {sortedChanges.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                   Inga verktygsbyten registrerade
                 </TableCell>
               </TableRow>
             ) : (
               sortedChanges.map((change) => (
                 <TableRow key={change.id}>
+                  <TableCell>{change.manufacturingOrder || "-"}</TableCell>
                   <TableCell className="font-medium">{change.toolNumber}</TableCell>
                   <TableCell>
                     <span className={

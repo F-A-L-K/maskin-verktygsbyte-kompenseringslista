@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import ToolCompensationForm from "@/components/ToolCompensationForm";
 import ToolCompensationList from "@/components/ToolCompensationList";
 import { ToolCompensation, MachineId } from "@/types";
+import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 
 interface ToolCompensationPageProps {
   activeMachine: MachineId;
@@ -13,9 +14,13 @@ interface ToolCompensationPageProps {
 export default function ToolCompensationPage({ activeMachine }: ToolCompensationPageProps) {
   const [compensations, setCompensations] = useState<ToolCompensation[]>([]);
   const [showDialog, setShowDialog] = useState(false);
+  const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
   
   const handleAddCompensation = (compensation: ToolCompensation) => {
     setCompensations((prev) => [...prev, compensation]);
+    if (compensation.manufacturingOrder) {
+      setLastOrder(activeMachine, compensation.manufacturingOrder);
+    }
   };
 
   return (

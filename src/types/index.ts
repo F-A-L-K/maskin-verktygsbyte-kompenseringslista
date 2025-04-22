@@ -6,6 +6,7 @@ export interface ToolChange {
   comment: string;
   signature: string;
   timestamp: Date;
+  manufacturingOrder: string;
 }
 
 export type MachineId = "5701" | "5702" | "5703" | "5704";
@@ -21,4 +22,5 @@ export interface ToolCompensation {
   comment: string;
   signature: string;
   timestamp: Date;
+  manufacturingOrder: string;
 }
