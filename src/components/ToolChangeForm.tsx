@@ -143,7 +143,7 @@ export default function ToolChangeForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Joel HS">Joel HS</SelectItem>
+                      <SelectItem value="Joel">Joel HS</SelectItem>
                       <SelectItem value="Antal G">Antal G</SelectItem>
                       <SelectItem value="Christian P">Christian P</SelectItem>
                       <SelectItem value="Tony C">Tony C</SelectItem>
