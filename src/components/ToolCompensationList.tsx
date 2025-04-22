@@ -50,14 +50,14 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
         <CardDescription>
           Historik över alla verktygskompensationer
         </CardDescription>
-        <div className="pt-2">
+        {/* <div className="pt-2">
           <Input
             placeholder="Sök..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-sm"
           />
-        </div>
+        </div> */}
       </CardHeader>
       <CardContent>
         <Table>
