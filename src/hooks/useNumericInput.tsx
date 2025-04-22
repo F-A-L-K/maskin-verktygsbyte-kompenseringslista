@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useCallback, useContext } from 'react';
+import React, { createContext, useState, useCallback, useContext, useEffect } from 'react';
 
 interface NumericInputContextType {
   value: string;
@@ -14,24 +14,42 @@ export const NumericInputProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [value, setValue] = useState('');
 
   const handleInput = useCallback((input: string) => {
-    if (input === 'backspace') {
-      setValue(prev => prev.slice(0, -1));
+    // Find the currently focused input element
+    const activeElement = document.activeElement as HTMLInputElement;
+    if (!activeElement || !['INPUT', 'TEXTAREA'].includes(activeElement.tagName)) {
       return;
     }
 
-    setValue(prev => {
-      // Handle first character being + or -
-      if ((input === '+' || input === '-') && prev === '') {
-        return input;
-      }
-      
-      // Don't allow multiple + or - signs
-      if ((input === '+' || input === '-') && (prev.includes('+') || prev.includes('-'))) {
-        return prev;
-      }
+    if (input === 'backspace') {
+      const newValue = activeElement.value.slice(0, -1);
+      activeElement.value = newValue;
+      // Trigger input event to ensure form state updates
+      activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
 
-      return prev + input;
-    });
+    // Get current cursor position
+    const cursorPos = activeElement.selectionStart || activeElement.value.length;
+    const beforeCursor = activeElement.value.substring(0, cursorPos);
+    const afterCursor = activeElement.value.substring(cursorPos);
+
+    // Only allow one + or - at the start
+    if ((input === '+' || input === '-')) {
+      if (cursorPos === 0) {
+        const newValue = input + activeElement.value;
+        activeElement.value = newValue;
+        activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      return;
+    }
+
+    // Insert the number at cursor position
+    const newValue = beforeCursor + input + afterCursor;
+    activeElement.value = newValue;
+    activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+    
+    // Move cursor position after the inserted number
+    activeElement.setSelectionRange(cursorPos + 1, cursorPos + 1);
   }, []);
 
   const clearValue = useCallback(() => {
