@@ -22,7 +22,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Verktygsbyte - {activeMachine}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{activeMachine} Verktygsbyte</h1>
           <p className="text-muted-foreground">
             Hantera verktygsbyten för maskin {activeMachine}
           </p>

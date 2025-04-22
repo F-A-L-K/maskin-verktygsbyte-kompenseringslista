@@ -22,7 +22,7 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Verktygskompensering - {activeMachine}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{activeMachine} Verktygskompensering</h1>
           <p className="text-muted-foreground">
             Hantera verktygskompensering för maskin {activeMachine}
           </p>
