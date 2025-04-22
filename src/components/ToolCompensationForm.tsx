@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React from "react";
 import { 
   Dialog,
   DialogContent,
@@ -29,7 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
-import { NumericKeypad } from "./NumericKeypad";
+import { FixedNumericKeypad } from "./FixedNumericKeypad";
 import { useNumericInput } from "@/hooks/useNumericInput";
 
 const formSchema = z.object({
@@ -79,11 +78,7 @@ export default function ToolCompensationForm({
   const {
     value: numericValue,
     setValue: setNumericValue,
-    showKeypad,
-    keypadPosition,
-    handleFocus,
     handleInput,
-    closeKeypad,
   } = useNumericInput(form.getValues("value"));
 
   React.useEffect(() => {
@@ -117,7 +112,7 @@ export default function ToolCompensationForm({
         </DialogHeader>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 pb-32">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
@@ -198,7 +193,6 @@ export default function ToolCompensationForm({
                         {...field}
                         value={numericValue}
                         
-                        onFocus={handleFocus}
                         placeholder="Ange värde (t.ex. +0.15)"
                       />
                     </FormControl>
@@ -260,14 +254,7 @@ export default function ToolCompensationForm({
             </DialogFooter>
           </form>
         </Form>
-
-        {showKeypad && (
-          <NumericKeypad
-            onInput={handleInput}
-            onClose={closeKeypad}
-            position={keypadPosition}
-          />
-        )}
+        <FixedNumericKeypad onInput={handleInput} />
       </DialogContent>
     </Dialog>
   );

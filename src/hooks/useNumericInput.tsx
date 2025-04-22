@@ -3,17 +3,6 @@ import { useState, useCallback } from 'react';
 
 export const useNumericInput = (initialValue: string = '') => {
   const [value, setValue] = useState(initialValue);
-  const [showKeypad, setShowKeypad] = useState(false);
-  const [keypadPosition, setKeypadPosition] = useState({ top: 0, left: 0 });
-
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    const rect = e.target.getBoundingClientRect();
-    setKeypadPosition({
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX,
-    });
-    setShowKeypad(true);
-  };
 
   const handleInput = useCallback((input: string) => {
     if (input === 'backspace') {
@@ -36,17 +25,9 @@ export const useNumericInput = (initialValue: string = '') => {
     });
   }, []);
 
-  const closeKeypad = useCallback(() => {
-    setShowKeypad(false);
-  }, []);
-
   return {
     value,
     setValue,
-    showKeypad,
-    keypadPosition,
-    handleFocus,
     handleInput,
-    closeKeypad,
   };
 };
