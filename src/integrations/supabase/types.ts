@@ -51,6 +51,21 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          id: string
+          username: string
+        }
+        Insert: {
+          id: string
+          username: string
+        }
+        Update: {
+          id?: string
+          username?: string
+        }
+        Relationships: []
+      }
       school_visits: {
         Row: {
           check_in_time: string
@@ -83,6 +98,29 @@ export type Database = {
           visiting?: string | null
         }
         Relationships: []
+      }
+      user_machines: {
+        Row: {
+          machine: string
+          user_id: string
+        }
+        Insert: {
+          machine: string
+          user_id: string
+        }
+        Update: {
+          machine?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_machines_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
