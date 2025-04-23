@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -5,7 +6,6 @@ import ToolCompensationForm from "@/components/ToolCompensationForm";
 import ToolCompensationList from "@/components/ToolCompensationList";
 import { ToolCompensation, MachineId } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
-import { useModbusValue } from "@/hooks/useModbusValue";
 import { supabase } from "@/integrations/supabase/client";
 
 interface ToolCompensationPageProps {
@@ -18,8 +18,8 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
-  const { value: modbusValue, error: modbusError } = useModbusValue();
 
+  // Fetch compensations from Supabase
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -56,6 +56,7 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
       });
   }, [activeMachine]);
 
+  // Add new compensation to Supabase & local state
   const handleAddCompensation = async (compensation: ToolCompensation) => {
     const { error } = await supabase.from("verktygskompensering").insert({
       id: compensation.id,
@@ -88,14 +89,6 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
           <p className="text-muted-foreground">
             Hantera verktygskompensering för maskin {activeMachine}
           </p>
-          {modbusValue !== null && (
-            <p className="mt-2 text-sm">
-              Modbus värde: <span className="font-medium">{modbusValue}</span>
-            </p>
-          )}
-          {modbusError && (
-            <p className="mt-2 text-sm text-destructive">{modbusError}</p>
-          )}
         </div>
         <Button 
           onClick={() => setShowDialog(true)}
