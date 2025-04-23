@@ -60,13 +60,30 @@ export default function ToolChangeForm({
   const [signatures, setSignatures] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fix: use explicit 'any' type as signatures is a new table not in Supabase client types
-    supabase
-      .from("signatures" as any)
-      .select("name")
-      .then(({ data }) => {
-        setSignatures(data?.map((d: { name: string }) => d.name) ?? []);
-      });
+    // Fix: use a more generic approach to handle the response
+    const fetchSignatures = async () => {
+      try {
+        // Cast to any to bypass TypeScript's strict checking since we know this table exists
+        const { data, error } = await supabase
+          .from('signatures' as any)
+          .select('name');
+        
+        if (error) {
+          console.error("Error fetching signatures:", error);
+          return;
+        }
+        
+        // Safely handle the data, ensuring it's an array with name properties
+        if (data && Array.isArray(data)) {
+          const names = data.map((item: any) => item.name).filter(Boolean);
+          setSignatures(names);
+        }
+      } catch (err) {
+        console.error("Exception when fetching signatures:", err);
+      }
+    };
+
+    fetchSignatures();
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
