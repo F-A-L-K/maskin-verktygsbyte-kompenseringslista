@@ -38,7 +38,7 @@ export default function AdminPage() {
   async function handleAddMachine(e: React.FormEvent) {
     e.preventDefault();
     if (!newMachine) return;
-    const { error } = await supabase.from("machines").insert([{ name: newMachine }]);
+    const { error } = await supabase.from("machines").insert({ name: newMachine });
     if (!error) {
       setMachines((prev) => [...prev, newMachine]);
       setNewMachine("");
@@ -48,7 +48,7 @@ export default function AdminPage() {
   async function handleAddSignature(e: React.FormEvent) {
     e.preventDefault();
     if (!newSignature) return;
-    const { error } = await supabase.from("signatures").insert([{ name: newSignature }]);
+    const { error } = await supabase.from("signatures").insert({ name: newSignature });
     if (!error) {
       setSignatures((prev) => [...prev, newSignature]);
       setNewSignature("");

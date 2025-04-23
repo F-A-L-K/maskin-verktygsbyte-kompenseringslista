@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { 
   Dialog,
   DialogContent,
@@ -28,7 +29,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
@@ -57,6 +58,7 @@ export default function ToolChangeForm({
 }: ToolChangeFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
   const [signatures, setSignatures] = useState<string[]>([]);
+  
   useEffect(() => {
     supabase.from("signatures").select("name").then(({ data }) => {
       setSignatures(data?.map((d) => d.name) ?? []);
