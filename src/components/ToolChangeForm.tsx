@@ -58,11 +58,15 @@ export default function ToolChangeForm({
 }: ToolChangeFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
   const [signatures, setSignatures] = useState<string[]>([]);
-  
+
   useEffect(() => {
-    supabase.from("signatures").select("name").then(({ data }) => {
-      setSignatures(data?.map((d) => d.name) ?? []);
-    });
+    // Fix: use explicit 'any' type as signatures is a new table not in Supabase client types
+    supabase
+      .from("signatures" as any)
+      .select("name")
+      .then(({ data }) => {
+        setSignatures(data?.map((d: { name: string }) => d.name) ?? []);
+      });
   }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
