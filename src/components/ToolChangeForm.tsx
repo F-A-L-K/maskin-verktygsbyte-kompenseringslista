@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Dialog,
@@ -29,6 +28,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
+import { supabase } from "@/lib/supabase";
 
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
@@ -37,14 +37,7 @@ const formSchema = z.object({
     required_error: "Välj en anledning",
   }),
   comment: z.string().optional(),
-  signature: z.enum(["Joel HS",
-"Antal G",
-"Christian P",
-"Tony C",
-"Roger J",
-"Fredrik F",
-"Sejad P",
-"Vu T",], {
+  signature: z.string({
     required_error: "Välj en signatur",
   }),
 });
@@ -63,7 +56,13 @@ export default function ToolChangeForm({
   machineId
 }: ToolChangeFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
-  
+  const [signatures, setSignatures] = useState<string[]>([]);
+  useEffect(() => {
+    supabase.from("signatures").select("name").then(({ data }) => {
+      setSignatures(data?.map((d) => d.name) ?? []);
+    });
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -170,14 +169,9 @@ export default function ToolChangeForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Joel HS">Joel HS</SelectItem>
-                      <SelectItem value="Antal G">Antal G</SelectItem>
-                      <SelectItem value="Christian P">Christian P</SelectItem>
-                      <SelectItem value="Tony C">Tony C</SelectItem>
-                      <SelectItem value="Roger J">Roger J</SelectItem>
-                      <SelectItem value="Fredrik F">Fredrik F</SelectItem>
-                      <SelectItem value="Sejad P">Sejad P</SelectItem>
-                      <SelectItem value="Vu T">Vu T</SelectItem>
+                      {signatures.map(sig => (
+                        <SelectItem key={sig} value={sig}>{sig}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>

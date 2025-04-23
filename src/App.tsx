@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { FixedNumericKeypad } from "./components/FixedNumericKeypad";
 import { NumericInputProvider } from "./hooks/useNumericInput";
+import AdminPage from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +35,7 @@ const App = () => {
                 <Routes>
                   <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
                   <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
+                  <Route path="/admin" element={<AdminPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>

@@ -15,6 +15,7 @@ export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProp
   const pages = [
     { path: "/verktyg", title: "Verktygsbyte" },
     { path: "/kompensering", title: "Verktygskompensering" },
+    { path: "/admin", title: "Admin" },
   ];
 
   return (

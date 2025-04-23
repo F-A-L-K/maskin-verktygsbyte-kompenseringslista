@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   Dialog,
@@ -29,6 +28,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolCompensation } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
@@ -42,14 +42,7 @@ const formSchema = z.object({
     .regex(/^[+-]?\d*\.?\d+$/, "Måste vara ett nummer med eventuellt +/- tecken")
     .min(1, "Kompenseringsvärde är obligatoriskt"),
   comment: z.string().optional(),
-  signature: z.enum(["Joel HS",
-"Antal G",
-"Christian P",
-"Tony C",
-"Roger J",
-"Fredrik F",
-"Sejad P",
-"Vu T",], {
+  signature: z.string({
     required_error: "Välj en signatur",
   }),
 }).refine(data => data.coordinateSystem || data.tool || data.number, {
@@ -70,7 +63,14 @@ export default function ToolCompensationForm({
   machineId
 }: ToolCompensationFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
-  
+  const [signatures, setSignatures] = useState<string[]>([]);
+  useEffect(() => {
+    // Fetch signatures from Supabase
+    supabase.from("signatures").select("name").then(({ data }) => {
+      setSignatures(data?.map((d) => d.name) ?? []);
+    });
+  }, []);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -229,14 +229,9 @@ export default function ToolCompensationForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                       <SelectItem value="Joel HS">Joel HS</SelectItem>
-                      <SelectItem value="Antal G">Antal G</SelectItem>
-                      <SelectItem value="Christian P">Christian P</SelectItem>
-                      <SelectItem value="Tony C">Tony C</SelectItem>
-                      <SelectItem value="Roger J">Roger J</SelectItem>
-                      <SelectItem value="Fredrik F">Fredrik F</SelectItem>
-                      <SelectItem value="Sejad P">Sejad P</SelectItem>
-                      <SelectItem value="Vu T">Vu T</SelectItem>
+                      {signatures.map(sig => (
+                        <SelectItem key={sig} value={sig}>{sig}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormItem>
