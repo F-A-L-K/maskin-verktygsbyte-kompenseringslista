@@ -105,6 +105,81 @@ export type Database = {
         }
         Relationships: []
       }
+      verktygsbyte: {
+        Row: {
+          anledning: string | null
+          id: string
+          kommentar: string | null
+          maskin: string
+          signatur: string | null
+          tid: string
+          tillverkningsorder: string | null
+          verktyg: string | null
+        }
+        Insert: {
+          anledning?: string | null
+          id?: string
+          kommentar?: string | null
+          maskin: string
+          signatur?: string | null
+          tid?: string
+          tillverkningsorder?: string | null
+          verktyg?: string | null
+        }
+        Update: {
+          anledning?: string | null
+          id?: string
+          kommentar?: string | null
+          maskin?: string
+          signatur?: string | null
+          tid?: string
+          tillverkningsorder?: string | null
+          verktyg?: string | null
+        }
+        Relationships: []
+      }
+      verktygskompensering: {
+        Row: {
+          id: string
+          kommentar: string | null
+          koordinatsystem: string | null
+          maskin: string
+          nummer: string | null
+          riktning: string | null
+          signatur: string | null
+          tid: string
+          tillverkningsorder: string | null
+          varde: string | null
+          verktyg: string | null
+        }
+        Insert: {
+          id?: string
+          kommentar?: string | null
+          koordinatsystem?: string | null
+          maskin: string
+          nummer?: string | null
+          riktning?: string | null
+          signatur?: string | null
+          tid?: string
+          tillverkningsorder?: string | null
+          varde?: string | null
+          verktyg?: string | null
+        }
+        Update: {
+          id?: string
+          kommentar?: string | null
+          koordinatsystem?: string | null
+          maskin?: string
+          nummer?: string | null
+          riktning?: string | null
+          signatur?: string | null
+          tid?: string
+          tillverkningsorder?: string | null
+          varde?: string | null
+          verktyg?: string | null
+        }
+        Relationships: []
+      }
       visitors: {
         Row: {
           check_in_time: string

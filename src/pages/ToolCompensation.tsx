@@ -1,11 +1,12 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import ToolCompensationForm from "@/components/ToolCompensationForm";
 import ToolCompensationList from "@/components/ToolCompensationList";
 import { ToolCompensation, MachineId } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ToolCompensationPageProps {
   activeMachine: MachineId;
@@ -14,9 +15,66 @@ interface ToolCompensationPageProps {
 export default function ToolCompensationPage({ activeMachine }: ToolCompensationPageProps) {
   const [compensations, setCompensations] = useState<ToolCompensation[]>([]);
   const [showDialog, setShowDialog] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
-  
-  const handleAddCompensation = (compensation: ToolCompensation) => {
+
+  // Fetch compensations from Supabase
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    supabase
+      .from("verktygskompensering")
+      .select(
+        "id, maskin, tillverkningsorder, koordinatsystem, verktyg, nummer, riktning, varde, kommentar, signatur, tid"
+      )
+      .eq("maskin", activeMachine)
+      .order("tid", { ascending: false })
+      .then(({ data, error }) => {
+        if (error) {
+          setError("Kunde inte hämta verktygskompensationer.");
+          setLoading(false);
+          return;
+        }
+
+        const mapped =
+          data?.map((item) => ({
+            id: item.id,
+            machineId: item.maskin,
+            manufacturingOrder: item.tillverkningsorder ?? "",
+            coordinateSystem: item.koordinatsystem ?? undefined,
+            tool: item.verktyg ?? undefined,
+            number: item.nummer ?? undefined,
+            direction: (item.riktning ?? "X") as ToolCompensation["direction"],
+            value: item.varde ?? "",
+            comment: item.kommentar ?? "",
+            signature: item.signatur ?? "",
+            timestamp: new Date(item.tid),
+          })) || [];
+        setCompensations(mapped);
+        setLoading(false);
+      });
+  }, [activeMachine]);
+
+  // Add new compensation to Supabase & local state
+  const handleAddCompensation = async (compensation: ToolCompensation) => {
+    const { error } = await supabase.from("verktygskompensering").insert({
+      id: compensation.id,
+      maskin: compensation.machineId,
+      tillverkningsorder: compensation.manufacturingOrder,
+      koordinatsystem: compensation.coordinateSystem || null,
+      verktyg: compensation.tool || null,
+      nummer: compensation.number || null,
+      riktning: compensation.direction,
+      varde: compensation.value,
+      kommentar: compensation.comment,
+      signatur: compensation.signature,
+      tid: compensation.timestamp.toISOString(),
+    });
+    if (error) {
+      setError("Kunde inte spara verktygskompensation.");
+      return;
+    }
     setCompensations((prev) => [...prev, compensation]);
     if (compensation.manufacturingOrder) {
       setLastOrder(activeMachine, compensation.manufacturingOrder);
@@ -40,11 +98,15 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
           <span>Ny kompensering</span>
         </Button>
       </div>
-      
-      <ToolCompensationList compensations={
-        compensations.filter(comp => comp.machineId === activeMachine)
-      } />
-      
+      {error && (
+        <div className="text-red-600 px-2">{error}</div>
+      )}
+      {loading ? (
+        <div className="text-gray-500 px-2">Laddar verktygskompensationer...</div>
+      ) : (
+        <ToolCompensationList compensations={compensations} />
+      )}
+
       <ToolCompensationForm
         open={showDialog}
         onOpenChange={setShowDialog}
