@@ -17,6 +17,7 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
   const [showDialog, setShowDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [latestManufacturingOrder, setLatestManufacturingOrder] = useState<string>("");
   const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
 
   // Fetch compensations from Supabase
@@ -52,6 +53,9 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
             timestamp: new Date(item.tid),
           })) || [];
         setCompensations(mapped);
+        if (mapped.length > 0) {
+          setLatestManufacturingOrder(mapped[0].manufacturingOrder);
+        }
         setLoading(false);
       });
   }, [activeMachine]);
@@ -112,6 +116,7 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
         onOpenChange={setShowDialog}
         onSubmit={handleAddCompensation}
         machineId={activeMachine}
+        defaultManufacturingOrder={latestManufacturingOrder}
       />
     </div>
   );

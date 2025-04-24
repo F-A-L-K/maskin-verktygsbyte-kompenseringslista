@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { 
   Dialog,
@@ -48,22 +47,22 @@ interface ToolChangeFormProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (toolChange: ToolChange) => void;
   machineId: MachineId;
+  defaultManufacturingOrder?: string;
 }
 
 export default function ToolChangeForm({ 
   open, 
   onOpenChange, 
   onSubmit,
-  machineId
+  machineId,
+  defaultManufacturingOrder = ""
 }: ToolChangeFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
   const [signatures, setSignatures] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fix: use a more generic approach to handle the response
     const fetchSignatures = async () => {
       try {
-        // Cast to any to bypass TypeScript's strict checking since we know this table exists
         const { data, error } = await supabase
           .from('signatures' as any)
           .select('name');
@@ -73,7 +72,6 @@ export default function ToolChangeForm({
           return;
         }
         
-        // Safely handle the data, ensuring it's an array with name properties
         if (data && Array.isArray(data)) {
           const names = data.map((item: any) => item.name).filter(Boolean);
           setSignatures(names);
@@ -89,13 +87,17 @@ export default function ToolChangeForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      manufacturingOrder: getLastOrder(machineId) || "",
+      manufacturingOrder: defaultManufacturingOrder || getLastOrder(machineId) || "",
       toolNumber: "",
       reason: undefined,
       comment: "",
       signature: undefined,
     },
   });
+
+  useEffect(() => {
+    form.setValue('manufacturingOrder', defaultManufacturingOrder || getLastOrder(machineId) || "");
+  }, [defaultManufacturingOrder, machineId, getLastOrder, form]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newToolChange: ToolChange = {

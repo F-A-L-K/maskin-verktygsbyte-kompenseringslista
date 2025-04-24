@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { 
   Dialog,
@@ -55,22 +54,22 @@ interface ToolCompensationFormProps {
   onOpenChange: (open: boolean) => void;
   onSubmit: (compensation: ToolCompensation) => void;
   machineId: MachineId;
+  defaultManufacturingOrder?: string;
 }
 
 export default function ToolCompensationForm({ 
   open, 
   onOpenChange, 
   onSubmit,
-  machineId
+  machineId,
+  defaultManufacturingOrder = ""
 }: ToolCompensationFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
   const [signatures, setSignatures] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fix: use a more generic approach to handle the response
     const fetchSignatures = async () => {
       try {
-        // Cast to any to bypass TypeScript's strict checking since we know this table exists
         const { data, error } = await supabase
           .from('signatures' as any)
           .select('name');
@@ -80,7 +79,6 @@ export default function ToolCompensationForm({
           return;
         }
         
-        // Safely handle the data, ensuring it's an array with name properties
         if (data && Array.isArray(data)) {
           const names = data.map((item: any) => item.name).filter(Boolean);
           setSignatures(names);
@@ -96,7 +94,7 @@ export default function ToolCompensationForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      manufacturingOrder: getLastOrder(machineId) || "",
+      manufacturingOrder: defaultManufacturingOrder || getLastOrder(machineId) || "",
       coordinateSystem: "",
       tool: "",
       number: "",
@@ -106,6 +104,10 @@ export default function ToolCompensationForm({
       signature: undefined,
     },
   });
+
+  useEffect(() => {
+    form.setValue('manufacturingOrder', defaultManufacturingOrder || getLastOrder(machineId) || "");
+  }, [defaultManufacturingOrder, machineId, getLastOrder, form]);
 
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
     const newCompensation: ToolCompensation = {

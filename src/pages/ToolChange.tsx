@@ -17,6 +17,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
   const [showDialog, setShowDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [latestManufacturingOrder, setLatestManufacturingOrder] = useState<string>("");
   const { setLastOrder, getLastOrder } = useLastManufacturingOrder();
 
   // Fetch tool changes from Supabase
@@ -48,6 +49,9 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
             timestamp: new Date(item.tid),
           })) || [];
         setToolChanges(mapped);
+        if (mapped.length > 0) {
+          setLatestManufacturingOrder(mapped[0].manufacturingOrder);
+        }
         setLoading(false);
       });
   }, [activeMachine]);
@@ -107,8 +111,8 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
         onOpenChange={setShowDialog}
         onSubmit={handleAddToolChange}
         machineId={activeMachine}
+        defaultManufacturingOrder={latestManufacturingOrder}
       />
     </div>
   );
 }
-
