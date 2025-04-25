@@ -9,7 +9,7 @@ export interface ToolChange {
   manufacturingOrder: string;
 }
 
-export type MachineId = "5701" | "5702" | "5703" | "5704";
+export type MachineId = "5701" | "5702" | "5703" | "5704" | "5705" | "5706";
 
 export interface ToolCompensation {
   id: string;

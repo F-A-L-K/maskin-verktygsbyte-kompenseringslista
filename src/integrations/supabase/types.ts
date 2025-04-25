@@ -51,6 +51,27 @@ export type Database = {
         }
         Relationships: []
       }
+      login_logs: {
+        Row: {
+          id: string
+          login_time: string | null
+          machine_id: string
+          success: boolean
+        }
+        Insert: {
+          id?: string
+          login_time?: string | null
+          machine_id: string
+          success: boolean
+        }
+        Update: {
+          id?: string
+          login_time?: string | null
+          machine_id?: string
+          success?: boolean
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           id: string
