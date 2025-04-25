@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { MachineId } from "@/types";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   activeMachine: MachineId;
@@ -10,7 +11,10 @@ interface SidebarProps {
 
 export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProps) {
   const location = useLocation();
-  const machines: MachineId[] = ["5701", "5702", "5703", "5704"];
+  const { getVisibleMachines } = useAuth();
+  
+  // Get only the machines that the current user can see
+  const visibleMachines = getVisibleMachines();
 
   const pages = [
     { path: "/verktyg", title: "Verktygsbyte" },
@@ -26,7 +30,7 @@ export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProp
       <div className="p-4">
         <h2 className="text-sm font-semibold text-sidebar-foreground mb-2 opacity-70">MASKINER</h2>
         <div className="space-y-1 mb-6">
-          {machines.map((machine) => (
+          {visibleMachines.map((machine) => (
             <button
               key={machine}
               onClick={() => setActiveMachine(machine)}

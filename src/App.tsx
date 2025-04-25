@@ -10,7 +10,6 @@ import ToolChangePage from "./pages/ToolChange";
 import ToolCompensationPage from "./pages/ToolCompensation";
 import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
-import { FixedNumericKeypad } from "./components/FixedNumericKeypad";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { AuthProvider } from "./contexts/AuthContext";
 import { AuthHeader } from "./components/AuthHeader";
@@ -33,7 +32,6 @@ const App = () => {
                   activeMachine={activeMachine} 
                   setActiveMachine={setActiveMachine} 
                 />
-                <AuthHeader />
                 <div className="flex-1 ml-64 p-8">
                   <Routes>
                     <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
@@ -41,7 +39,7 @@ const App = () => {
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </div>
-                <FixedNumericKeypad />
+                <AuthHeader />
               </div>
             </BrowserRouter>
           </TooltipProvider>
