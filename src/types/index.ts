@@ -1,3 +1,4 @@
+
 export interface ToolChange {
   id: string;
   machineId: string;
@@ -23,4 +24,12 @@ export interface ToolCompensation {
   signature: string;
   timestamp: Date;
   manufacturingOrder: string;
+}
+
+// Add a type for login logs to match the database structure
+export interface LoginLog {
+  id?: string;
+  machine_id: string;
+  success: boolean;
+  login_time?: string;
 }

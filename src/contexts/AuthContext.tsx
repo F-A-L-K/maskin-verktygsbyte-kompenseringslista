@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState } from 'react';
-import { MachineId } from '@/types';
+import { LoginLog, MachineId } from '@/types';
 import { supabase } from '@/integrations/supabase/client';
 
 type AuthContextType = {
@@ -19,7 +19,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const machineVisibility: Record<MachineId, MachineId[]> = {
     "5701": ["5701", "5704"],
     "5702": ["5702", "5705"],
-    "5703": ["5703", "5706"]
+    "5703": ["5703", "5706"],
+    // Add empty arrays for the other machine IDs to satisfy TypeScript
+    "5704": [],
+    "5705": [],
+    "5706": []
   };
 
   const login = async (username: MachineId, password: string): Promise<boolean> => {
@@ -29,9 +33,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Log the successful login attempt
       await supabase
-        .from('login_logs')
+        .from('login_logs' as any)
         .insert([
-          { machine_id: username, success: true }
+          { machine_id: username, success: true } as LoginLog
         ]);
       
       return true;
@@ -39,9 +43,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Log the failed login attempt
       if (["5701", "5702", "5703"].includes(username)) {
         await supabase
-          .from('login_logs')
+          .from('login_logs' as any)
           .insert([
-            { machine_id: username, success: false }
+            { machine_id: username, success: false } as LoginLog
           ]);
       }
       
