@@ -8,6 +8,8 @@ export function useLastManufacturingOrder() {
     "5702": "",
     "5703": "",
     "5704": "",
+    "5705": "",
+    "5706": "",
   });
 
   const setLastOrder = (machineId: MachineId, order: string) => {
