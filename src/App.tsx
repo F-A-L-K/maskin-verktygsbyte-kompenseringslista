@@ -12,6 +12,8 @@ import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { FixedNumericKeypad } from "./components/FixedNumericKeypad";
 import { NumericInputProvider } from "./hooks/useNumericInput";
+import { AuthProvider } from "./contexts/AuthContext";
+import { AuthHeader } from "./components/AuthHeader";
 
 const queryClient = new QueryClient();
 
@@ -19,31 +21,33 @@ const App = () => {
   const [activeMachine, setActiveMachine] = useState<MachineId>("5701");
   
   return (
-    <NumericInputProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <div className="flex min-h-screen">
-              <Sidebar 
-                activeMachine={activeMachine} 
-                setActiveMachine={setActiveMachine} 
-              />
-              
-              <div className="flex-1 ml-64 p-8">
-                <Routes>
-                  <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
-                  <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+    <AuthProvider>
+      <NumericInputProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <div className="flex min-h-screen">
+                <Sidebar 
+                  activeMachine={activeMachine} 
+                  setActiveMachine={setActiveMachine} 
+                />
+                <AuthHeader />
+                <div className="flex-1 ml-64 p-8">
+                  <Routes>
+                    <Route path="/verktyg" element={<ToolChangePage activeMachine={activeMachine} />} />
+                    <Route path="/kompensering" element={<ToolCompensationPage activeMachine={activeMachine} />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </div>
+                <FixedNumericKeypad />
               </div>
-              <FixedNumericKeypad />
-            </div>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </NumericInputProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </NumericInputProvider>
+    </AuthProvider>
   );
 };
 
