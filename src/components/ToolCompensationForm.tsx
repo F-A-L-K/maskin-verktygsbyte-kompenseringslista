@@ -65,31 +65,6 @@ export default function ToolCompensationForm({
   defaultManufacturingOrder = ""
 }: ToolCompensationFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
-  const [signatures, setSignatures] = useState<string[]>([]);
-
-  useEffect(() => {
-    const fetchSignatures = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('signatures' as any)
-          .select('name');
-        
-        if (error) {
-          console.error("Error fetching signatures:", error);
-          return;
-        }
-        
-        if (data && Array.isArray(data)) {
-          const names = data.map((item: any) => item.name).filter(Boolean);
-          setSignatures(names);
-        }
-      } catch (err) {
-        console.error("Exception when fetching signatures:", err);
-      }
-    };
-
-    fetchSignatures();
-  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -243,21 +218,9 @@ export default function ToolCompensationForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Signatur</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Välj signatur" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {signatures.map(sig => (
-                        <SelectItem key={sig} value={sig}>{sig}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input {...field} placeholder="Ange signatur" />
+                  </FormControl>
                 </FormItem>
               )}
             />
