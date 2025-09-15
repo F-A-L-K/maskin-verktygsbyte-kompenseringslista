@@ -40,20 +40,9 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
   );
 
   return (
-    <Card>
+    <Card className="border-none">
       <CardHeader>
-        <CardTitle>Verktygsbyten</CardTitle>
-        <CardDescription>
-          Historik över alla verktygsbyten
-        </CardDescription>
-        {/* <div className="pt-2">
-          <Input
-            placeholder="Sök..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm"
-          />
-        </div> */}
+       
       </CardHeader>
       <CardContent>
         <Table>

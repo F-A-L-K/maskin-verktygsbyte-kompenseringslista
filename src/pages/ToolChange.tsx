@@ -1,7 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import ToolChangeForm from "@/components/ToolChangeForm";
 import ToolChangeList from "@/components/ToolChangeList";
 import { ToolChange, MachineId } from "@/types";
@@ -10,11 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ToolChangePageProps {
   activeMachine: MachineId;
+  showDialog: boolean;
+  setShowDialog: (show: boolean) => void;
 }
 
-export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
+export default function ToolChangePage({ activeMachine, showDialog, setShowDialog }: ToolChangePageProps) {
   const [toolChanges, setToolChanges] = useState<ToolChange[]>([]);
-  const [showDialog, setShowDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [latestManufacturingOrder, setLatestManufacturingOrder] = useState<string>("");
@@ -24,30 +23,33 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    supabase
-      .from("verktygsbyte")
+    
+    (supabase as any)
+      .from("Verktygshanteringssystem_verktygsbyteslista")
       .select(
-        "id, maskin, verktyg, anledning, kommentar, signatur, tid, tillverkningsorder"
+        "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order"
       )
-      .eq("maskin", activeMachine)
-      .order("tid", { ascending: false })
+      .eq("machine_number", activeMachine)
+      .order("date_created", { ascending: false })
       .then(({ data, error }) => {
         if (error) {
           setError("Kunde inte hämta verktygsbyten.");
           setLoading(false);
           return;
         }
+        
         const mapped =
           data?.map((item) => ({
             id: item.id,
-            machineId: item.maskin,
-            manufacturingOrder: item.tillverkningsorder ?? "",
-            toolNumber: item.verktyg ?? "",
-            reason: (item.anledning ?? "Slitage") as ToolChange["reason"],
-            comment: item.kommentar ?? "",
-            signature: item.signatur ?? "",
-            timestamp: new Date(item.tid),
+            machineId: item.machine_number ?? "",
+            manufacturingOrder: item.manufacturing_order ?? "",
+            toolNumber: item.tool_number ?? "",
+            reason: (item.cause ?? "Slitage") as ToolChange["reason"],
+            comment: item.comment ?? "",
+            signature: item.signature ?? "",
+            timestamp: new Date(item.date_created),
           })) || [];
+        
         setToolChanges(mapped);
         if (mapped.length > 0) {
           setLatestManufacturingOrder(mapped[0].manufacturingOrder);
@@ -59,15 +61,15 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
   // Add new tool change to Supabase & local state
   const handleAddToolChange = async (toolChange: ToolChange) => {
     // Save to Supabase
-    const { error } = await supabase.from("verktygsbyte").insert({
+    const { error } = await (supabase as any).from("Verktygshanteringssystem_verktygsbyteslista").insert({
       id: toolChange.id,
-      maskin: toolChange.machineId,
-      tillverkningsorder: toolChange.manufacturingOrder,
-      verktyg: toolChange.toolNumber,
-      anledning: toolChange.reason,
-      kommentar: toolChange.comment,
-      signatur: toolChange.signature,
-      tid: toolChange.timestamp.toISOString(),
+      machine_number: toolChange.machineId,
+      manufacturing_order: toolChange.manufacturingOrder,
+      tool_number: toolChange.toolNumber,
+      cause: toolChange.reason,
+      comment: toolChange.comment,
+      signature: toolChange.signature,
+      date_created: toolChange.timestamp.toISOString(),
     });
     if (error) {
       setError("Kunde inte spara verktygsbyte.");
@@ -81,21 +83,6 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{activeMachine} Verktygsbyte</h1>
-          <p className="text-muted-foreground">
-            Hantera verktygsbyten för maskin {activeMachine}
-          </p>
-        </div>
-        <Button 
-          onClick={() => setShowDialog(true)}
-          className="flex items-center gap-2"
-        >
-          <Plus size={16} />
-          <span>Nytt verktygsbyte</span>
-        </Button>
-      </div>
 
       {error && (
         <div className="text-red-600 px-2">{error}</div>

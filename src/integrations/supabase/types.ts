@@ -465,7 +465,7 @@ export type Database = {
         }
         Relationships: []
       }
-      verktygshanteringssystem_kompenseringslista: {
+      Verktygshanteringssystem_kompenseringslista: {
         Row: {
           comment: string | null
           compensation_direction: string | null
@@ -510,7 +510,7 @@ export type Database = {
         }
         Relationships: []
       }
-      verktygshanteringssystem_verktygsbyteslista: {
+      Verktygshanteringssystem_verktygsbyteslista: {
         Row: {
           amount_since_last_change: number | null
           cause: string | null

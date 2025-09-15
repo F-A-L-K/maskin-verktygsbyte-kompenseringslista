@@ -1,7 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import ToolCompensationForm from "@/components/ToolCompensationForm";
 import ToolCompensationList from "@/components/ToolCompensationList";
 import { ToolCompensation, MachineId } from "@/types";
@@ -10,11 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ToolCompensationPageProps {
   activeMachine: MachineId;
+  showDialog: boolean;
+  setShowDialog: (show: boolean) => void;
 }
 
-export default function ToolCompensationPage({ activeMachine }: ToolCompensationPageProps) {
+export default function ToolCompensationPage({ activeMachine, showDialog, setShowDialog }: ToolCompensationPageProps) {
   const [compensations, setCompensations] = useState<ToolCompensation[]>([]);
-  const [showDialog, setShowDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [latestManufacturingOrder, setLatestManufacturingOrder] = useState<string>("");
@@ -24,13 +23,13 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
   useEffect(() => {
     setLoading(true);
     setError(null);
-    supabase
-      .from("verktygskompensering")
+    (supabase as any)
+      .from("Verktygshanteringssystem_kompenseringslista")
       .select(
-        "id, maskin, tillverkningsorder, koordinatsystem, verktyg, nummer, riktning, varde, kommentar, signatur, tid"
+        "id, machine_number, manufacturing_order, compnum_coordinate_system, compnum_tool, compnum_number, compensation_direction, compensation_value, comment, signature, date_created"
       )
-      .eq("maskin", activeMachine)
-      .order("tid", { ascending: false })
+      .eq("machine_number", activeMachine)
+      .order("date_created", { ascending: false })
       .then(({ data, error }) => {
         if (error) {
           setError("Kunde inte hämta verktygskompensationer.");
@@ -41,16 +40,16 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
         const mapped =
           data?.map((item) => ({
             id: item.id,
-            machineId: item.maskin,
-            manufacturingOrder: item.tillverkningsorder ?? "",
-            coordinateSystem: item.koordinatsystem ?? undefined,
-            tool: item.verktyg ?? undefined,
-            number: item.nummer ?? undefined,
-            direction: (item.riktning ?? "X") as ToolCompensation["direction"],
-            value: item.varde ?? "",
-            comment: item.kommentar ?? "",
-            signature: item.signatur ?? "",
-            timestamp: new Date(item.tid),
+            machineId: item.machine_number ?? "",
+            manufacturingOrder: item.manufacturing_order ?? "",
+            coordinateSystem: item.compnum_coordinate_system ?? undefined,
+            tool: item.compnum_tool ?? undefined,
+            number: item.compnum_number ?? undefined,
+            direction: (item.compensation_direction ?? "X") as ToolCompensation["direction"],
+            value: item.compensation_value ?? "",
+            comment: item.comment ?? "",
+            signature: item.signature ?? "",
+            timestamp: new Date(item.date_created),
           })) || [];
         setCompensations(mapped);
         if (mapped.length > 0) {
@@ -62,18 +61,18 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
 
   // Add new compensation to Supabase & local state
   const handleAddCompensation = async (compensation: ToolCompensation) => {
-    const { error } = await supabase.from("verktygskompensering").insert({
+    const { error } = await (supabase as any).from("Verktygshanteringssystem_kompenseringslista").insert({
       id: compensation.id,
-      maskin: compensation.machineId,
-      tillverkningsorder: compensation.manufacturingOrder,
-      koordinatsystem: compensation.coordinateSystem || null,
-      verktyg: compensation.tool || null,
-      nummer: compensation.number || null,
-      riktning: compensation.direction,
-      varde: compensation.value,
-      kommentar: compensation.comment,
-      signatur: compensation.signature,
-      tid: compensation.timestamp.toISOString(),
+      machine_number: compensation.machineId,
+      manufacturing_order: compensation.manufacturingOrder,
+      compnum_coordinate_system: compensation.coordinateSystem || null,
+      compnum_tool: compensation.tool || null,
+      compnum_number: compensation.number || null,
+      compensation_direction: compensation.direction,
+      compensation_value: compensation.value,
+      comment: compensation.comment,
+      signature: compensation.signature,
+      date_created: compensation.timestamp.toISOString(),
     });
     if (error) {
       setError("Kunde inte spara verktygskompensation.");
@@ -87,21 +86,6 @@ export default function ToolCompensationPage({ activeMachine }: ToolCompensation
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">{activeMachine} Verktygskompensering</h1>
-          <p className="text-muted-foreground">
-            Hantera verktygskompensering för maskin {activeMachine}
-          </p>
-        </div>
-        <Button 
-          onClick={() => setShowDialog(true)}
-          className="flex items-center gap-2"
-        >
-          <Plus size={16} />
-          <span>Ny kompensering</span>
-        </Button>
-      </div>
       {error && (
         <div className="text-red-600 px-2">{error}</div>
       )}

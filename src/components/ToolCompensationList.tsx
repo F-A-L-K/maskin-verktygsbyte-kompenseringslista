@@ -44,21 +44,8 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
   );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Verktygskompensering</CardTitle>
-        <CardDescription>
-          Historik över alla verktygskompensationer
-        </CardDescription>
-        {/* <div className="pt-2">
-          <Input
-            placeholder="Sök..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm"
-          />
-        </div> */}
-      </CardHeader>
+    <Card className="border-none">
+      
       <CardContent>
         <Table>
           <TableHeader>
