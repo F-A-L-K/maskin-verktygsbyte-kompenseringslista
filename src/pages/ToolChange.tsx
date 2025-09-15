@@ -25,7 +25,7 @@ export default function ToolChangePage({ activeMachine, showDialog, setShowDialo
     setError(null);
     
     (supabase as any)
-      .from("Verktygshanteringssystem_verktygsbyteslista")
+      .from("verktygshanteringssystem_verktygsbyteslista")
       .select(
         "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order"
       )
@@ -61,7 +61,7 @@ export default function ToolChangePage({ activeMachine, showDialog, setShowDialo
   // Add new tool change to Supabase & local state
   const handleAddToolChange = async (toolChange: ToolChange) => {
     // Save to Supabase
-    const { error } = await (supabase as any).from("Verktygshanteringssystem_verktygsbyteslista").insert({
+    const { error } = await (supabase as any).from("verktygshanteringssystem_verktygsbyteslista").insert({
       id: toolChange.id,
       machine_number: toolChange.machineId,
       manufacturing_order: toolChange.manufacturingOrder,

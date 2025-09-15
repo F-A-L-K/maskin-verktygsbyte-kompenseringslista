@@ -24,7 +24,7 @@ export default function ToolCompensationPage({ activeMachine, showDialog, setSho
     setLoading(true);
     setError(null);
     (supabase as any)
-      .from("Verktygshanteringssystem_kompenseringslista")
+      .from("verktygshanteringssystem_kompenseringslista")
       .select(
         "id, machine_number, manufacturing_order, compnum_coordinate_system, compnum_tool, compnum_number, compensation_direction, compensation_value, comment, signature, date_created"
       )
@@ -61,7 +61,7 @@ export default function ToolCompensationPage({ activeMachine, showDialog, setSho
 
   // Add new compensation to Supabase & local state
   const handleAddCompensation = async (compensation: ToolCompensation) => {
-    const { error } = await (supabase as any).from("Verktygshanteringssystem_kompenseringslista").insert({
+    const { error } = await (supabase as any).from("verktygshanteringssystem_kompenseringslista").insert({
       id: compensation.id,
       machine_number: compensation.machineId,
       manufacturing_order: compensation.manufacturingOrder,
