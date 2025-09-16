@@ -46,42 +46,45 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
       </CardHeader>
       <CardContent>
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Tillverkningsorder</TableHead>
-              <TableHead>Verktyg</TableHead>
-              <TableHead>Anledning</TableHead>
-              <TableHead>Kommentar</TableHead>
-              <TableHead>Signatur</TableHead>
-              <TableHead>Tid</TableHead>
-            </TableRow>
-          </TableHeader>
+            <TableHeader>
+              <TableRow>
+             <TableHead className="w-1/10 text-center">Signatur</TableHead>
+             <TableHead className="w-2/10 text-center">Tid</TableHead>   
+             <TableHead className="w-1/10 text-center">Verktyg</TableHead>
+             <TableHead className="w-2/10 text-center">Anledning</TableHead>
+             <TableHead className="w-4/10 text-center">Kommentar</TableHead>
+              </TableRow>
+            </TableHeader>
           <TableBody>
             {sortedChanges.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                   Inga verktygsbyten registrerade
                 </TableCell>
               </TableRow>
             ) : (
-              sortedChanges.map((change) => (
-                <TableRow key={change.id}>
-                  <TableCell>{change.manufacturingOrder || "-"}</TableCell>
-                  <TableCell className="font-medium">{change.toolNumber}</TableCell>
-                  <TableCell>
-                    <span className={
-                      change.reason === "Verktygsbrott" 
-                        ? "text-destructive" 
-                        : "text-yellow-600"
-                    }>
-                      {change.reason}
-                    </span>
-                  </TableCell>
-                  <TableCell>{change.comment || "-"}</TableCell>
-                  <TableCell>{change.signature}</TableCell>
-                  <TableCell>
-                    {format(change.timestamp, "yyyy-MM-dd HH:mm:ss")}
-                  </TableCell>
+              sortedChanges.map((change, index) => (
+                <TableRow key={change.id} className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}>
+                    <TableCell className="text-center">{change.signature}</TableCell>
+                    <TableCell className="text-center">
+                     {format(change.timestamp, "yyyy-MM-dd HH:mm")}
+                   </TableCell>
+                   
+                   
+                   <TableCell className="font-bold text-center">{change.toolNumber}</TableCell>
+                   <TableCell className="text-center">
+                     <span className={
+                       change.reason === "Verktygsbrott" 
+                         ? "text-destructive" 
+                         : "text-yellow-600"
+                     }>
+                       {change.reason}
+                     </span>
+                   </TableCell>
+                   
+                   <TableCell className="text-center">{change.comment || "-"}</TableCell>
+                   
+                   
                 </TableRow>
               ))
             )}

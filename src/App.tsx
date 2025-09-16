@@ -32,7 +32,7 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <div className="min-h-screen">
-                <header className="border-b bg-background">
+                <header className="bg-background">
                   <div className="flex items-center justify-between px-6 py-4">
                     <MachineSelector 
                       activeMachine={activeMachine} 

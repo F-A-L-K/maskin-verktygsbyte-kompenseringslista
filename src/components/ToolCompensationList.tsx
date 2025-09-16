@@ -50,15 +50,15 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Tillverkningsorder</TableHead>
-              <TableHead>Koordinatsystem</TableHead>
-              <TableHead>Verktyg</TableHead>
-              <TableHead>Nummer</TableHead>
-              <TableHead>Riktning</TableHead>
-              <TableHead>Värde</TableHead>
-              <TableHead>Kommentar</TableHead>
-              <TableHead>Signatur</TableHead>
-              <TableHead>Tid</TableHead>
+              <TableHead className="text-center">Tillverkningsorder</TableHead>
+              <TableHead className="text-center">Koordinatsystem</TableHead>
+              <TableHead className="text-center">Verktyg</TableHead>
+              <TableHead className="text-center">Nummer</TableHead>
+              <TableHead className="text-center">Riktning</TableHead>
+              <TableHead className="text-center">Värde</TableHead>
+              <TableHead className="text-center">Kommentar</TableHead>
+              <TableHead className="text-center">Signatur</TableHead>
+              <TableHead className="text-center">Tid</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -69,17 +69,17 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
                 </TableCell>
               </TableRow>
             ) : (
-              sortedCompensations.map((comp) => (
-                <TableRow key={comp.id}>
-                  <TableCell>{comp.manufacturingOrder || "-"}</TableCell>
-                  <TableCell>{comp.coordinateSystem || "-"}</TableCell>
-                  <TableCell>{comp.tool || "-"}</TableCell>
-                  <TableCell>{comp.number || "-"}</TableCell>
-                  <TableCell>{comp.direction}</TableCell>
-                  <TableCell>{comp.value}</TableCell>
-                  <TableCell>{comp.comment || "-"}</TableCell>
-                  <TableCell>{comp.signature}</TableCell>
-                  <TableCell>
+              sortedCompensations.map((comp, index) => (
+                <TableRow key={comp.id} className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}>
+                  <TableCell className="text-center">{comp.manufacturingOrder || "-"}</TableCell>
+                  <TableCell className="text-center">{comp.coordinateSystem || "-"}</TableCell>
+                  <TableCell className="text-center">{comp.tool || "-"}</TableCell>
+                  <TableCell className="text-center">{comp.number || "-"}</TableCell>
+                  <TableCell className="text-center">{comp.direction}</TableCell>
+                  <TableCell className="text-center">{comp.value}</TableCell>
+                  <TableCell className="text-center">{comp.comment || "-"}</TableCell>
+                  <TableCell className="text-center">{comp.signature}</TableCell>
+                  <TableCell className="text-center">
                     {format(comp.timestamp, "yyyy-MM-dd HH:mm:ss")}
                   </TableCell>
                 </TableRow>
