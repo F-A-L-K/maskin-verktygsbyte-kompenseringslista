@@ -23,9 +23,9 @@ export default function NotFound() {
               <div className="text-sm text-blue-700 space-y-2">
                 <p><strong>Exempel på korrekta URL:er:</strong></p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li><code>/4400-9877-1234</code> - Välj mellan maskin 4400, 9877 och 1234</li>
+                  <li><code>/5401-5402-5403</code> - Välj mellan maskin 5401, 5402 och 5403</li>
                   <li><code>/5701-5704</code> - Välj mellan maskin 5701 och 5704</li>
-                  <li><code>/9999</code> - Endast maskin 9999 tillgänglig</li>
+                  <li><code>/5503</code> - Endast maskin 5503 tillgänglig</li>
                 </ul>
                 <p className="mt-3"><strong>Exempel på felaktiga URL:er:</strong></p>
                 <ul className="list-disc list-inside space-y-1 ml-4">

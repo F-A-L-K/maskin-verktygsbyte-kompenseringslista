@@ -5,13 +5,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
-import MachineSelector from "./components/MachineSelector";
-import ActionButtons from "./components/ActionButtons";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -28,29 +26,17 @@ const AppContent = () => {
   
   return (
     <div className="min-h-screen">
-      <header className="bg-background border-b ">
-        <div className="flex items-center justify-between px-6 py-4">
-          <MachineSelector 
-            activeMachine={activeMachine} 
-            onMachineChange={setActiveMachine}
-            availableMachines={availableMachines}
-          />
-          <div className="flex items-center gap-4">
-            <ActionButtons 
-              onNewToolChange={() => setShowToolChangeDialog(true)}
-              onNewCompensation={() => setShowCompensationDialog(true)}
-            />
-          </div>
-        </div>
-      </header>
+      <Navbar
+        activeMachine={activeMachine}
+        onMachineChange={setActiveMachine}
+        availableMachines={availableMachines}
+        showDialog={showToolChangeDialog}
+        setShowDialog={setShowToolChangeDialog}
+        showCompensationDialog={showCompensationDialog}
+        setShowCompensationDialog={setShowCompensationDialog}
+      />
       <main className="p-8">
-        <Home 
-          activeMachine={activeMachine} 
-          showDialog={showToolChangeDialog}
-          setShowDialog={setShowToolChangeDialog}
-          showCompensationDialog={showCompensationDialog}
-          setShowCompensationDialog={setShowCompensationDialog}
-        />
+        {/* Content is now handled by NavigationTabs */}
       </main>
     </div>
   );

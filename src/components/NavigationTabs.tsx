@@ -1,0 +1,47 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MachineId } from "@/types";
+import ToolChangePage from "@/pages/ToolChange";
+import ToolCompensationPage from "@/pages/ToolCompensation";
+
+interface NavigationTabsProps {
+  activeMachine: MachineId;
+  showDialog: boolean;
+  setShowDialog: (show: boolean) => void;
+  showCompensationDialog: boolean;
+  setShowCompensationDialog: (show: boolean) => void;
+}
+
+export default function NavigationTabs({ 
+  activeMachine, 
+  showDialog, 
+  setShowDialog, 
+  showCompensationDialog, 
+  setShowCompensationDialog 
+}: NavigationTabsProps) {
+  return (
+    <Tabs defaultValue="verktyg" className="w-full">
+      <div className="flex justify-center">
+        <TabsList className="grid w-1/4 grid-cols-2">
+          <TabsTrigger value="verktyg">Verktygsbyte</TabsTrigger>
+          <TabsTrigger value="kompensering">Kompensering</TabsTrigger>
+        </TabsList>
+      </div>
+      
+      <TabsContent value="verktyg" className="mt-6">
+        <ToolChangePage 
+          activeMachine={activeMachine} 
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
+        />
+      </TabsContent>
+      
+      <TabsContent value="kompensering" className="mt-6">
+        <ToolCompensationPage 
+          activeMachine={activeMachine} 
+          showDialog={showCompensationDialog}
+          setShowDialog={setShowCompensationDialog}
+        />
+      </TabsContent>
+    </Tabs>
+  );
+}
