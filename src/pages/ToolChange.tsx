@@ -8,11 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ToolChangePageProps {
   activeMachine: MachineId;
-  showDialog: boolean;
-  setShowDialog: (show: boolean) => void;
 }
 
-export default function ToolChangePage({ activeMachine, showDialog, setShowDialog }: ToolChangePageProps) {
+export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
   const [toolChanges, setToolChanges] = useState<ToolChange[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,14 +90,6 @@ export default function ToolChangePage({ activeMachine, showDialog, setShowDialo
       ) : (
         <ToolChangeList toolChanges={toolChanges} />
       )}
-
-      <ToolChangeForm
-        open={showDialog}
-        onOpenChange={setShowDialog}
-        onSubmit={handleAddToolChange}
-        machineId={activeMachine}
-        defaultManufacturingOrder={latestManufacturingOrder}
-      />
     </div>
   );
 }

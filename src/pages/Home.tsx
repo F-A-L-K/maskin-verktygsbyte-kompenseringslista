@@ -6,18 +6,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface HomeProps {
   activeMachine: MachineId;
-  showDialog: boolean;
-  setShowDialog: (show: boolean) => void;
-  showCompensationDialog: boolean;
-  setShowCompensationDialog: (show: boolean) => void;
 }
 
 export default function Home({ 
-  activeMachine, 
-  showDialog, 
-  setShowDialog, 
-  showCompensationDialog, 
-  setShowCompensationDialog 
+  activeMachine
 }: HomeProps) {
   return (
     <Tabs defaultValue="verktyg" className="w-full">
@@ -29,16 +21,12 @@ export default function Home({
       <TabsContent value="verktyg" className="mt-6">
         <ToolChangePage 
           activeMachine={activeMachine} 
-          showDialog={showDialog}
-          setShowDialog={setShowDialog}
         />
       </TabsContent>
       
       <TabsContent value="kompensering" className="mt-6">
         <ToolCompensationPage 
           activeMachine={activeMachine} 
-          showDialog={showCompensationDialog}
-          setShowDialog={setShowCompensationDialog}
         />
       </TabsContent>
     </Tabs>

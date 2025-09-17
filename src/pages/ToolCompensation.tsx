@@ -8,11 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ToolCompensationPageProps {
   activeMachine: MachineId;
-  showDialog: boolean;
-  setShowDialog: (show: boolean) => void;
 }
 
-export default function ToolCompensationPage({ activeMachine, showDialog, setShowDialog }: ToolCompensationPageProps) {
+export default function ToolCompensationPage({ activeMachine }: ToolCompensationPageProps) {
   const [compensations, setCompensations] = useState<ToolCompensation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,14 +92,6 @@ export default function ToolCompensationPage({ activeMachine, showDialog, setSho
       ) : (
         <ToolCompensationList compensations={compensations} />
       )}
-
-      <ToolCompensationForm
-        open={showDialog}
-        onOpenChange={setShowDialog}
-        onSubmit={handleAddCompensation}
-        machineId={activeMachine}
-        defaultManufacturingOrder={latestManufacturingOrder}
-      />
     </div>
   );
 }
