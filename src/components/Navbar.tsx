@@ -11,6 +11,8 @@ interface NavbarProps {
   setShowDialog: (show: boolean) => void;
   showCompensationDialog: boolean;
   setShowCompensationDialog: (show: boolean) => void;
+  currentTab: string;
+  onTabChange: (value: string) => void;
 }
 
 export default function Navbar({
@@ -20,7 +22,9 @@ export default function Navbar({
   showDialog,
   setShowDialog,
   showCompensationDialog,
-  setShowCompensationDialog
+  setShowCompensationDialog,
+  currentTab,
+  onTabChange
 }: NavbarProps) {
   return (
     <header className="bg-background border-b">
@@ -30,12 +34,11 @@ export default function Navbar({
           onMachineChange={onMachineChange}
           availableMachines={availableMachines}
         />
-        <div className="flex items-center gap-4">
-          <ActionButtons 
-            onNewToolChange={() => setShowDialog(true)}
-            onNewCompensation={() => setShowCompensationDialog(true)}
-          />
-        </div>
+        <ActionButtons 
+          onNewToolChange={() => setShowDialog(true)}
+          onNewCompensation={() => setShowCompensationDialog(true)}
+          currentTab={currentTab}
+        />
       </div>
       <div className="px-6 pb-4">
         <NavigationTabs 
@@ -44,6 +47,7 @@ export default function Navbar({
           setShowDialog={setShowDialog}
           showCompensationDialog={showCompensationDialog}
           setShowCompensationDialog={setShowCompensationDialog}
+          onTabChange={onTabChange}
         />
       </div>
     </header>

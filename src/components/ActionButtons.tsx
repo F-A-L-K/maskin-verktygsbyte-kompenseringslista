@@ -1,18 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { useLocation } from "react-router-dom";
 
 interface ActionButtonsProps {
   onNewToolChange: () => void;
   onNewCompensation: () => void;
+  currentTab: string;
 }
 
-export default function ActionButtons({ onNewToolChange, onNewCompensation }: ActionButtonsProps) {
-  const location = useLocation();
-
+export default function ActionButtons({ onNewToolChange, onNewCompensation, currentTab }: ActionButtonsProps) {
   return (
     <div className="flex gap-2">
-      {location.pathname === "/verktyg" && (
+      {currentTab === "verktyg" && (
         <Button 
           onClick={onNewToolChange}
           className="flex items-center gap-2"
@@ -21,7 +19,7 @@ export default function ActionButtons({ onNewToolChange, onNewCompensation }: Ac
           <span>Nytt verktygsbyte</span>
         </Button>
       )}
-      {location.pathname === "/kompensering" && (
+      {currentTab === "kompensering" && (
         <Button 
           onClick={onNewCompensation}
           className="flex items-center gap-2"

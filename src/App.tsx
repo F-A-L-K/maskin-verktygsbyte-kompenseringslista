@@ -18,6 +18,7 @@ const AppContent = () => {
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
   const [showToolChangeDialog, setShowToolChangeDialog] = useState(false);
   const [showCompensationDialog, setShowCompensationDialog] = useState(false);
+  const [currentTab, setCurrentTab] = useState("verktyg");
   
   // If URL is invalid, show 404 page
   if (!isValidUrl) {
@@ -34,6 +35,8 @@ const AppContent = () => {
         setShowDialog={setShowToolChangeDialog}
         showCompensationDialog={showCompensationDialog}
         setShowCompensationDialog={setShowCompensationDialog}
+        currentTab={currentTab}
+        onTabChange={setCurrentTab}
       />
       <main className="p-8">
         {/* Content is now handled by NavigationTabs */}

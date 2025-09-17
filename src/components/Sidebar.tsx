@@ -2,7 +2,6 @@
 import { cn } from "@/lib/utils";
 import { MachineId } from "@/types";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface SidebarProps {
   activeMachine: MachineId;
@@ -11,10 +10,17 @@ interface SidebarProps {
 
 export default function Sidebar({ activeMachine, setActiveMachine }: SidebarProps) {
   const location = useLocation();
-  const { getVisibleMachines } = useAuth();
   
-  // Get only the machines that the current user can see
-  const visibleMachines = getVisibleMachines();
+  // All available machines
+  const visibleMachines: MachineId[] = [
+    "5401 Fanuc Robodrill",
+    "5701 Fanuc Robodrill",
+    "5702 Fanuc Robodrill", 
+    "5703 Fanuc Robodrill",
+    "5704 Fanuc Robodrill",
+    "5705 Fanuc Robodrill",
+    "5706 Fanuc Robodrill"
+  ];
 
   const pages = [
     { path: "/verktyg", title: "Verktygsbyte" },

@@ -4,12 +4,13 @@ import { MachineId } from '@/types';
 
 export function useLastManufacturingOrder() {
   const [lastOrders, setLastOrders] = useState<Record<MachineId, string>>({
-    "5701": "",
-    "5702": "",
-    "5703": "",
-    "5704": "",
-    "5705": "",
-    "5706": "",
+    "5401 Fanuc Robodrill": "",
+    "5701 Fanuc Robodrill": "",
+    "5702 Fanuc Robodrill": "",
+    "5703 Fanuc Robodrill": "",
+    "5704 Fanuc Robodrill": "",
+    "5705 Fanuc Robodrill": "",
+    "5706 Fanuc Robodrill": "",
   });
 
   const setLastOrder = (machineId: MachineId, order: string) => {

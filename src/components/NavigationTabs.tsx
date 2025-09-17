@@ -9,6 +9,7 @@ interface NavigationTabsProps {
   setShowDialog: (show: boolean) => void;
   showCompensationDialog: boolean;
   setShowCompensationDialog: (show: boolean) => void;
+  onTabChange: (value: string) => void;
 }
 
 export default function NavigationTabs({ 
@@ -16,10 +17,11 @@ export default function NavigationTabs({
   showDialog, 
   setShowDialog, 
   showCompensationDialog, 
-  setShowCompensationDialog 
+  setShowCompensationDialog,
+  onTabChange
 }: NavigationTabsProps) {
   return (
-    <Tabs defaultValue="verktyg" className="w-full">
+    <Tabs defaultValue="verktyg" className="w-full" onValueChange={onTabChange}>
       <div className="flex justify-center">
         <TabsList className="grid w-1/4 grid-cols-2">
           <TabsTrigger value="verktyg">Verktygsbyte</TabsTrigger>
