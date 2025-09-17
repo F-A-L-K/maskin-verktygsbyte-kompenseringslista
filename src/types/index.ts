@@ -10,7 +10,7 @@ export interface ToolChange {
   manufacturingOrder: string;
 }
 
-export type MachineId = "5701" | "5702" | "5703" | "5704" | "5705" | "5706";
+export type MachineId = "5701 Fanuc Robodrill" | "5702 Fanuc Robodrill" | "5703 Fanuc Robodrill" | "5704 Fanuc Robodrill" | "5705 Fanuc Robodrill" | "5706 Fanuc Robodrill";
 
 export interface ToolCompensation {
   id: string;
@@ -26,10 +26,3 @@ export interface ToolCompensation {
   manufacturingOrder: string;
 }
 
-// Add a type for login logs to match the database structure
-export interface LoginLog {
-  id?: string;
-  machine_id: string;
-  success: boolean;
-  login_time?: string;
-}

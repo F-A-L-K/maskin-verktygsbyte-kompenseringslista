@@ -1,27 +1,44 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Info } from "lucide-react";
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-8">
+      <div className="max-w-2xl w-full">
+        <div className="text-center mb-8">
+          <h1 className="text-6xl font-bold text-gray-900 mb-4">404</h1>
+          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Felaktig URL</h2>
+          <p className="text-gray-600 mb-8">
+            URL:en du angav är inte korrekt. Använd formatet nedan för att komma åt verktygshanteringen.
+          </p>
+        </div>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="flex items-start gap-3">
+            <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+            <div>
+              <h3 className="font-medium text-blue-900 mb-3">Korrekt URL-format</h3>
+              <p className="text-blue-800 text-sm mb-4">
+                Använd 4-siffriga maskin-ID:n separerade med bindestreck:
+              </p>
+              <div className="text-sm text-blue-700 space-y-2">
+                <p><strong>Exempel på korrekta URL:er:</strong></p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li><code>/4400-9877-1234</code> - Välj mellan maskin 4400, 9877 och 1234</li>
+                  <li><code>/5701-5704</code> - Välj mellan maskin 5701 och 5704</li>
+                  <li><code>/9999</code> - Endast maskin 9999 tillgänglig</li>
+                </ul>
+                <p className="mt-3"><strong>Exempel på felaktiga URL:er:</strong></p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li><code>/</code> - För kort</li>
+                  <li><code>/570</code> - Inte 4 siffror</li>
+                  <li><code>/5701-570</code> - Blandade längder</li>
+                  <li><code>/abc-5701</code> - Innehåller bokstäver</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-};
-
-export default NotFound;
+}

@@ -1,58 +1,51 @@
 import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { MachineId } from "@/types";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface MachineSelectorProps {
   activeMachine: MachineId;
   onMachineChange: (machine: MachineId) => void;
+  availableMachines: MachineId[];
 }
 
-export default function MachineSelector({ activeMachine, onMachineChange }: MachineSelectorProps) {
+export default function MachineSelector({ activeMachine, onMachineChange, availableMachines }: MachineSelectorProps) {
   const [open, setOpen] = useState(false);
-  const { getVisibleMachines } = useAuth();
-  
-  const visibleMachines = getVisibleMachines();
 
   return (
-    <div className="flex items-center gap-2">
-      <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild>
-          <div className={`flex items-center gap-2 px-6 py-3 bg-white border border-gray-300 shadow-sm cursor-pointer hover:text-muted-foreground transition-colors ${open ? 'rounded-t-full rounded-b-none' : 'rounded-full'}`}>
-            <span className="font-medium">Maskin {activeMachine}</span>
-            <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${open ? '-rotate-90' : ''}`} />
+    <div className="relative">
+      <div 
+        className="flex items-center gap-2 cursor-pointer hover:text-muted-foreground transition-colors"
+        onClick={() => setOpen(!open)}
+      >
+        
+        {open ? (
+          <X className="h-4 w-4 transition-transform duration-200" />
+        ) : (
+          <Menu className="h-4 w-4 transition-transform duration-200" />
+        )}
+        <span className="font-medium">{activeMachine}</span>
+      </div>
+      
+      {open && (
+        <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+          <div className="py-2">
+            {availableMachines.map((machine) => (
+              <div
+                key={machine}
+                onClick={() => {
+                  onMachineChange(machine);
+                  setOpen(false);
+                }}
+                className={`px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors ${
+                  activeMachine === machine ? "bg-blue-50 text-blue-700 font-medium" : "text-gray-700"
+                }`}
+              >
+                {machine}
+              </div>
+            ))}
           </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align="start" 
-          className="w-48 mt-0 border border-gray-300 rounded-b-lg shadow-lg"
-          style={{ 
-            marginLeft: '0px',
-            borderTop: 'none',
-            borderTopLeftRadius: '0px',
-            borderTopRightRadius: '0px'
-          }}
-        >
-          {visibleMachines.map((machine) => (
-            <DropdownMenuItem
-              key={machine}
-              onClick={() => {
-                onMachineChange(machine);
-                setOpen(false);
-              }}
-              className={activeMachine === machine ? "bg-accent h-16" : "h-16"}
-            >
-              Maskin {machine}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+        </div>
+      )}
     </div>
   );
 }
