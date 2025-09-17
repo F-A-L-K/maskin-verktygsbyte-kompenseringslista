@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import NewToolChange from "./pages/NewToolChange";
 import NewCompensation from "./pages/NewCompensation";
+import Home from "./pages/Home";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
@@ -34,8 +35,8 @@ const AppContent = () => {
         currentTab={currentTab}
         onTabChange={setCurrentTab}
       />
-      <main className="p-8">
-        {/* Content is now handled by NavigationTabs */}
+      <main>
+        <Home activeMachine={activeMachine} currentTab={currentTab} />
       </main>
     </div>
   );

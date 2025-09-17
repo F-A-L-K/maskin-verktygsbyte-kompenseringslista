@@ -1,34 +1,29 @@
-import { useState } from "react";
 import { MachineId } from "@/types";
 import ToolChangePage from "./ToolChange";
 import ToolCompensationPage from "./ToolCompensation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface HomeProps {
   activeMachine: MachineId;
+  currentTab: string;
 }
 
 export default function Home({ 
-  activeMachine
+  activeMachine,
+  currentTab
 }: HomeProps) {
   return (
-    <Tabs defaultValue="verktyg" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="verktyg">Verktygsbyte</TabsTrigger>
-        <TabsTrigger value="kompensering">Kompensering</TabsTrigger>
-      </TabsList>
-      
-      <TabsContent value="verktyg" className="mt-6">
+    <div className="p-6">
+      {currentTab === "verktyg" && (
         <ToolChangePage 
           activeMachine={activeMachine} 
         />
-      </TabsContent>
+      )}
       
-      <TabsContent value="kompensering" className="mt-6">
+      {currentTab === "kompensering" && (
         <ToolCompensationPage 
           activeMachine={activeMachine} 
         />
-      </TabsContent>
-    </Tabs>
+      )}
+    </div>
   );
 }
