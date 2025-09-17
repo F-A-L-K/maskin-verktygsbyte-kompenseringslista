@@ -20,7 +20,7 @@ export function useMachineFromUrl() {
       
       // Convert to full machine IDs (accept any 4-digit number)
       const machines = machineNumbers
-        .map(num => `${num} Fanuc Robodrill` as MachineId);
+        .map(num => `${num}` as MachineId);
       
       if (machines.length > 0) {
         return {
@@ -34,7 +34,7 @@ export function useMachineFromUrl() {
     // Invalid URL - return empty arrays to trigger 404
     return {
       availableMachines: [],
-      activeMachine: "0000 Fanuc Robodrill" as MachineId,
+      activeMachine: "0000" as MachineId,
       isValidUrl: false
     };
   }, [location.pathname]);

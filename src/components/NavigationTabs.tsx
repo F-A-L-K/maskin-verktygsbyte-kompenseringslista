@@ -21,13 +21,13 @@ export default function NavigationTabs({
         </TabsList>
       </div>
       
-      <TabsContent value="verktyg" className="mt-6">
+      <TabsContent value="verktyg" className="  ">
         <ToolChangePage 
           activeMachine={activeMachine} 
         />
       </TabsContent>
       
-      <TabsContent value="kompensering" className="mt-6">
+      <TabsContent value="kompensering" className="">
         <ToolCompensationPage 
           activeMachine={activeMachine} 
         />

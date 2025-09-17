@@ -31,7 +31,7 @@ export default function Navbar({
         currentTab={currentTab}
       />
       </div>
-      <div className="px-6 pb-4">
+      <div className=" pb-4">
         <NavigationTabs 
           activeMachine={activeMachine} 
           onTabChange={onTabChange}
