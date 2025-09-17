@@ -7,10 +7,6 @@ interface NavbarProps {
   activeMachine: MachineId;
   onMachineChange: (machine: MachineId) => void;
   availableMachines: MachineId[];
-  showDialog: boolean;
-  setShowDialog: (show: boolean) => void;
-  showCompensationDialog: boolean;
-  setShowCompensationDialog: (show: boolean) => void;
   currentTab: string;
   onTabChange: (value: string) => void;
 }
@@ -19,10 +15,6 @@ export default function Navbar({
   activeMachine,
   onMachineChange,
   availableMachines,
-  showDialog,
-  setShowDialog,
-  showCompensationDialog,
-  setShowCompensationDialog,
   currentTab,
   onTabChange
 }: NavbarProps) {
@@ -34,19 +26,14 @@ export default function Navbar({
           onMachineChange={onMachineChange}
           availableMachines={availableMachines}
         />
-        <ActionButtons 
-          onNewToolChange={() => setShowDialog(true)}
-          onNewCompensation={() => setShowCompensationDialog(true)}
-          currentTab={currentTab}
-        />
+      <ActionButtons 
+        activeMachine={activeMachine}
+        currentTab={currentTab}
+      />
       </div>
       <div className="px-6 pb-4">
         <NavigationTabs 
           activeMachine={activeMachine} 
-          showDialog={showDialog}
-          setShowDialog={setShowDialog}
-          showCompensationDialog={showCompensationDialog}
-          setShowCompensationDialog={setShowCompensationDialog}
           onTabChange={onTabChange}
         />
       </div>

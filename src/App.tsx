@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/NotFound";
+import NewToolChange from "./pages/NewToolChange";
+import NewCompensation from "./pages/NewCompensation";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
@@ -16,8 +18,6 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const { availableMachines, activeMachine: defaultMachine, isValidUrl } = useMachineFromUrl();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
-  const [showToolChangeDialog, setShowToolChangeDialog] = useState(false);
-  const [showCompensationDialog, setShowCompensationDialog] = useState(false);
   const [currentTab, setCurrentTab] = useState("verktyg");
   
   // If URL is invalid, show 404 page
@@ -31,10 +31,6 @@ const AppContent = () => {
         activeMachine={activeMachine}
         onMachineChange={setActiveMachine}
         availableMachines={availableMachines}
-        showDialog={showToolChangeDialog}
-        setShowDialog={setShowToolChangeDialog}
-        showCompensationDialog={showCompensationDialog}
-        setShowCompensationDialog={setShowCompensationDialog}
         currentTab={currentTab}
         onTabChange={setCurrentTab}
       />
@@ -53,7 +49,12 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <AppContent />
+            <Routes>
+              <Route path="/new-tool-change" element={<NewToolChange />} />
+              <Route path="/new-compensation" element={<NewCompensation />} />
+              <Route path="/:machineId" element={<AppContent />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>
