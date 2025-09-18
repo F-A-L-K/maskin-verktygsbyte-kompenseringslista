@@ -25,7 +25,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
     (supabase as any)
       .from("verktygshanteringssystem_verktygsbyteslista")
       .select(
-        "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order, number_of_parts_ADAM"
+        "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order, number_of_parts_ADAM, amount_since_last_change"
       )
       .eq("machine_number", activeMachine)
       .order("date_created", { ascending: false })
@@ -47,6 +47,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
             signature: item.signature ?? "",
             timestamp: new Date(item.date_created),
             number_of_parts_ADAM: item.number_of_parts_ADAM,
+            amount_since_last_change: item.amount_since_last_change,
           })) || [];
         
         setToolChanges(mapped);
