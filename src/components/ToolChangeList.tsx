@@ -48,11 +48,12 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
         <Table className="table-fixed w-full">
             <TableHeader>
               <TableRow>
-             <TableHead className="w-[10%] text-center">Signatur</TableHead>
-             <TableHead className="w-[20%] text-center">Datum</TableHead>   
-             <TableHead className="w-[10%] text-center">Verktyg</TableHead>
-             <TableHead className="w-[20%] text-center">Anledning</TableHead>
-             <TableHead className="w-[40%] text-center">Kommentar</TableHead>
+             <TableHead className="w-[6%] text-center">Signatur</TableHead>
+             <TableHead className="w-[12%] text-center">Datum</TableHead>   
+             <TableHead className="w-[6%] text-center">Verktyg</TableHead>
+             <TableHead className="w-[12%] text-center">Anledning</TableHead>
+             <TableHead className="w-[6%] text-center">Antal körda</TableHead>
+             <TableHead className="w-[36%] text-center">Kommentar</TableHead>
               </TableRow>
             </TableHeader>
           <TableBody>
@@ -77,6 +78,7 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
                        {change.reason}
                      </span>
                    </TableCell>
+                   <TableCell className="text-center"></TableCell>
                    <TableCell className="text-center">{change.comment || "-"}</TableCell>
                 </TableRow>
               ))

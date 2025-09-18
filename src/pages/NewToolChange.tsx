@@ -138,6 +138,7 @@ export default function NewToolChange() {
       signature: values.signature,
       timestamp: new Date(),
       number_of_parts_ADAM: adamBoxValue || null,
+      amount_since_last_change: amountSinceLastChange,
     };
 
     // Save to Supabase
