@@ -512,6 +512,7 @@ export type Database = {
       }
       verktygshanteringssystem_maskiner: {
         Row: {
+          active_article: string | null
           created_at: string
           id: string
           ip_adambox: string | null
@@ -520,6 +521,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          active_article?: string | null
           created_at?: string
           id?: string
           ip_adambox?: string | null
@@ -528,6 +530,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          active_article?: string | null
           created_at?: string
           id?: string
           ip_adambox?: string | null

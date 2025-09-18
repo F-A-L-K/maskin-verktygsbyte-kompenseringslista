@@ -12,12 +12,14 @@ import Home from "./pages/Home";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
+import { useMachines } from "./hooks/useMachines";
 import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { availableMachines, activeMachine: defaultMachine, isValidUrl, isLoading } = useMachineFromUrl();
+  const { data: machineData } = useMachines();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
   const [currentTab, setCurrentTab] = useState("verktyg");
   
@@ -46,6 +48,7 @@ const AppContent = () => {
         availableMachines={availableMachines}
         currentTab={currentTab}
         onTabChange={setCurrentTab}
+        machineData={machineData}
       />
       <main>
         <Home activeMachine={activeMachine} currentTab={currentTab} />

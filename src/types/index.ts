@@ -18,6 +18,7 @@ export interface Machine {
   maskiner_nummer: string;
   maskin_namn: string;
   ip_adambox: string | null;
+  active_article: string | null;
   created_at: string;
   updated_at: string;
 }

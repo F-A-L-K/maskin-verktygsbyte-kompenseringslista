@@ -1,4 +1,4 @@
-import { MachineId } from "@/types";
+import { MachineId, Machine } from "@/types";
 import MachineSelector from "./MachineSelector";
 import ActionButtons from "./ActionButtons";
 import { Button } from "./ui/button";
@@ -9,6 +9,7 @@ interface NavbarProps {
   availableMachines: MachineId[];
   currentTab: string;
   onTabChange: (value: string) => void;
+  machineData?: Machine[];
 }
 
 export default function Navbar({
@@ -16,7 +17,8 @@ export default function Navbar({
   onMachineChange,
   availableMachines,
   currentTab,
-  onTabChange
+  onTabChange,
+  machineData
 }: NavbarProps) {
   return (
     <header className="bg-background border-b">
@@ -25,6 +27,7 @@ export default function Navbar({
             activeMachine={activeMachine} 
             onMachineChange={onMachineChange}
             availableMachines={availableMachines}
+            machineData={machineData}
           />
         <div className="flex items-center gap-6">
         
