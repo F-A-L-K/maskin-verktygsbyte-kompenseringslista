@@ -97,37 +97,6 @@ export default function NewToolChange() {
   const handleStep2Submit = async (values: z.infer<typeof step2Schema>) => {
     if (!step1Data) return;
 
-    // Get machine info to retrieve active_article_number
-    const { data: machine } = await (supabase as any)
-      .from("verktygshanteringssystem_maskiner")
-      .select("active_article")
-      .eq("maskiner_nummer", machineNumber)
-      .maybeSingle();
-
-    const activeArticle = machine?.active_article;
-
-    // Check for previous tool change to calculate amount_since_last_change
-    let amountSinceLastChange = 0;
-    
-    if (activeArticle && adamBoxValue) {
-      try {
-        const { data: previousToolChanges } = await (supabase as any)
-          .from("verktygshanteringssystem_verktygsbyteslista")
-          .select("*")
-          .eq("machine_number", machineId)
-          .eq("active_article_number", activeArticle)
-          .eq("tool_number", step1Data.toolNumber)
-          .order("date_created", { ascending: false })
-          .limit(1);
-
-        if (previousToolChanges && previousToolChanges.length > 0 && (previousToolChanges[0] as any).number_of_parts_ADAM) {
-          amountSinceLastChange = adamBoxValue - (previousToolChanges[0] as any).number_of_parts_ADAM;
-        }
-      } catch (error) {
-        console.error('Error fetching previous tool change:', error);
-      }
-    }
-
     const newToolChange: ToolChange = {
       id: generateUUID(),
       machineId,
@@ -138,11 +107,10 @@ export default function NewToolChange() {
       signature: values.signature,
       timestamp: new Date(),
       number_of_parts_ADAM: adamBoxValue || null,
-      amount_since_last_change: amountSinceLastChange,
     };
 
     // Save to Supabase
-    const { error } = await supabase.from("verktygshanteringssystem_verktygsbyteslista").insert({
+    const { error } = await (supabase as any).from("verktygshanteringssystem_verktygsbyteslista").insert({
       id: newToolChange.id,
       machine_number: newToolChange.machineId,
       manufacturing_order: newToolChange.manufacturingOrder,
@@ -152,8 +120,6 @@ export default function NewToolChange() {
       signature: newToolChange.signature,
       date_created: newToolChange.timestamp.toISOString(),
       number_of_parts_ADAM: adamBoxValue || null,
-      active_article_number: activeArticle,
-      amount_since_last_change: amountSinceLastChange,
     });
 
     if (error) {
@@ -183,11 +149,7 @@ export default function NewToolChange() {
             <ArrowRight size={16} />
             <span className={currentStep === 2 ? "text-primary font-medium" : ""}>Steg 2: Order & signatur</span>
           </div>
-          {adamBoxValue !== null && (
-            <div className="text-sm text-muted-foreground">
-              AdamBox värde: {adamBoxValue}
-            </div>
-          )}
+       
         </div>
 
         {currentStep === 1 && (

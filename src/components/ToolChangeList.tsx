@@ -49,17 +49,17 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
             <TableHeader>
               <TableRow>
              <TableHead className="w-[6%] text-center">Signatur</TableHead>
-             <TableHead className="w-[12%] text-center">Datum</TableHead>   
+             <TableHead className="w-[8%] text-center">Datum</TableHead>   
              <TableHead className="w-[6%] text-center">Verktyg</TableHead>
-             <TableHead className="w-[12%] text-center">Anledning</TableHead>
-             <TableHead className="w-[6%] text-center">Antal körda</TableHead>
-             <TableHead className="w-[36%] text-center">Kommentar</TableHead>
+             <TableHead className="w-[8%] text-center">Anledning</TableHead>
+             <TableHead className="w-[6%] text-center">Körda artiklar</TableHead>
+             <TableHead className="w-[40%] text-center">Kommentar</TableHead>
               </TableRow>
             </TableHeader>
           <TableBody>
             {sortedChanges.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={5} className=" py-8 text-muted-foreground">
                   Inga verktygsbyten registrerade
                 </TableCell>
               </TableRow>

@@ -52,11 +52,11 @@ export default function ToolCompensationList({ compensations }: ToolCompensation
         <Table className="table-fixed w-full">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[10%] text-center">Signatur</TableHead>
-              <TableHead className="w-[10%] text-center">Datum</TableHead>
-              <TableHead className="w-[20%] text-center">Koordinatsystem | Verktyg | Nummer</TableHead>
-              <TableHead className="w-[10%] text-center">Riktning</TableHead>
-              <TableHead className="w-[10%] text-center">Värde</TableHead>
+              <TableHead className="w-[6%] text-center">Signatur</TableHead>
+              <TableHead className="w-[8%] text-center">Datum</TableHead>
+              <TableHead className="w-[15%] text-center">Koordinatsystem | Verktyg | Nummer</TableHead>
+              <TableHead className="w-[6%] text-center">Riktning</TableHead>
+              <TableHead className="w-[6%] text-center">Värde</TableHead>
               <TableHead className="w-[40%] text-center">Kommentar</TableHead>
             </TableRow>
           </TableHeader>
