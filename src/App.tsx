@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,6 +20,13 @@ const AppContent = () => {
   const { availableMachines, activeMachine: defaultMachine, isValidUrl, isLoading } = useMachineFromUrl();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
   const [currentTab, setCurrentTab] = useState("verktyg");
+  
+  // Update active machine when URL changes
+  useEffect(() => {
+    if (defaultMachine !== "0000") {
+      setActiveMachine(defaultMachine);
+    }
+  }, [defaultMachine]);
   
   // Show loading while checking machines
   if (isLoading) {

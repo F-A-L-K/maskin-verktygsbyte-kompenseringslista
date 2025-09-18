@@ -31,7 +31,7 @@ export function useMachineFromUrl() {
         .filter(num => machines.some(machine => machine.maskiner_nummer === num))
         .map(num => {
           const machine = machines.find(m => m.maskiner_nummer === num);
-          return machine?.maskin_namn || num;
+          return `${num} ${machine?.maskin_namn || 'Unknown'}`;
         });
       
       if (validMachines.length > 0) {
