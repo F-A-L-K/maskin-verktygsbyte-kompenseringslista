@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -24,8 +24,9 @@ import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { getAdamBoxValue } from "@/lib/adambox";
 
 const step1Schema = z.object({
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
@@ -46,6 +47,8 @@ export default function NewToolChange() {
   const machineId = searchParams.get("machine") as MachineId;
   const [currentStep, setCurrentStep] = useState(1);
   const [step1Data, setStep1Data] = useState<z.infer<typeof step1Schema> | null>(null);
+  const [isLoadingAdamBox, setIsLoadingAdamBox] = useState(false);
+  const [adamBoxValue, setAdamBoxValue] = useState<number | null>(null);
   const { getLastOrder, setLastOrder } = useLastManufacturingOrder();
 
   const step1Form = useForm<z.infer<typeof step1Schema>>({
@@ -65,6 +68,26 @@ export default function NewToolChange() {
     },
   });
 
+  // Get AdamBox value when component mounts
+  useEffect(() => {
+    if (machineId) {
+      fetchAdamBoxValue();
+    }
+  }, [machineId]);
+
+  const fetchAdamBoxValue = async () => {
+    setIsLoadingAdamBox(true);
+    try {
+      const value = await getAdamBoxValue(machineId);
+      setAdamBoxValue(value);
+    } catch (error) {
+      console.error('Error fetching AdamBox value:', error);
+      setAdamBoxValue(null);
+    } finally {
+      setIsLoadingAdamBox(false);
+    }
+  };
+
   const handleStep1Submit = (values: z.infer<typeof step1Schema>) => {
     setStep1Data(values);
     setCurrentStep(2);
@@ -82,6 +105,7 @@ export default function NewToolChange() {
       comment: values.comment || "",
       signature: values.signature,
       timestamp: new Date(),
+      number_of_parts_ADAM: adamBoxValue || undefined,
     };
 
     // Save to Supabase
@@ -94,6 +118,7 @@ export default function NewToolChange() {
       comment: newToolChange.comment,
       signature: newToolChange.signature,
       date_created: newToolChange.timestamp.toISOString(),
+      number_of_parts_ADAM: adamBoxValue || 0,
     });
 
     if (error) {
@@ -118,10 +143,22 @@ export default function NewToolChange() {
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <h1 className="text-2xl font-bold mb-2">Nytt verktygsbyte - Maskin {machineId}</h1>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className={currentStep === 1 ? "text-primary font-medium" : ""}>Steg 1: Verktyg & anledning</span>
             <ArrowRight size={16} />
             <span className={currentStep === 2 ? "text-primary font-medium" : ""}>Steg 2: Order & signatur</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            {isLoadingAdamBox ? (
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Loader2 size={16} className="animate-spin" />
+                <span>Hämtar AdamBox värde...</span>
+              </div>
+            ) : (
+              <div className="text-muted-foreground">
+                AdamBox värde: <span className="font-medium">{adamBoxValue !== null ? adamBoxValue : 'Ej tillgängligt'}</span>
+              </div>
+            )}
           </div>
         </div>
 
