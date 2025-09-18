@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { generateUUID } from "@/lib/utils";
+import { getFullMachineId } from "@/lib/adambox";
 import { Button } from "@/components/ui/button";
 import { 
   Form, 
@@ -54,7 +55,8 @@ export default function NewCompensation() {
   const [step1Data, setStep1Data] = useState<z.infer<typeof step1Schema> | null>(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const machineId = searchParams.get("machine") as MachineId;
+  const machineNumber = searchParams.get("machine");
+  const machineId = machineNumber ? getFullMachineId(machineNumber) : null;
   const { getLastOrder, setLastOrder } = useLastManufacturingOrder();
 
   const step1Form = useForm<z.infer<typeof step1Schema>>({
@@ -124,7 +126,7 @@ export default function NewCompensation() {
     }
 
     toast.success("Verktygskompensation sparad");
-    navigate(`/${machineId}?tab=kompensering`);
+    navigate(`/${machineNumber}?tab=kompensering`);
   };
 
   if (!machineId) {
@@ -234,7 +236,7 @@ export default function NewCompensation() {
                   <Button 
                     type="button" 
                     variant="outline" 
-                    onClick={() => navigate(`/${machineId}?tab=kompensering`)}
+                    onClick={() => navigate(`/${machineNumber}?tab=kompensering`)}
                   >
                     <ArrowLeft size={16} className="mr-2" />
                     Tillbaka

@@ -57,3 +57,13 @@ export async function getAdamBoxValue(machineId: string): Promise<number | null>
 export function getMachineIP(machineId: string): string | null {
   return MACHINE_IP_MAPPING[machineId] || null;
 }
+
+/**
+ * Convert machine number to full machine ID
+ * @param machineNumber - The machine number (e.g., "5701")
+ * @returns string - The full machine ID (e.g., "5701 Fanuc Robodrill")
+ */
+export function getFullMachineId(machineNumber: string): string {
+  const fullId = `${machineNumber} Fanuc Robodrill`;
+  return fullId;
+}

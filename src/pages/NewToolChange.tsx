@@ -26,7 +26,7 @@ import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { getAdamBoxValue } from "@/lib/adambox";
+import { getAdamBoxValue, getFullMachineId } from "@/lib/adambox";
 
 const step1Schema = z.object({
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
@@ -44,7 +44,8 @@ const step2Schema = z.object({
 export default function NewToolChange() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const machineId = searchParams.get("machine") as MachineId;
+  const machineNumber = searchParams.get("machine");
+  const machineId = machineNumber ? getFullMachineId(machineNumber) : null;
   const [currentStep, setCurrentStep] = useState(1);
   const [step1Data, setStep1Data] = useState<z.infer<typeof step1Schema> | null>(null);
   const [isLoadingAdamBox, setIsLoadingAdamBox] = useState(false);
@@ -105,7 +106,7 @@ export default function NewToolChange() {
       comment: values.comment || "",
       signature: values.signature,
       timestamp: new Date(),
-      number_of_parts_ADAM: adamBoxValue || undefined,
+      number_of_parts_ADAM: adamBoxValue || null,
     };
 
     // Save to Supabase
@@ -118,7 +119,7 @@ export default function NewToolChange() {
       comment: newToolChange.comment,
       signature: newToolChange.signature,
       date_created: newToolChange.timestamp.toISOString(),
-      number_of_parts_ADAM: adamBoxValue || 0,
+      number_of_parts_ADAM: adamBoxValue || null,
     });
 
     if (error) {
@@ -131,7 +132,7 @@ export default function NewToolChange() {
     }
 
     toast.success("Verktygsbyte sparat");
-    navigate(`/${machineId}`);
+    navigate(`/${machineNumber}`);
   };
 
   if (!machineId) {
@@ -142,24 +143,13 @@ export default function NewToolChange() {
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">Nytt verktygsbyte - Maskin {machineId}</h1>
+          <h1 className="text-2xl font-bold mb-2">Nytt verktygsbyte - {machineId}</h1>
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className={currentStep === 1 ? "text-primary font-medium" : ""}>Steg 1: Verktyg & anledning</span>
             <ArrowRight size={16} />
             <span className={currentStep === 2 ? "text-primary font-medium" : ""}>Steg 2: Order & signatur</span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            {isLoadingAdamBox ? (
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <Loader2 size={16} className="animate-spin" />
-                <span>Hämtar AdamBox värde...</span>
-              </div>
-            ) : (
-              <div className="text-muted-foreground">
-                AdamBox värde: <span className="font-medium">{adamBoxValue !== null ? adamBoxValue : 'Ej tillgängligt'}</span>
-              </div>
-            )}
-          </div>
+       
         </div>
 
         {currentStep === 1 && (
@@ -207,7 +197,7 @@ export default function NewToolChange() {
                   <Button 
                     type="button" 
                     variant="outline" 
-                    onClick={() => navigate(`/${machineId}`)}
+                    onClick={() => navigate(`/${machineNumber}`)}
                   >
                     <ArrowLeft size={16} className="mr-2" />
                     Tillbaka
