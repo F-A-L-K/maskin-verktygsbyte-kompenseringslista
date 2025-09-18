@@ -9,6 +9,7 @@ export interface ToolChange {
   timestamp: Date;
   manufacturingOrder: string;
   number_of_parts_ADAM?: number;
+  amount_since_last_change?: number;
 }
 
 export type MachineId = string;

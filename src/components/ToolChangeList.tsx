@@ -78,7 +78,7 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
                        {change.reason}
                      </span>
                    </TableCell>
-                   <TableCell className="text-center"></TableCell>
+                   <TableCell className="text-center">{change.amount_since_last_change || "-"}</TableCell>
                    <TableCell className="text-center">{change.comment || "-"}</TableCell>
                 </TableRow>
               ))
