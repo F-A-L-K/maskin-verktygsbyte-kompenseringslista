@@ -21,12 +21,13 @@ export default function Navbar({
   return (
     <header className="bg-background border-b">
       <div className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-6">
-          <MachineSelector 
+      <MachineSelector 
             activeMachine={activeMachine} 
             onMachineChange={onMachineChange}
             availableMachines={availableMachines}
           />
+        <div className="flex items-center gap-6">
+        
           
           <div className="flex gap-2">
             <Button

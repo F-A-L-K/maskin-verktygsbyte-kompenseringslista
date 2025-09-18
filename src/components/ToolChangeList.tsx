@@ -45,14 +45,14 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
        
       </CardHeader>
       <CardContent>
-        <Table>
+        <Table className="table-fixed w-full">
             <TableHeader>
               <TableRow>
-             <TableHead className="w-1/10 text-center">Signatur</TableHead>
-             <TableHead className="w-2/10 text-center">Tid</TableHead>   
-             <TableHead className="w-1/10 text-center">Verktyg</TableHead>
-             <TableHead className="w-2/10 text-center">Anledning</TableHead>
-             <TableHead className="w-4/10 text-center">Kommentar</TableHead>
+             <TableHead className="w-[10%] text-center">Signatur</TableHead>
+             <TableHead className="w-[10%] text-center">Datum</TableHead>   
+             <TableHead className="w-[10%] text-center">Verktyg</TableHead>
+             <TableHead className="w-[10%] text-center">Anledning</TableHead>
+             <TableHead className="w-[60%] text-center">Kommentar</TableHead>
               </TableRow>
             </TableHeader>
           <TableBody>
@@ -66,11 +66,7 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
               sortedChanges.map((change, index) => (
                 <TableRow key={change.id} className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}>
                     <TableCell className="text-center">{change.signature}</TableCell>
-                    <TableCell className="text-center">
-                     {format(change.timestamp, "yyyy-MM-dd HH:mm")}
-                   </TableCell>
-                   
-                   
+                    <TableCell className="text-center">{format(change.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
                    <TableCell className="font-bold text-center">{change.toolNumber}</TableCell>
                    <TableCell className="text-center">
                      <span className={

@@ -10,23 +10,27 @@ interface MachineSelectorProps {
 
 export default function MachineSelector({ activeMachine, onMachineChange, availableMachines }: MachineSelectorProps) {
   const [open, setOpen] = useState(false);
+  const hasMultipleMachines = availableMachines.length > 1;
 
   return (
     <div className="relative">
       <div 
-        className="flex items-center gap-2 cursor-pointer hover:text-muted-foreground transition-colors"
-        onClick={() => setOpen(!open)}
+        className={`flex items-center gap-2 ${hasMultipleMachines ? 'cursor-pointer hover:text-muted-foreground transition-colors' : ''}`}
+        onClick={hasMultipleMachines ? () => setOpen(!open) : undefined}
       >
-        
-        {open ? (
-          <X className="h-4 w-4 transition-transform duration-200" />
-        ) : (
-          <Menu className="h-4 w-4 transition-transform duration-200" />
+        {hasMultipleMachines && (
+          <>
+            {open ? (
+              <X className="h-4 w-4 transition-transform duration-200" />
+            ) : (
+              <Menu className="h-4 w-4 transition-transform duration-200" />
+            )}
+          </>
         )}
         <span className="font-medium">{activeMachine}</span>
       </div>
       
-      {open && (
+      {open && hasMultipleMachines && (
         <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
           <div className="py-2">
             {availableMachines.map((machine) => (
