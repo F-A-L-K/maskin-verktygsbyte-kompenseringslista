@@ -25,7 +25,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
     (supabase as any)
       .from("verktygshanteringssystem_verktygsbyteslista")
       .select(
-        "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order"
+        "id, machine_number, tool_number, cause, comment, signature, date_created, manufacturing_order, amount_since_last_change"
       )
       .eq("machine_number", activeMachine)
       .order("date_created", { ascending: false })
@@ -46,6 +46,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
             comment: item.comment ?? "",
             signature: item.signature ?? "",
             timestamp: new Date(item.date_created),
+            number_of_parts_ADAM: item.amount_since_last_change,
           })) || [];
         
         setToolChanges(mapped);
@@ -68,6 +69,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
       comment: toolChange.comment,
       signature: toolChange.signature,
       date_created: toolChange.timestamp.toISOString(),
+      amount_since_last_change: toolChange.number_of_parts_ADAM ? Number(toolChange.number_of_parts_ADAM) : null,
     });
     if (error) {
       setError("Kunde inte spara verktygsbyte.");

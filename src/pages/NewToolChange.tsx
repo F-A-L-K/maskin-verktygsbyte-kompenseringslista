@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
   Form, 
@@ -73,7 +74,7 @@ export default function NewToolChange() {
     if (!step1Data) return;
 
     const newToolChange: ToolChange = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       machineId,
       manufacturingOrder: values.manufacturingOrder,
       toolNumber: step1Data.toolNumber,

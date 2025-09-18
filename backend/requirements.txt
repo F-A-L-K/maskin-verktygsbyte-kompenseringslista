@@ -1,0 +1,4 @@
+# Advantech AdamBox Data Reader Dependencies
+pymodbus==3.5.2  # Modbus TCP client library
+flask==3.0.0  # Web framework for API
+flask-cors==4.0.0  # CORS support for frontend

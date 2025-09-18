@@ -29,6 +29,9 @@ import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
 import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 import { supabase } from "@/integrations/supabase/client";
+import { getAdamBoxValue } from "@/lib/adambox";
+import { Loader2 } from "lucide-react";
+import { generateUUID } from "@/lib/utils";
 
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
@@ -58,6 +61,8 @@ export default function ToolChangeForm({
   defaultManufacturingOrder = ""
 }: ToolChangeFormProps) {
   const { getLastOrder } = useLastManufacturingOrder();
+  const [isLoadingAdamBox, setIsLoadingAdamBox] = useState(false);
+  const [adamBoxValue, setAdamBoxValue] = useState<number | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,9 +79,29 @@ export default function ToolChangeForm({
     form.setValue('manufacturingOrder', defaultManufacturingOrder || getLastOrder(machineId) || "");
   }, [defaultManufacturingOrder, machineId, getLastOrder, form]);
 
-  const handleSubmit = (values: z.infer<typeof formSchema>) => {
+  // Get AdamBox value when dialog opens
+  useEffect(() => {
+    if (open) {
+      fetchAdamBoxValue();
+    }
+  }, [open, machineId]);
+
+  const fetchAdamBoxValue = async () => {
+    setIsLoadingAdamBox(true);
+    try {
+      const value = await getAdamBoxValue(machineId);
+      setAdamBoxValue(value);
+    } catch (error) {
+      console.error('Error fetching AdamBox value:', error);
+      setAdamBoxValue(null);
+    } finally {
+      setIsLoadingAdamBox(false);
+    }
+  };
+
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     const newToolChange: ToolChange = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       machineId,
       manufacturingOrder: values.manufacturingOrder,
       toolNumber: values.toolNumber,
@@ -84,6 +109,7 @@ export default function ToolChangeForm({
       comment: values.comment || "",
       signature: values.signature,
       timestamp: new Date(),
+      number_of_parts_ADAM: adamBoxValue || undefined,
     };
     
     onSubmit(newToolChange);
@@ -91,6 +117,7 @@ export default function ToolChangeForm({
       ...form.formState.defaultValues,
       manufacturingOrder: values.manufacturingOrder,
     });
+    setAdamBoxValue(null);
     onOpenChange(false);
   };
 
@@ -180,6 +207,7 @@ export default function ToolChangeForm({
                 </FormItem>
               )}
             />
+
             
             <DialogFooter>
               <Button 

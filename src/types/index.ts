@@ -8,6 +8,7 @@ export interface ToolChange {
   signature: string;
   timestamp: Date;
   manufacturingOrder: string;
+  number_of_parts_ADAM?: number;
 }
 
 export type MachineId = string;

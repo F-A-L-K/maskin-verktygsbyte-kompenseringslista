@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
   Form, 
@@ -85,7 +86,7 @@ export default function NewCompensation() {
     if (!step1Data) return;
 
     const newCompensation: ToolCompensation = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       machineId,
       manufacturingOrder: values.manufacturingOrder,
       coordinateSystem: step1Data.coordinateSystem || undefined,
