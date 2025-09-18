@@ -327,7 +327,7 @@ export type Database = {
       }
       underhall_planerade_underhall: {
         Row: {
-          assignee: string
+          assignee: string | null
           checkbox1_completed: boolean | null
           checkbox1_text: string | null
           checkbox2_completed: boolean | null
@@ -349,7 +349,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          assignee: string
+          assignee?: string | null
           checkbox1_completed?: boolean | null
           checkbox1_text?: string | null
           checkbox2_completed?: boolean | null
@@ -371,7 +371,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          assignee?: string
+          assignee?: string | null
           checkbox1_completed?: boolean | null
           checkbox1_text?: string | null
           checkbox2_completed?: boolean | null
@@ -465,7 +465,7 @@ export type Database = {
         }
         Relationships: []
       }
-      Verktygshanteringssystem_kompenseringslista: {
+      verktygshanteringssystem_kompenseringslista: {
         Row: {
           comment: string | null
           compensation_direction: string | null
@@ -510,7 +510,34 @@ export type Database = {
         }
         Relationships: []
       }
-      Verktygshanteringssystem_verktygsbyteslista: {
+      verktygshanteringssystem_maskiner: {
+        Row: {
+          created_at: string
+          id: string
+          ip_adambox: string | null
+          maskin_namn: string
+          maskiner_nummer: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_adambox?: string | null
+          maskin_namn: string
+          maskiner_nummer: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_adambox?: string | null
+          maskin_namn?: string
+          maskiner_nummer?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      verktygshanteringssystem_verktygsbyteslista: {
         Row: {
           amount_since_last_change: number | null
           cause: string | null

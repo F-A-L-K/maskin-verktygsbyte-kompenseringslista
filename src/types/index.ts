@@ -10,7 +10,16 @@ export interface ToolChange {
   manufacturingOrder: string;
 }
 
-export type MachineId = "5401 Fanuc Robodrill" | "5701 Fanuc Robodrill" | "5702 Fanuc Robodrill" | "5703 Fanuc Robodrill" | "5704 Fanuc Robodrill" | "5705 Fanuc Robodrill" | "5706 Fanuc Robodrill";
+export type MachineId = string;
+
+export interface Machine {
+  id: string;
+  maskiner_nummer: string;
+  maskin_namn: string;
+  ip_adambox: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface ToolCompensation {
   id: string;

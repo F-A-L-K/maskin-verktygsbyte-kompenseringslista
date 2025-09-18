@@ -17,10 +17,15 @@ import Navbar from "./components/Navbar";
 const queryClient = new QueryClient();
 
 const AppContent = () => {
-  const { availableMachines, activeMachine: defaultMachine, isValidUrl } = useMachineFromUrl();
+  const { availableMachines, activeMachine: defaultMachine, isValidUrl, isLoading } = useMachineFromUrl();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
   const [currentTab, setCurrentTab] = useState("verktyg");
   
+  // Show loading while checking machines
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
   // If URL is invalid, show 404 page
   if (!isValidUrl) {
     return <NotFound />;
