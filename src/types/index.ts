@@ -19,7 +19,6 @@ export interface Machine {
   maskiner_nummer: string;
   maskin_namn: string;
   ip_adambox: string | null;
-  active_article: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -36,5 +35,16 @@ export interface ToolCompensation {
   signature: string;
   timestamp: Date;
   manufacturingOrder: string;
+}
+
+export interface Tool {
+  id: string;
+  plats: string | null;
+  benämning: string;
+  artikelnummer: string | null;
+  mingräns: number | null;
+  maxgräns: number | null;
+  created_at: string;
+  updated_at: string;
 }
 
