@@ -40,52 +40,53 @@ export default function ToolChangeList({ toolChanges }: ToolChangeListProps) {
   );
 
   return (
-    <Card className="border-none">
-      <CardHeader>
-       
-      </CardHeader>
-      <CardContent>
-        <Table className="table-fixed w-full">
-            <TableHeader>
-              <TableRow>
-             <TableHead className="w-[6%] text-center">Signatur</TableHead>
-             <TableHead className="w-[8%] text-center">Datum</TableHead>   
-             <TableHead className="w-[6%] text-center">Verktyg</TableHead>
-             <TableHead className="w-[8%] text-center">Anledning</TableHead>
-             <TableHead className="w-[6%] text-center">Körda artiklar</TableHead>
-             <TableHead className="w-[40%] text-center">Kommentar</TableHead>
-              </TableRow>
-            </TableHeader>
+    <div className="p-6">
+      <div className="rounded-lg border border-gray-200 overflow-hidden">
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[12%] text-center">Signatur</TableHead>
+              <TableHead className="w-[15%] text-center">Datum</TableHead>   
+              <TableHead className="w-[10%] text-center">Verktyg</TableHead>
+              <TableHead className="w-[12%] text-center">Anledning</TableHead>
+              <TableHead className="w-[12%] text-center">Körda artiklar</TableHead>
+              <TableHead className="w-[39%] text-center">Kommentar</TableHead>
+            </TableRow>
+          </TableHeader>
           <TableBody>
             {sortedChanges.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className=" py-8 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-gray-500 py-8">
                   Inga verktygsbyten registrerade
                 </TableCell>
               </TableRow>
             ) : (
               sortedChanges.map((change, index) => (
-                <TableRow key={change.id} className={index % 2 === 0 ? "bg-background" : "bg-muted/50"}>
-                    <TableCell className="text-center">{change.signature}</TableCell>
-                    <TableCell className="text-center">{format(change.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
-                   <TableCell className="font-bold text-center">{change.toolNumber}</TableCell>
-                   <TableCell className="text-center">
-                     <span className={
-                       change.reason === "Verktygsbrott" 
-                         ? "text-destructive" 
-                         : "text-yellow-600"
-                     }>
-                       {change.reason}
-                     </span>
-                   </TableCell>
-                   <TableCell className="text-center">{change.amount_since_last_change || "-"}</TableCell>
-                   <TableCell className="text-center">{change.comment || "-"}</TableCell>
+                <TableRow key={change.id}>
+                  <TableCell className="text-center">{change.signature}</TableCell>
+                  <TableCell className="text-center">{format(change.timestamp, "yyyy-MM-dd HH:mm")}</TableCell>
+                  <TableCell className="font-medium text-center">{change.toolNumber}</TableCell>
+                  <TableCell className="text-center">
+                    <span className={
+                      change.reason === "Verktygsbrott" 
+                        ? "text-red-600 font-medium" 
+                        : "text-orange-600 font-medium"
+                    }>
+                      {change.reason}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {change.amount_since_last_change ? (
+                      <span>{change.amount_since_last_change} <span className="text-blue-500">ST</span></span>
+                    ) : "-"}
+                  </TableCell>
+                  <TableCell className="text-center">{change.comment || "-"}</TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
