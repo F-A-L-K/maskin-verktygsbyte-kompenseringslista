@@ -47,10 +47,9 @@ export default function History({ activeMachine }: HistoryProps) {
           <TableHeader>
             <TableRow >
               <TableHead className="w-[5%] text-center">Plats</TableHead>
-              <TableHead className="w-[20%] text-center">Benämning</TableHead>
-              <TableHead className="w-[20%] text-center">Artikelnummer</TableHead>
+              <TableHead className="w-[25%] text-center">Benämning</TableHead>
+              <TableHead className="w-[25%] text-center">Artikelnummer</TableHead>
               <TableHead className="w-[10%] text-center">Antal körda</TableHead>
-              <TableHead className="w-[10%] text-center">Min gräns</TableHead>
               <TableHead className="w-[10%] text-center">Max gräns</TableHead>
               <TableHead className="w-[3%] text-center">Mer</TableHead>
             </TableRow>
@@ -65,11 +64,6 @@ export default function History({ activeMachine }: HistoryProps) {
                   <TableCell className="font-medium text-center">{tool.benämning}</TableCell>
                   <TableCell className="text-center">{tool.artikelnummer || "-"}</TableCell>
                   <TableCell className="text-center">-</TableCell>
-                  <TableCell className="text-center">
-                    {tool.mingräns !== null ? (
-                      <span>{tool.mingräns} <span className="text-blue-500">ST</span></span>
-                    ) : "-"}
-                  </TableCell>
                   <TableCell className="text-center" >
                     {tool.maxgräns !== null ? (
                       <span>{tool.maxgräns} <span className="text-blue-500">ST</span></span>
@@ -87,7 +81,7 @@ export default function History({ activeMachine }: HistoryProps) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-gray-500 py-8">
+                <TableCell colSpan={6} className="text-center text-gray-500 py-8">
                   Inga verktyg hittades
                 </TableCell>
               </TableRow>

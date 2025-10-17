@@ -9,6 +9,7 @@ export default function NavigationTabs() {
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
     { path: "historik", label: "Historisk Verktygsbyte" },
     { path: "mätplan", label: "Mätplan" },
+    { path: "cmm", label: "CMM" },
   ];
 
   return (

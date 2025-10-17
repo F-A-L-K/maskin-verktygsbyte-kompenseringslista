@@ -75,17 +75,9 @@ export default function ToolHistory() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <Button
-          variant="ghost"
-          onClick={() => navigate(-1)}
-          className="mb-4"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Tillbaka
-        </Button>
+      
         
         <div className="bg-card p-4 rounded-lg border">
-          <h1 className="text-2xl font-bold mb-2">Verktygshistorik</h1>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
               <span className="text-muted-foreground">Plats:</span>
@@ -100,9 +92,9 @@ export default function ToolHistory() {
               <span className="ml-2 font-medium">{tool.artikelnummer || "-"}</span>
             </div>
             <div>
-              <span className="text-muted-foreground">Gränser:</span>
+              <span className="text-muted-foreground">Max gräns:</span>
               <span className="ml-2 font-medium">
-                {tool.mingräns || "-"} - {tool.maxgräns || "-"} ST
+                {tool.maxgräns || "-"} ST
               </span>
             </div>
           </div>
