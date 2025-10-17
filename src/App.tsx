@@ -17,6 +17,7 @@ import History from "./pages/History";
 import ToolHistory from "./pages/ToolHistory";
 import MI from "./pages/MI";
 import Matplan from "./pages/Matplan";
+import CMM from "./pages/CMM";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const AppContent = () => {
               <Route path="historik" element={<History activeMachine={activeMachine} />} />
               <Route path="verktygshistorik/:toolId" element={<ToolHistory />} />
               <Route path="mätplan" element={<Matplan />} />
+              <Route path="cmm" element={<CMM />} />
             </Routes>
           </main>
         </div>
