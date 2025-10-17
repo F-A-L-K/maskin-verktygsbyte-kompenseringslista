@@ -1,5 +1,5 @@
 import { MachineId } from "@/types";
-import { Clock } from "lucide-react";
+import { Clock, User, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface StatusBarProps {
@@ -22,12 +22,24 @@ export default function StatusBar({ activeMachine }: StatusBarProps) {
   };
 
   return (
-    <div className="bg-statusbar text-statusbar-foreground px-6 py-3 flex items-center justify-between">
+    <div className="bg-statusbar text-statusbar-foreground px-6 py-2 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <span className="font-semibold text-lg">{activeMachine}</span>
+       
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+        <Shield className="h-4 w-4 text-white fill-white" />
+          <span className="font-semibold text-xs">{activeMachine}</span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <User className="h-4 w-4 text-white fill-white" />
+            <span className="font-medium text-xs">Fredrik Falk</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span className="font-medium">110 Väntar på ställ</span>
       </div>
       <div className="flex items-center gap-4">
-        <span className="font-medium">110 Väntar på ställ</span>
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
           <span className="font-medium">{formatTime(currentTime)}</span>

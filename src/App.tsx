@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "./pages/NotFound";
-import NewToolChange from "./pages/NewToolChange";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
@@ -15,6 +14,7 @@ import { AppSidebar } from "./components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import CreateToolChange from "./pages/CreateToolChange";
 import History from "./pages/History";
+import MI from "./pages/MI";
 
 const queryClient = new QueryClient();
 
@@ -42,7 +42,7 @@ const AppContent = () => {
   const hasMultipleMachines = availableMachines.length > 1;
   
   return (
-    <SidebarProvider defaultOpen={hasMultipleMachines}>
+    <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full">
         {hasMultipleMachines && (
           <AppSidebar
@@ -52,14 +52,12 @@ const AppContent = () => {
           />
         )}
         <div className="flex-1 flex flex-col">
-          <div className="flex items-center border-b">
-            {hasMultipleMachines && <SidebarTrigger className="ml-2" />}
-          </div>
           <StatusBar activeMachine={activeMachine} />
           <NavigationTabs />
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Navigate to="skapa-verktygsbyte" replace />} />
+              <Route path="mi" element={<MI />} />
               <Route path="skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
               <Route path="historik" element={<History activeMachine={activeMachine} />} />
             </Routes>
@@ -79,7 +77,6 @@ const App = () => {
           <Sonner />
           <BrowserRouter>
             <Routes>
-              <Route path="/new-tool-change" element={<NewToolChange />} />
               <Route path="/:machineId/*" element={<AppContent />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

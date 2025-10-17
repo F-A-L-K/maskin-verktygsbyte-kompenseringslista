@@ -5,6 +5,7 @@ export default function NavigationTabs() {
   const location = useLocation();
 
   const tabs = [
+    { path: "mi", label: "MI" },
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
     { path: "historik", label: "Historisk Verktygsbyte" },
   ];
@@ -21,7 +22,7 @@ export default function NavigationTabs() {
               className={cn(
                 "px-6 py-3 font-medium transition-colors relative",
                 isActive
-                  ? "text-primary border-b-2 border-primary"
+                  ? "text-[#507E95] border-b-[2px] border-[#507E95]"
                   : "text-muted-foreground hover:text-foreground"
               )}
             >

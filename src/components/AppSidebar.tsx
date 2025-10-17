@@ -9,7 +9,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
 interface AppSidebarProps {
@@ -19,14 +18,11 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeMachine, onMachineChange, availableMachines }: AppSidebarProps) {
-  const { state } = useSidebar();
-  const isCollapsed = state === "collapsed";
-
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent>
+    <Sidebar collapsible="none">
+      <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupLabel className={isCollapsed ? "hidden" : ""}>Maskiner</SidebarGroupLabel>
+          <SidebarGroupLabel>Maskiner</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {availableMachines.map((machine) => {
@@ -42,12 +38,9 @@ export function AppSidebar({ activeMachine, onMachineChange, availableMachines }
                       className="flex items-center gap-2"
                     >
                       <MonitorPlay className="h-4 w-4 flex-shrink-0" />
-                      {!isCollapsed && (
-                        <div className="flex flex-col items-start">
-                          <span className="text-xs font-medium">{machineNumber}</span>
-                          <span className="text-xs opacity-80">{machineName}</span>
-                        </div>
-                      )}
+                      <div className="flex flex-col items-start">
+                        <span className="text-xs font-medium">{machineNumber} {machineName}</span>
+                      </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );
