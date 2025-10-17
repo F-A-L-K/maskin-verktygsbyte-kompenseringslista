@@ -82,6 +82,42 @@ export type Database = {
           },
         ]
       }
+      informationtavla_frånvaro: {
+        Row: {
+          alternate_time: string | null
+          calculated_return: string | null
+          created_at: string
+          end_date: string | null
+          id: string
+          name: string
+          reason: string | null
+          show_date: string
+          start_date: string | null
+        }
+        Insert: {
+          alternate_time?: string | null
+          calculated_return?: string | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          name: string
+          reason?: string | null
+          show_date: string
+          start_date?: string | null
+        }
+        Update: {
+          alternate_time?: string | null
+          calculated_return?: string | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          name?: string
+          reason?: string | null
+          show_date?: string
+          start_date?: string | null
+        }
+        Relationships: []
+      }
       informationtavla_handelser: {
         Row: {
           anmalan_sista_tid: string | null
@@ -216,33 +252,105 @@ export type Database = {
         }
         Relationships: []
       }
+      matrixkoder: {
+        Row: {
+          created_at: string
+          id: number
+          matrixkod_string: string | null
+          tillverkningsorder: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          matrixkod_string?: string | null
+          tillverkningsorder?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          matrixkod_string?: string | null
+          tillverkningsorder?: string | null
+        }
+        Relationships: []
+      }
+      operatorsbyte_maskiner: {
+        Row: {
+          created_at: string
+          id: string
+          machine_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          machine_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          machine_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      operatorsbyte_operatorer: {
+        Row: {
+          created_at: string
+          id: string
+          namn: string
+          nummer: string
+          skift: Database["public"]["Enums"]["skift_typ"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          namn: string
+          nummer: string
+          skift: Database["public"]["Enums"]["skift_typ"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          namn?: string
+          nummer?: string
+          skift?: Database["public"]["Enums"]["skift_typ"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       underhall_akuta_underhall: {
         Row: {
+          archived: boolean
           created_at: string
           creator_signature: string
           equipment_id: string
           id: string
-          show_on_TV: boolean | null
+          performed_by: string | null
           task_number: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          archived?: boolean
           created_at?: string
           creator_signature: string
           equipment_id: string
           id?: string
-          show_on_TV?: boolean | null
+          performed_by?: string | null
           task_number?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          archived?: boolean
           created_at?: string
           creator_signature?: string
           equipment_id?: string
           id?: string
-          show_on_TV?: boolean | null
+          performed_by?: string | null
           task_number?: string | null
           title?: string
           updated_at?: string
@@ -261,28 +369,37 @@ export type Database = {
         Row: {
           comment: string | null
           created_at: string
+          creator_signature: string | null
           everything_ok: boolean
           id: string
           performed_by: string
           performed_date: string
+          task_created_at: string | null
+          title: string | null
           uppgift_id: string
         }
         Insert: {
           comment?: string | null
           created_at?: string
+          creator_signature?: string | null
           everything_ok: boolean
           id?: string
           performed_by: string
           performed_date: string
+          task_created_at?: string | null
+          title?: string | null
           uppgift_id: string
         }
         Update: {
           comment?: string | null
           created_at?: string
+          creator_signature?: string | null
           everything_ok?: boolean
           id?: string
           performed_by?: string
           performed_date?: string
+          task_created_at?: string | null
+          title?: string | null
           uppgift_id?: string
         }
         Relationships: [
@@ -327,7 +444,9 @@ export type Database = {
       }
       underhall_planerade_underhall: {
         Row: {
+          archived: boolean
           assignee: string | null
+          baseline_counter_seconds: number | null
           checkbox1_completed: boolean | null
           checkbox1_text: string | null
           checkbox2_completed: boolean | null
@@ -341,15 +460,21 @@ export type Database = {
           created_at: string
           equipment_id: string
           id: string
+          interval_seconds: number | null
+          intervall_months: number | null
           last_performed_date: string | null
           show_on_TV: boolean | null
           status: string | null
           task_number: string | null
           type: string
           updated_at: string
+          warn_threshhold_months: number | null
+          warn_threshhold_second: number | null
         }
         Insert: {
+          archived?: boolean
           assignee?: string | null
+          baseline_counter_seconds?: number | null
           checkbox1_completed?: boolean | null
           checkbox1_text?: string | null
           checkbox2_completed?: boolean | null
@@ -363,15 +488,21 @@ export type Database = {
           created_at?: string
           equipment_id: string
           id?: string
+          interval_seconds?: number | null
+          intervall_months?: number | null
           last_performed_date?: string | null
           show_on_TV?: boolean | null
           status?: string | null
           task_number?: string | null
           type: string
           updated_at?: string
+          warn_threshhold_months?: number | null
+          warn_threshhold_second?: number | null
         }
         Update: {
+          archived?: boolean
           assignee?: string | null
+          baseline_counter_seconds?: number | null
           checkbox1_completed?: boolean | null
           checkbox1_text?: string | null
           checkbox2_completed?: boolean | null
@@ -385,12 +516,16 @@ export type Database = {
           created_at?: string
           equipment_id?: string
           id?: string
+          interval_seconds?: number | null
+          intervall_months?: number | null
           last_performed_date?: string | null
           show_on_TV?: boolean | null
           status?: string | null
           task_number?: string | null
           type?: string
           updated_at?: string
+          warn_threshhold_months?: number | null
+          warn_threshhold_second?: number | null
         }
         Relationships: [
           {
@@ -404,29 +539,38 @@ export type Database = {
       }
       underhall_utrustningar: {
         Row: {
+          archived: boolean
+          counting_cycletime_seconds: number
           created_at: string
           id: string
+          last_report_item_id: number
           location: string
           name: string
-          resource_number: string | null
+          resource_number: string
           responsible_person: string | null
           updated_at: string
         }
         Insert: {
+          archived?: boolean
+          counting_cycletime_seconds?: number
           created_at?: string
           id?: string
+          last_report_item_id?: number
           location: string
           name: string
-          resource_number?: string | null
+          resource_number: string
           responsible_person?: string | null
           updated_at?: string
         }
         Update: {
+          archived?: boolean
+          counting_cycletime_seconds?: number
           created_at?: string
           id?: string
+          last_report_item_id?: number
           location?: string
           name?: string
-          resource_number?: string | null
+          resource_number?: string
           responsible_person?: string | null
           updated_at?: string
         }
@@ -436,6 +580,8 @@ export type Database = {
         Row: {
           Access_checkin: boolean | null
           Access_informationboard: boolean
+          Access_maintenance: boolean
+          Access_setup_time_machines: boolean
           admin: boolean
           created_at: string
           full_name: string | null
@@ -446,6 +592,8 @@ export type Database = {
         Insert: {
           Access_checkin?: boolean | null
           Access_informationboard?: boolean
+          Access_maintenance?: boolean
+          Access_setup_time_machines?: boolean
           admin: boolean
           created_at?: string
           full_name?: string | null
@@ -456,6 +604,8 @@ export type Database = {
         Update: {
           Access_checkin?: boolean | null
           Access_informationboard?: boolean
+          Access_maintenance?: boolean
+          Access_setup_time_machines?: boolean
           admin?: boolean
           created_at?: string
           full_name?: string | null
@@ -465,54 +615,8 @@ export type Database = {
         }
         Relationships: []
       }
-      verktygshanteringssystem_kompenseringslista: {
-        Row: {
-          comment: string | null
-          compensation_direction: string | null
-          compensation_value: string | null
-          compnum_coordinate_system: string | null
-          compnum_number: string | null
-          compnum_tool: string | null
-          date_created: string
-          id: string
-          machine_number: string | null
-          manufacturing_order: string | null
-          signature: string | null
-          tool_number: string | null
-        }
-        Insert: {
-          comment?: string | null
-          compensation_direction?: string | null
-          compensation_value?: string | null
-          compnum_coordinate_system?: string | null
-          compnum_number?: string | null
-          compnum_tool?: string | null
-          date_created?: string
-          id?: string
-          machine_number?: string | null
-          manufacturing_order?: string | null
-          signature?: string | null
-          tool_number?: string | null
-        }
-        Update: {
-          comment?: string | null
-          compensation_direction?: string | null
-          compensation_value?: string | null
-          compnum_coordinate_system?: string | null
-          compnum_number?: string | null
-          compnum_tool?: string | null
-          date_created?: string
-          id?: string
-          machine_number?: string | null
-          manufacturing_order?: string | null
-          signature?: string | null
-          tool_number?: string | null
-        }
-        Relationships: []
-      }
       verktygshanteringssystem_maskiner: {
         Row: {
-          active_article: string | null
           created_at: string
           id: string
           ip_adambox: string | null
@@ -521,7 +625,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          active_article?: string | null
           created_at?: string
           id?: string
           ip_adambox?: string | null
@@ -530,12 +633,44 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          active_article?: string | null
           created_at?: string
           id?: string
           ip_adambox?: string | null
           maskin_namn?: string
           maskiner_nummer?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      verktygshanteringssystem_verktyg: {
+        Row: {
+          artikelnummer: string | null
+          benämning: string
+          created_at: string
+          id: string
+          maxgräns: number | null
+          mingräns: number | null
+          plats: string | null
+          updated_at: string
+        }
+        Insert: {
+          artikelnummer?: string | null
+          benämning: string
+          created_at?: string
+          id?: string
+          maxgräns?: number | null
+          mingräns?: number | null
+          plats?: string | null
+          updated_at?: string
+        }
+        Update: {
+          artikelnummer?: string | null
+          benämning?: string
+          created_at?: string
+          id?: string
+          maxgräns?: number | null
+          mingräns?: number | null
+          plats?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -549,6 +684,7 @@ export type Database = {
           id: string
           machine_number: string | null
           manufacturing_order: string | null
+          number_of_parts_ADAM: number | null
           signature: string | null
           tool_number: string | null
         }
@@ -560,6 +696,7 @@ export type Database = {
           id?: string
           machine_number?: string | null
           manufacturing_order?: string | null
+          number_of_parts_ADAM?: number | null
           signature?: string | null
           tool_number?: string | null
         }
@@ -571,6 +708,7 @@ export type Database = {
           id?: string
           machine_number?: string | null
           manufacturing_order?: string | null
+          number_of_parts_ADAM?: number | null
           signature?: string | null
           tool_number?: string | null
         }
@@ -618,6 +756,10 @@ export type Database = {
         Args: { p_password: string; p_username: string }
         Returns: Json
       }
+      cleanup_expired_franvaro: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       cleanup_expired_news: {
         Args: Record<PropertyKey, never>
         Returns: number
@@ -629,9 +771,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      inc_and_set_last_id: {
+        Args: {
+          p_add_seconds: number
+          p_new_last_id: number
+          p_resource: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "user"
+      skift_typ: "dag" | "kväll" | "natt"
       user_role: "user" | "admin"
     }
     CompositeTypes: {
@@ -761,6 +912,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      skift_typ: ["dag", "kväll", "natt"],
       user_role: ["user", "admin"],
     },
   },
