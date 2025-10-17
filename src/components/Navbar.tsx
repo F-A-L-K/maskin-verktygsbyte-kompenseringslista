@@ -1,57 +1,41 @@
-import { MachineId, Machine } from "@/types";
-import MachineSelector from "./MachineSelector";
+import { MachineId } from "@/types";
 import ActionButtons from "./ActionButtons";
 import { Button } from "./ui/button";
+import { Menu } from "lucide-react";
 
 interface NavbarProps {
   activeMachine: MachineId;
-  onMachineChange: (machine: MachineId) => void;
   availableMachines: MachineId[];
-  currentTab: string;
-  onTabChange: (value: string) => void;
-  machineData?: Machine[];
+  sidebarOpen: boolean;
+  onSidebarToggle: () => void;
 }
 
 export default function Navbar({
   activeMachine,
-  onMachineChange,
   availableMachines,
-  currentTab,
-  onTabChange,
-  machineData
+  sidebarOpen,
+  onSidebarToggle
 }: NavbarProps) {
+  const hasMultipleMachines = availableMachines.length > 1;
+  
   return (
     <header className="bg-background border-b">
       <div className="flex items-center justify-between px-6 py-4">
-      <MachineSelector 
-            activeMachine={activeMachine} 
-            onMachineChange={onMachineChange}
-            availableMachines={availableMachines}
-            machineData={machineData}
-          />
-        <div className="flex items-center gap-6">
-        
-          
-          <div className="flex gap-2">
+        <div className="flex items-center gap-4">
+          {hasMultipleMachines && (
             <Button
-              variant={currentTab === "verktyg" ? "default" : "outline"}
-              onClick={() => onTabChange("verktyg")}
+              variant="ghost"
+              size="icon"
+              onClick={onSidebarToggle}
+              aria-label="Toggle sidebar"
             >
-              Verktygsbyte
+              <Menu className="h-5 w-5" />
             </Button>
-            <Button
-              variant={currentTab === "kompensering" ? "default" : "outline"}
-              onClick={() => onTabChange("kompensering")}
-            >
-              Kompensering
-            </Button>
-          </div>
+          )}
+          <h1 className="text-xl font-semibold">{activeMachine}</h1>
         </div>
 
-        <ActionButtons 
-          activeMachine={activeMachine}
-          currentTab={currentTab}
-        />
+        <ActionButtons activeMachine={activeMachine} />
       </div>
     </header>
   );

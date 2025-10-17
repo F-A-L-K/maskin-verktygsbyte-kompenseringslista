@@ -5,10 +5,9 @@ import { MachineId } from "@/types";
 
 interface ActionButtonsProps {
   activeMachine: MachineId;
-  currentTab: string;
 }
 
-export default function ActionButtons({ activeMachine, currentTab }: ActionButtonsProps) {
+export default function ActionButtons({ activeMachine }: ActionButtonsProps) {
   const navigate = useNavigate();
 
   // Extract machine number from full machine ID (e.g., "5701 Fanuc Robodrill" -> "5701")
@@ -17,25 +16,12 @@ export default function ActionButtons({ activeMachine, currentTab }: ActionButto
   };
 
   return (
-    <div className="flex gap-2">
-      {currentTab === "verktyg" && (
-        <Button 
-          onClick={() => navigate(`/new-tool-change?machine=${getMachineNumber(activeMachine)}`)}
-          className="flex items-center gap-2"
-        >
-          <Plus size={16} />
-          <span>Nytt verktygsbyte</span>
-        </Button>
-      )}
-      {currentTab === "kompensering" && (
-        <Button 
-          onClick={() => navigate(`/new-compensation?machine=${getMachineNumber(activeMachine)}`)}
-          className="flex items-center gap-2"
-        >
-          <Plus size={16} />
-          <span>Ny kompensering</span>
-        </Button>
-      )}
-    </div>
+    <Button 
+      onClick={() => navigate(`/new-tool-change?machine=${getMachineNumber(activeMachine)}`)}
+      className="flex items-center gap-2"
+    >
+      <Plus size={16} />
+      <span>Nytt verktygsbyte</span>
+    </Button>
   );
 }

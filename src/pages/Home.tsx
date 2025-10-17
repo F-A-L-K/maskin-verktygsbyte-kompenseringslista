@@ -1,29 +1,18 @@
 import { MachineId } from "@/types";
 import ToolChangePage from "./ToolChange";
-import ToolCompensationPage from "./ToolCompensation";
 
 interface HomeProps {
   activeMachine: MachineId;
-  currentTab: string;
+  sidebarOpen: boolean;
 }
 
 export default function Home({ 
   activeMachine,
-  currentTab
+  sidebarOpen
 }: HomeProps) {
   return (
-    <div className="p-6">
-      {currentTab === "verktyg" && (
-        <ToolChangePage 
-          activeMachine={activeMachine} 
-        />
-      )}
-      
-      {currentTab === "kompensering" && (
-        <ToolCompensationPage 
-          activeMachine={activeMachine} 
-        />
-      )}
+    <div className={`p-6 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
+      <ToolChangePage activeMachine={activeMachine} />
     </div>
   );
 }
