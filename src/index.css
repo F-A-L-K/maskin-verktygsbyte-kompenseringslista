@@ -47,6 +47,9 @@
     --machine-active: 210 100% 50%;
     --machine-hover: 214 60% 21%;
     --machine-foreground: 210 40% 98%;
+
+    --status-bar: 0 84% 50%;
+    --status-bar-foreground: 0 0% 100%;
   }
 
   .dark {

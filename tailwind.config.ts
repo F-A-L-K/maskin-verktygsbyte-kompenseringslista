@@ -38,6 +38,10 @@ export default {
                     hover: 'hsl(var(--machine-hover))',
                     foreground: 'hsl(var(--machine-foreground))'
                 },
+                statusbar: {
+                    DEFAULT: 'hsl(var(--status-bar))',
+                    foreground: 'hsl(var(--status-bar-foreground))'
+                },
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
