@@ -20,8 +20,8 @@ export default function History({ activeMachine }: HistoryProps) {
   const navigate = useNavigate();
 
   const handleToolHistory = (toolId: string) => {
-    // Navigate to tool history page
-    navigate(`/tool-history/${toolId}`);
+    const machineId = activeMachine.split(' ')[0];
+    navigate(`/${machineId}/verktygshistorik/${toolId}`);
   };
 
   if (isLoading) {
