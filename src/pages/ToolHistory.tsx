@@ -36,20 +36,20 @@ export default function ToolHistory() {
 
   // Fetch tool changes for this tool
   const { data: toolChanges, isLoading: changesLoading } = useQuery({
-    queryKey: ['toolChanges', tool?.plats],
+    queryKey: ['toolChanges', toolId],
     queryFn: async () => {
-      if (!tool?.plats) return [];
+      if (!toolId) return [];
       
       const { data, error } = await supabase
         .from('verktygshanteringssystem_verktygsbyteslista')
         .select('*')
-        .eq('tool_number', tool.plats)
+        .eq('tool_number', toolId)
         .order('date_created', { ascending: false });
       
       if (error) throw error;
       return data;
     },
-    enabled: !!tool?.plats,
+    enabled: !!toolId,
   });
 
   const isLoading = toolLoading || changesLoading;
