@@ -1,16 +1,15 @@
-
-import React, { createContext, useState, useCallback, useContext, useEffect } from 'react';
+import { createContext, useState, useCallback, useContext, ReactNode, Dispatch, SetStateAction } from 'react';
 
 interface NumericInputContextType {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue: Dispatch<SetStateAction<string>>;
   handleInput: (input: string) => void;
   clearValue: () => void;
 }
 
 const NumericInputContext = createContext<NumericInputContextType | undefined>(undefined);
 
-export const NumericInputProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const NumericInputProvider = ({ children }: { children: ReactNode }) => {
   const [value, setValue] = useState('');
 
   const handleInput = useCallback((input: string) => {
