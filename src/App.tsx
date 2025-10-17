@@ -59,9 +59,9 @@ const AppContent = () => {
           <NavigationTabs />
           <main className="flex-1">
             <Routes>
-              <Route path="/" element={<Navigate to="/skapa-verktygsbyte" replace />} />
-              <Route path="/skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
-              <Route path="/historik" element={<History activeMachine={activeMachine} />} />
+              <Route path="/" element={<Navigate to="skapa-verktygsbyte" replace />} />
+              <Route path="skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
+              <Route path="historik" element={<History activeMachine={activeMachine} />} />
             </Routes>
           </main>
         </div>
