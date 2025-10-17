@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "full": "concurrently \"vite\" \"python ./backend/start_api.py\""
+    "full": "concurrently \"vite\" \"python ./backend/app.py\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

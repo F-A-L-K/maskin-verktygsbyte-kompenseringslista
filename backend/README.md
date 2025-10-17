@@ -12,12 +12,7 @@ pip install -r requirements.txt
 
 ### 2. Start the API Server
 ```bash
-python start_api.py
-```
-
-Or manually:
-```bash
-python api.py
+python app.py
 ```
 
 ## API Endpoints

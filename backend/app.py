@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """
-Simple AdamBox Reader - Get value from specific register
+Flask API for AdamBox integration
+All backend functionality in one file
 """
 
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import socket
 import struct
-import json
 from datetime import datetime
+
+# Initialize Flask app
+app = Flask(__name__)
+CORS(app)  # Enable CORS for frontend requests
 
 def read_adambox_value(ip_address, port=502, unit_id=1, register_address=2):
     """
@@ -119,29 +125,47 @@ def read_adambox_value(ip_address, port=502, unit_id=1, register_address=2):
         if socket_obj:
             socket_obj.close()
 
-def main():
-    """Main function for testing"""
-    print("AdamBox Value Reader")
-    print("=" * 30)
+# API Routes
+
+@app.route('/api/adambox', methods=['GET'])
+def get_adambox_value():
+    """
+    Get AdamBox value for a specific IP address
+    Query parameters:
+    - ip: IP address of the AdamBox
+    """
+    ip_address = request.args.get('ip')
     
-    # Get IP address from user
-    ip_address = input("Enter AdamBox IP address (default: 192.168.3.25): ").strip()
     if not ip_address:
-        ip_address = "192.168.3.25"
+        return jsonify({
+            "error": "IP address parameter is required",
+            "status": "error"
+        }), 400
     
-    # Read value
+    # Read value from AdamBox
     result = read_adambox_value(ip_address)
     
-    # Print result
-    print("\nResult:")
-    print(json.dumps(result, indent=2))
+    if "error" in result:
+        return jsonify(result), 500
     
-    # Save to file
-    filename = f"adambox_value_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    with open(filename, 'w') as f:
-        json.dump(result, f, indent=2)
-    
-    print(f"\nResult saved to: {filename}")
+    return jsonify(result)
 
-if __name__ == "__main__":
-    main()
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({
+        "status": "healthy",
+        "service": "AdamBox API"
+    })
+
+if __name__ == '__main__':
+    print("Starting AdamBox API server...")
+    print("=" * 40)
+    print("API will be available at: http://localhost:8000")
+    print("\nEndpoints:")
+    print("  GET /api/adambox?ip=<ip_address> - Get AdamBox value")
+    print("  GET /health - Health check")
+    print("\nPress Ctrl+C to stop the server")
+    print("=" * 40)
+    
+    app.run(host='0.0.0.0', port=8000, debug=True)

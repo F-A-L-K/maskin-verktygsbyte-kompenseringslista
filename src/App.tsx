@@ -15,6 +15,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import CreateToolChange from "./pages/CreateToolChange";
 import History from "./pages/History";
 import MI from "./pages/MI";
+import Matplan from "./pages/Matplan";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const AppContent = () => {
               <Route path="mi" element={<MI />} />
               <Route path="skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
               <Route path="historik" element={<History activeMachine={activeMachine} />} />
+              <Route path="mätplan" element={<Matplan />} />
             </Routes>
           </main>
         </div>

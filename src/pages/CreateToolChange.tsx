@@ -15,25 +15,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronDown, Save } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId, ToolChange } from "@/types";
-import { useLastManufacturingOrder } from "@/hooks/useLastManufacturingOrder";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getAdamBoxValue } from "@/lib/adambox";
+import { useTools } from "@/hooks/useTools";
 
 const formSchema = z.object({
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
-  reason: z.enum(["Slitage", "Verktygsbrott"], {
+  reason: z.enum(["Slitage", "Verktygsbrott", 'Övrigt'], {
     required_error: "Välj en anledning",
   }),
-  manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
   signature: z.string().min(1, "Signatur är obligatoriskt"),
   comment: z.string().optional(),
+}).refine((data) => {
+  // If reason is "Övrigt", comment must be filled
+  if (data.reason === "Övrigt") {
+    return data.comment && data.comment.trim().length > 0;
+  }
+  return true;
+}, {
+  message: "Kommentar är obligatoriskt när anledning är Övrigt",
+  path: ["comment"],
 });
 
 interface CreateToolChangeProps {
@@ -43,18 +57,27 @@ interface CreateToolChangeProps {
 export default function CreateToolChange({ activeMachine }: CreateToolChangeProps) {
   const [isLoadingAdamBox, setIsLoadingAdamBox] = useState(false);
   const [adamBoxValue, setAdamBoxValue] = useState<number | null>(null);
-  const { getLastOrder, setLastOrder } = useLastManufacturingOrder();
+  const [toolDropdownOpen, setToolDropdownOpen] = useState(false);
+  const [reasonDropdownOpen, setReasonDropdownOpen] = useState(false);
+  const { data: tools } = useTools();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       toolNumber: "",
       reason: undefined,
-      manufacturingOrder: getLastOrder(activeMachine) || "",
       signature: "",
       comment: "",
     },
   });
+
+  // Watch form values to determine if save button should be enabled
+  const watchedValues = form.watch();
+  const isFormValid = 
+    watchedValues.toolNumber && 
+    watchedValues.reason && 
+    watchedValues.signature &&
+    (watchedValues.reason !== "Övrigt" || (watchedValues.comment && watchedValues.comment.trim().length > 0));
 
   // Get AdamBox value when component mounts
   useEffect(() => {
@@ -78,7 +101,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
     const newToolChange: ToolChange = {
       id: generateUUID(),
       machineId: activeMachine,
-      manufacturingOrder: values.manufacturingOrder,
+      manufacturingOrder: "", // No longer needed
       toolNumber: values.toolNumber,
       reason: values.reason,
       comment: values.comment || "",
@@ -91,7 +114,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
     const { error } = await (supabase as any).from("verktygshanteringssystem_verktygsbyteslista").insert({
       id: newToolChange.id,
       machine_number: newToolChange.machineId,
-      manufacturing_order: newToolChange.manufacturingOrder,
+      manufacturing_order: "",
       tool_number: newToolChange.toolNumber,
       cause: newToolChange.reason,
       comment: newToolChange.comment,
@@ -105,17 +128,12 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       return;
     }
 
-    if (newToolChange.manufacturingOrder) {
-      setLastOrder(activeMachine, newToolChange.manufacturingOrder);
-    }
-
     toast.success("Verktygsbyte sparat");
     
     // Reset form
     form.reset({
       toolNumber: "",
       reason: undefined,
-      manufacturingOrder: getLastOrder(activeMachine) || "",
       signature: "",
       comment: "",
     });
@@ -123,67 +141,171 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
 
   return (
     <div className="p-6">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl">
   
-        <div className="bg-card p-6 rounded-lg border">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Save Button at the top */}
+              <div className="flex justify-start mb-8">
+                <Button 
+                  type="submit" 
+                  disabled={!isFormValid}
+                  className={`${
+                    isFormValid 
+                      ? "bg-white text-[#507E95] hover:bg-[#8BA5B8] border border-[#507E95] " 
+                      : "bg-white text-[#9DB5C8] hover:bg-[#8BA5B8] border border-[#7A95A8] cursor-not-allowed "
+                  } rounded-full px-6 py-2 flex items-center gap-2`}
+                >
+                  <Save className="h-4 w-4" />
+                  SPARA
+                </Button>
+              </div>
+
               <FormField
                 control={form.control}
                 name="toolNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Verktygsnummer</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Ange verktygsnummer" />
-                    </FormControl>
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const selectedTool = tools?.find(tool => tool.id === field.value);
+                  const sortedTools = tools?.sort((a, b) => {
+                    const numA = parseInt(a.plats || "0");
+                    const numB = parseInt(b.plats || "0");
+                    return numA - numB;
+                  }) || [];
+
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-gray-600 text-sm font-medium ">Verktyg</FormLabel>
+                      <FormControl>
+                        <Popover open={toolDropdownOpen} onOpenChange={setToolDropdownOpen} >
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={toolDropdownOpen}
+                              className="w-full justify-between hover:bg-[#f3f3f3] hover:text-black"
+                            >
+                              {selectedTool ? (
+                                `T${selectedTool.plats} ${selectedTool.benämning}`
+                              ) : (
+                                "Välj verktyg"
+                              )}
+                              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0" align="start">
+                            <div className="max-h-96 overflow-y-auto">
+                              <div className="grid grid-cols-4 gap-0">
+                                {sortedTools.map((tool) => (
+                                  <div
+                                    key={tool.id}
+                                    className={`flex items-center space-x-2 px-4 py-2 cursor-pointer hover:bg-[#f3f3f3]  ${
+                                      field.value === tool.id ? "bg-[#f3f3f3]" : ""
+                                    }`}
+                                    onClick={() => {
+                                      field.onChange(tool.id);
+                                      setToolDropdownOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={`h-4 w-4 ${
+                                        field.value === tool.id ? "opacity-100" : "opacity-0"
+                                      }`}
+                                    />
+                                    <div className="flex-1">
+                                      <div className="text-sm font-medium">
+                                        T{tool.plats}
+                                      </div>
+                                      <div className="text-xs text-muted-foreground truncate">
+                                        {tool.benämning}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                    </FormItem>
+                  );
+                }}
               />
               
               <FormField
                 control={form.control}
                 name="reason"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Anledning</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
+                render={({ field }) => {
+                  const reasons = [
+                    { value: "Slitage", label: "Slitage" },
+                    { value: "Verktygsbrott", label: "Verktygsbrott" },
+                    { value: "Övrigt", label: "Övrigt" }
+                  ];
+                  const selectedReason = reasons.find(reason => reason.value === field.value);
+
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-gray-600 text-sm font-medium">Anledning</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Välj anledning" />
-                        </SelectTrigger>
+                        <Popover open={reasonDropdownOpen} onOpenChange={setReasonDropdownOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={reasonDropdownOpen}
+                              className="w-full justify-between hover:bg-[#f3f3f3] hover:text-black"
+                            >
+                              {selectedReason ? (
+                                selectedReason.label
+                              ) : (
+                                "Välj anledning"
+                              )}
+                              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-full p-0" align="start">
+                            <div className="max-h-96 overflow-y-auto">
+                              <div className="grid grid-cols-1 gap-0">
+                                {reasons.map((reason) => (
+                                  <div
+                                    key={reason.value}
+                                    className={`flex items-center space-x-2 px-4 py-2 cursor-pointer hover:bg-[#f3f3f3] ${
+                                      field.value === reason.value ? "bg-[#f3f3f3]" : ""
+                                    }`}
+                                    onClick={() => {
+                                      field.onChange(reason.value);
+                                      setReasonDropdownOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={`h-4 w-4 ${
+                                        field.value === reason.value ? "opacity-100" : "opacity-0"
+                                      }`}
+                                    />
+                                    <div className="flex-1">
+                                      <div className="text-sm font-medium">
+                                        {reason.label}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Slitage">Slitage</SelectItem>
-                        <SelectItem value="Verktygsbrott">Verktygsbrott</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
+                    </FormItem>
+                  );
+                }}
               />
 
-              <FormField
-                control={form.control}
-                name="manufacturingOrder"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tillverkningsorder</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Ange tillverkningsorder" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+
 
               <FormField
                 control={form.control}
                 name="signature"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Signatur</FormLabel>
+                    <FormLabel className="text-gray-600 text-sm font-medium">Signatur</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Ange signatur" />
                     </FormControl>
@@ -194,27 +316,32 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
               <FormField
                 control={form.control}
                 name="comment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kommentar</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        {...field} 
-                        placeholder="Skriv en kommentar (valfritt)" 
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const isCommentRequired = watchedValues.reason === "Övrigt";
+                  return (
+                    <FormItem>
+                      <FormLabel className="text-gray-600 text-sm font-medium">
+                        Kommentar{isCommentRequired && <span className="text-red-600 ml-1">*</span>}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          {...field} 
+                          placeholder={isCommentRequired ? "Kommentar är obligatoriskt för Övrigt" : "Skriv en kommentar (valfritt)"}
+                          className={isCommentRequired && !field.value ? "border-red-300" : ""}
+                        />
+                      </FormControl>
+                      {isCommentRequired && !field.value && (
+                        <p className="text-sm text-red-600 mt-1">
+                          Kommentar är obligatoriskt när anledning är Övrigt
+                        </p>
+                      )}
+                    </FormItem>
+                  );
+                }}
               />
 
-              <div className="flex justify-end">
-                <Button type="submit">
-                  Spara
-                </Button>
-              </div>
             </form>
           </Form>
-        </div>
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export function AppSidebar({ activeMachine, onMachineChange, availableMachines }
     <Sidebar collapsible="none">
       <SidebarContent className="">
         <SidebarGroup>
-          <SidebarGroupLabel>Maskiner</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg font-medium flex items-center justify-center">Maskiner</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {availableMachines.map((machine) => {
@@ -31,15 +31,15 @@ export function AppSidebar({ activeMachine, onMachineChange, availableMachines }
                 const machineName = machine.split(' ').slice(1).join(' ');
 
                 return (
-                  <SidebarMenuItem key={machine}>
+                  <SidebarMenuItem key={machine} className=" pt-2">
                     <SidebarMenuButton
                       onClick={() => onMachineChange(machine)}
                       isActive={isActive}
-                      className="flex items-center gap-2"
+                      className="flex gap-2 h-24"
                     >
-                      <MonitorPlay className="h-4 w-4 flex-shrink-0" />
+                      <MonitorPlay className="h-4 w-4 flex-shrink-0 text-red-500" />
                       <div className="flex flex-col items-start">
-                        <span className="text-xs font-medium">{machineNumber} {machineName}</span>
+                        <span className="text-lg font-medium">{machineNumber} {machineName}</span>
                       </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

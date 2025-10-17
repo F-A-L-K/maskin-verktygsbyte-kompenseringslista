@@ -3,7 +3,7 @@ export interface ToolChange {
   id: string;
   machineId: string;
   toolNumber: string;
-  reason: "Slitage" | "Verktygsbrott";
+  reason: "Slitage" | "Verktygsbrott" | "Övrigt";
   comment: string;
   signature: string;
   timestamp: Date;

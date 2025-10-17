@@ -36,7 +36,7 @@ import { generateUUID } from "@/lib/utils";
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
-  reason: z.enum(["Slitage", "Verktygsbrott"], {
+  reason: z.enum(["Slitage", "Verktygsbrott", "Övrigt"], {
     required_error: "Välj en anledning",
   }),
   comment: z.string().optional(),
@@ -174,6 +174,7 @@ export default function ToolChangeForm({
                     <SelectContent>
                       <SelectItem value="Slitage">Slitage</SelectItem>
                       <SelectItem value="Verktygsbrott">Verktygsbrott</SelectItem>
+                      <SelectItem value="Övrigt">Övrigt</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormItem>

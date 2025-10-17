@@ -8,7 +8,8 @@ export default function NavigationButtons() {
   const pages = [
     { path: "/verktyg", title: "Verktygsbyte" },
     { path: "/kompensering", title: "Kompensering" },
-  ];
+    { path: "/mätplan", title: "Mätplan" },
+    ];
 
   return (
     <div className="flex justify-center">
