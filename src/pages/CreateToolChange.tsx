@@ -167,7 +167,6 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       machine_number: newToolChange.machineId,
       manufacturing_order: newToolChange.manufacturingOrder,
       tool_id: values.toolNumber,
-      tool_number: toolNumber,
       cause: newToolChange.reason,
       comment: newToolChange.comment,
       signature: newToolChange.signature,

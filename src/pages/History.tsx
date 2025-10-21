@@ -67,11 +67,13 @@ export default function History({ activeMachine }: HistoryProps) {
             if (currentValue !== null && tool.id) {
               try {
                 // Get the latest tool change for this tool on this specific machine
+                const machineNumber = activeMachine.split(' ')[0];
+                
                 const { data: latestToolChange } = await (supabase as any)
                   .from("verktygshanteringssystem_verktygsbyteslista")
                   .select("number_of_parts_ADAM")
                   .eq("tool_id", tool.id)
-                  .eq("machine_id", activeMachine)
+                  .eq("machine_number", machineNumber)
                   .order("date_created", { ascending: false })
                   .limit(1);
 

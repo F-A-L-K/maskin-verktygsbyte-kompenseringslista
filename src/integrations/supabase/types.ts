@@ -684,7 +684,6 @@ export type Database = {
           number_of_parts_ADAM: number | null
           signature: string | null
           tool_id: string | null
-          tool_number: string | null
         }
         Insert: {
           amount_since_last_change?: number | null
@@ -697,7 +696,6 @@ export type Database = {
           number_of_parts_ADAM?: number | null
           signature?: string | null
           tool_id?: string | null
-          tool_number?: string | null
         }
         Update: {
           amount_since_last_change?: number | null
@@ -710,7 +708,6 @@ export type Database = {
           number_of_parts_ADAM?: number | null
           signature?: string | null
           tool_id?: string | null
-          tool_number?: string | null
         }
         Relationships: [
           {
