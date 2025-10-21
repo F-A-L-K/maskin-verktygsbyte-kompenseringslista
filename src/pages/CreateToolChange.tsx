@@ -230,6 +230,24 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
 
               <FormField
                 control={form.control}
+                name="manufacturingOrder"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-600 text-sm font-medium">Tillverkningsorder</FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Tillverkningsorder" 
+                        readOnly
+                        className="bg-gray-50"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="toolNumber"
                 render={({ field }) => {
                   const selectedTool = tools?.find(tool => tool.id === field.value);
@@ -380,23 +398,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="manufacturingOrder"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-600 text-sm font-medium">Tillverkningsorder</FormLabel>
-                    <FormControl>
-                      <Input 
-                        {...field} 
-                        placeholder="Tillverkningsorder" 
-                        readOnly
-                        className="bg-gray-50"
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+             
 
               <FormField
                 control={form.control}
