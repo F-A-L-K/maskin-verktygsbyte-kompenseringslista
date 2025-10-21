@@ -37,8 +37,7 @@ export default function ToolHistory() {
   const [selectedSignatures, setSelectedSignatures] = useState<string[]>([]);
   const [availableCauses, setAvailableCauses] = useState<string[]>([]);
   const [availableSignatures, setAvailableSignatures] = useState<string[]>([]);
-  const [showSearchFilter, setShowSearchFilter] = useState(false);
-  const [showToolDetails, setShowToolDetails] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // Fetch tool details
   const { data: tool, isLoading: toolLoading } = useQuery({
@@ -189,203 +188,181 @@ export default function ToolHistory() {
 
   return (
     <div className="p-6 space-y-6">
-       {/* Two Column Layout */}
-       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-         {/* Tool Information Card */}
-         <div className="bg-gradient-to-br from-gray-500/5 to-gray-500/10 rounded-lg border border-gray-500/20 overflow-hidden">
-           <div className="bg-card/80 backdrop-blur-sm p-4">
-             <div className="flex items-center justify-between mb-3">
-               <h3 className="text-sm font-semibold text-foreground">Verktygsinformation</h3>
-               <Button
-                 variant="ghost"
-                 size="sm"
-                 onClick={() => setShowToolDetails(!showToolDetails)}
-                 className="h-6 px-2"
-               >
-                 {showToolDetails ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-               </Button>
-             </div>
-             <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-1">
-                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Plats</p>
-                 <p className="text-lg font-semibold text-foreground">T{tool.plats}</p>
-               </div>
-               <div className="space-y-1">
-                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Benämning</p>
-                 <p className="text-base font-semibold text-foreground">{tool.benämning}</p>
-               </div>
-               {showToolDetails && (
-                 <>
-                   <div className="space-y-1">
-                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Artikelnummer</p>
-                     <p className="text-base font-medium text-foreground">{tool.artikelnummer || "-"}</p>
-                   </div>
-                   <div className="space-y-1">
-                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Max gräns</p>
-                     <p className="text-base font-semibold text-foreground">
-                       {tool.maxgräns || "-"} <span className="text-sm text-muted-foreground">ST</span>
-                     </p>
-                   </div>
-                 </>
-               )}
-             </div>
-           </div>
-         </div>
+      {/* Compact Tool Info & Filters */}
+      <div className="bg-card rounded-lg border shadow-sm overflow-hidden">
+        {/* Collapsed Header - Always Visible */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors"
+        >
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl font-bold text-primary">T{tool.plats}</span>
+              <div className="h-6 w-px bg-border"></div>
+              <span className="text-base font-semibold text-foreground">{tool.benämning}</span>
+            </div>
+          </div>
+          <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+        </button>
 
-         {/* Filter Controls */}
-         <div className="bg-card rounded-lg border shadow-sm overflow-hidden">
-           <div className="bg-muted/30 px-4 py-2 border-b">
-             <div className="flex items-center justify-between">
-               <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                 <Filter className="h-4 w-4 text-primary" />
-                 Sökfilter
-               </h3>
-               <Button
-                 variant="ghost"
-                 size="sm"
-                 onClick={() => setShowSearchFilter(!showSearchFilter)}
-                 className="h-6 px-2"
-               >
-                 {showSearchFilter ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-               </Button>
-             </div>
-           </div>
-           {showSearchFilter && (
-             <div className="p-4">
-               <div className="space-y-3">
-                 {/* Tillverkningsorder and Avancerade filter row */}
-                 <div className="grid grid-cols-2 gap-3">
-                   <div>
-                     <label className="text-xs font-semibold text-foreground uppercase tracking-wide block mb-1">
-                       Tillverkningsorder
-                     </label>
-                     <Input
-                       placeholder="Sök tillverkningsorder..."
-                       value={manufacturingOrder}
-                       onChange={(e) => setManufacturingOrder(e.target.value)}
-                       className="h-8"
-                     />
-                   </div>
+        {/* Expanded Content */}
+        {isExpanded && (
+          <div className="border-t bg-muted/20">
+            <div className="p-4 space-y-4">
+              {/* Additional Tool Details */}
+              <div className="grid grid-cols-2 gap-4 pb-4 border-b">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Artikelnummer</p>
+                  <p className="text-sm font-medium text-foreground">{tool.artikelnummer || "-"}</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Max gräns</p>
+                  <p className="text-sm font-semibold text-foreground">
+                    {tool.maxgräns || "-"} <span className="text-xs text-muted-foreground">ST</span>
+                  </p>
+                </div>
+              </div>
 
-                   <div>
-                     <label className="text-xs font-semibold text-foreground uppercase tracking-wide block mb-1">
-                       Avancerade filter
-                     </label>
-                     <DropdownMenu>
-                       <DropdownMenuTrigger asChild>
-                         <Button variant="outline" size="sm" className="w-full h-8 justify-start">
-                           <Filter className="h-3 w-3 mr-1" />
-                           Anledning & Signatur
-                           {(selectedCauses.length + selectedSignatures.length) > 0 && (
-                             <span className="ml-auto bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-xs font-semibold min-w-[18px] h-[18px] flex items-center justify-center">
-                               {selectedCauses.length + selectedSignatures.length}
-                             </span>
-                           )}
-                         </Button>
-                       </DropdownMenuTrigger>
-                       <DropdownMenuContent className="w-80 bg-popover" align="end">
-                         <div className="p-3">
-                           <div className="mb-3">
-                             <h4 className="font-semibold text-sm mb-2 text-foreground flex items-center gap-2">
-                               <span className="w-1 h-3 bg-primary rounded-full"></span>
-                               Anledning
-                             </h4>
-                             <div className="space-y-1 max-h-28 overflow-y-auto">
-                               {availableCauses.length > 0 ? (
-                                 availableCauses.map((cause) => (
-                                   <DropdownMenuCheckboxItem
-                                     key={cause}
-                                     checked={selectedCauses.includes(cause)}
-                                     onCheckedChange={() => toggleCause(cause)}
-                                     className="text-sm"
-                                   >
-                                     {cause}
-                                   </DropdownMenuCheckboxItem>
-                                 ))
-                               ) : (
-                                 <div className="text-sm text-muted-foreground py-1 px-2">Inga anledningar tillgängliga</div>
-                               )}
-                             </div>
-                           </div>
-                           <div className="mb-3">
-                             <h4 className="font-semibold text-sm mb-2 text-foreground flex items-center gap-2">
-                               <span className="w-1 h-3 bg-primary rounded-full"></span>
-                               Signatur
-                             </h4>
-                             <div className="space-y-1 max-h-28 overflow-y-auto">
-                               {availableSignatures.length > 0 ? (
-                                 availableSignatures.map((signature) => (
-                                   <DropdownMenuCheckboxItem
-                                     key={signature}
-                                     checked={selectedSignatures.includes(signature)}
-                                     onCheckedChange={() => toggleSignature(signature)}
-                                     className="text-sm"
-                                   >
-                                     {signature}
-                                   </DropdownMenuCheckboxItem>
-                                 ))
-                               ) : (
-                                 <div className="text-sm text-muted-foreground py-1 px-2">Inga signaturer tillgängliga</div>
-                               )}
-                             </div>
-                           </div>
-                           <div className="flex justify-between items-center pt-2 border-t">
-                             <Button
-                               variant="ghost"
-                               size="sm"
-                               onClick={clearAllFilters}
-                               className="text-xs h-7 px-2"
-                             >
-                               <X className="h-3 w-3 mr-1" />
-                               Rensa alla
-                             </Button>
-                             <div className="text-xs font-medium text-muted-foreground">
-                               {selectedCauses.length + selectedSignatures.length} valda
-                             </div>
-                           </div>
-                         </div>
-                       </DropdownMenuContent>
-                     </DropdownMenu>
-                   </div>
-                 </div>
+              {/* Search Filters */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide flex items-center gap-2">
+                  <Filter className="h-3 w-3 text-primary" />
+                  Sökfilter
+                </h4>
+                
+                {/* Tillverkningsorder and Avancerade filter row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                      Tillverkningsorder
+                    </label>
+                    <Input
+                      placeholder="Sök..."
+                      value={manufacturingOrder}
+                      onChange={(e) => setManufacturingOrder(e.target.value)}
+                      className="h-9"
+                    />
+                  </div>
 
-                 {/* Date Range */}
-                 <div className="grid grid-cols-2 gap-3">
-                   <div>
-                     <label className="text-xs font-semibold text-foreground uppercase tracking-wide block mb-1">
-                       Från datum
-                     </label>
-                     <div className="relative">
-                       <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-3 w-3 pointer-events-none" />
-                       <Input
-                         type="date"
-                         value={dateFrom}
-                         onChange={(e) => setDateFrom(e.target.value)}
-                         className="pl-8 h-8"
-                       />
-                     </div>
-                   </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                      Anledning & Signatur
+                    </label>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="w-full h-9 justify-start">
+                          <Filter className="h-3 w-3 mr-2" />
+                          Filter
+                          {(selectedCauses.length + selectedSignatures.length) > 0 && (
+                            <span className="ml-auto bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-xs font-semibold min-w-[18px] h-[18px] flex items-center justify-center">
+                              {selectedCauses.length + selectedSignatures.length}
+                            </span>
+                          )}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-80 bg-popover z-50" align="end">
+                        <div className="p-3">
+                          <div className="mb-3">
+                            <h4 className="font-semibold text-sm mb-2 text-foreground flex items-center gap-2">
+                              <span className="w-1 h-3 bg-primary rounded-full"></span>
+                              Anledning
+                            </h4>
+                            <div className="space-y-1 max-h-28 overflow-y-auto">
+                              {availableCauses.length > 0 ? (
+                                availableCauses.map((cause) => (
+                                  <DropdownMenuCheckboxItem
+                                    key={cause}
+                                    checked={selectedCauses.includes(cause)}
+                                    onCheckedChange={() => toggleCause(cause)}
+                                    className="text-sm"
+                                  >
+                                    {cause}
+                                  </DropdownMenuCheckboxItem>
+                                ))
+                              ) : (
+                                <div className="text-sm text-muted-foreground py-1 px-2">Inga anledningar tillgängliga</div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="mb-3">
+                            <h4 className="font-semibold text-sm mb-2 text-foreground flex items-center gap-2">
+                              <span className="w-1 h-3 bg-primary rounded-full"></span>
+                              Signatur
+                            </h4>
+                            <div className="space-y-1 max-h-28 overflow-y-auto">
+                              {availableSignatures.length > 0 ? (
+                                availableSignatures.map((signature) => (
+                                  <DropdownMenuCheckboxItem
+                                    key={signature}
+                                    checked={selectedSignatures.includes(signature)}
+                                    onCheckedChange={() => toggleSignature(signature)}
+                                    className="text-sm"
+                                  >
+                                    {signature}
+                                  </DropdownMenuCheckboxItem>
+                                ))
+                              ) : (
+                                <div className="text-sm text-muted-foreground py-1 px-2">Inga signaturer tillgängliga</div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center pt-2 border-t">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={clearAllFilters}
+                              className="text-xs h-7 px-2"
+                            >
+                              <X className="h-3 w-3 mr-1" />
+                              Rensa alla
+                            </Button>
+                            <div className="text-xs font-medium text-muted-foreground">
+                              {selectedCauses.length + selectedSignatures.length} valda
+                            </div>
+                          </div>
+                        </div>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
 
-                   <div>
-                     <label className="text-xs font-semibold text-foreground uppercase tracking-wide block mb-1">
-                       Till datum
-                     </label>
-                     <div className="relative">
-                       <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-3 w-3 pointer-events-none" />
-                       <Input
-                         type="date"
-                         value={dateTo}
-                         onChange={(e) => setDateTo(e.target.value)}
-                         className="pl-8 h-8"
-                       />
-                     </div>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           )}
-         </div>
-       </div>
+                {/* Date Range */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                      Från datum
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-3 w-3 pointer-events-none" />
+                      <Input
+                        type="date"
+                        value={dateFrom}
+                        onChange={(e) => setDateFrom(e.target.value)}
+                        className="pl-8 h-9"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-medium text-muted-foreground mb-1 block">
+                      Till datum
+                    </label>
+                    <div className="relative">
+                      <Calendar className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground h-3 w-3 pointer-events-none" />
+                      <Input
+                        type="date"
+                        value={dateTo}
+                        onChange={(e) => setDateTo(e.target.value)}
+                        className="pl-8 h-9"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="overflow-hidden">
         <Table maxHeight="70vh">
