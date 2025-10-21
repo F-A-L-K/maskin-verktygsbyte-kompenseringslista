@@ -42,14 +42,22 @@ export default function ToolHistory() {
     queryFn: async () => {
       if (!toolId || !activeMachine) return [];
       
-      // Extract machine number from activeMachine (e.g., "5702 Fanuc Robodrill" -> "5702")
+      // Extract machine number from activeMachine and get machine ID
       const machineNumber = activeMachine.split(' ')[0];
+      
+      const { data: machineData } = await supabase
+        .from('verktygshanteringssystem_maskiner')
+        .select('id')
+        .eq('maskiner_nummer', machineNumber)
+        .single();
+      
+      if (!machineData) return [];
       
       const { data, error } = await supabase
         .from('verktygshanteringssystem_verktygsbyteslista')
         .select('*')
         .eq('tool_id', toolId)
-        .eq('machine_number', machineNumber)
+        .eq('machine_id', machineData.id)
         .order('date_created', { ascending: false });
       
       if (error) throw error;
@@ -127,7 +135,7 @@ export default function ToolHistory() {
                   <TableCell className="text-center">
                     {format(new Date(change.date_created), "yyyy-MM-dd HH:mm", { locale: sv })}
                   </TableCell>
-                  <TableCell className="text-center">{change.machine_number || "-"}</TableCell>
+                  <TableCell className="text-center">{activeMachine.split(' ')[0] || "-"}</TableCell>
                   <TableCell className="text-center">{change.cause || "-"}</TableCell>
                   <TableCell className="text-center">{change.manufacturing_order || "-"}</TableCell>
                   <TableCell className="text-center">{change.amount_since_last_change || "-"}</TableCell>

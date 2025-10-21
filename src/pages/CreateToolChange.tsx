@@ -126,6 +126,19 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
     const selectedTool = tools?.find(tool => tool.id === values.toolNumber);
     const toolNumber = selectedTool?.plats || "";
 
+    // Get machine ID from database
+    const machineNumber = activeMachine.split(' ')[0];
+    const { data: machineData } = await supabase
+      .from('verktygshanteringssystem_maskiner')
+      .select('id')
+      .eq('maskiner_nummer', machineNumber)
+      .single();
+
+    if (!machineData) {
+      toast.error("Maskin hittades inte");
+      return;
+    }
+
     // Get the previous tool change for this tool to calculate the difference
     let amountSinceLastChange = null;
     if (adamBoxValue !== null && values.toolNumber) {
@@ -134,6 +147,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
           .from("verktygshanteringssystem_verktygsbyteslista")
           .select("number_of_parts_ADAM")
           .eq("tool_id", values.toolNumber)
+          .eq("machine_id", machineData.id)
           .order("date_created", { ascending: false })
           .limit(1);
 
@@ -164,7 +178,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
     // Save to Supabase
     const { error } = await (supabase as any).from("verktygshanteringssystem_verktygsbyteslista").insert({
       id: newToolChange.id,
-      machine_number: newToolChange.machineId,
+      machine_id: machineData.id,
       manufacturing_order: newToolChange.manufacturingOrder,
       tool_id: values.toolNumber,
       cause: newToolChange.reason,

@@ -66,21 +66,29 @@ export default function History({ activeMachine }: HistoryProps) {
             
             if (currentValue !== null && tool.id) {
               try {
-                // Get the latest tool change for this tool on this specific machine
+                // Get machine ID from database
                 const machineNumber = activeMachine.split(' ')[0];
+                const { data: machineData } = await supabase
+                  .from('verktygshanteringssystem_maskiner')
+                  .select('id')
+                  .eq('maskiner_nummer', machineNumber)
+                  .single();
                 
-                const { data: latestToolChange } = await (supabase as any)
-                  .from("verktygshanteringssystem_verktygsbyteslista")
-                  .select("number_of_parts_ADAM")
-                  .eq("tool_id", tool.id)
-                  .eq("machine_number", machineNumber)
-                  .order("date_created", { ascending: false })
-                  .limit(1);
+                if (machineData) {
+                  // Get the latest tool change for this tool on this specific machine
+                  const { data: latestToolChange } = await (supabase as any)
+                    .from("verktygshanteringssystem_verktygsbyteslista")
+                    .select("number_of_parts_ADAM")
+                    .eq("tool_id", tool.id)
+                    .eq("machine_id", machineData.id)
+                    .order("date_created", { ascending: false })
+                    .limit(1);
 
-                if (latestToolChange && latestToolChange.length > 0) {
-                  const lastAdamValue = latestToolChange[0].number_of_parts_ADAM;
-                  if (lastAdamValue !== null) {
-                    partsSinceLastChange = currentValue - lastAdamValue;
+                  if (latestToolChange && latestToolChange.length > 0) {
+                    const lastAdamValue = latestToolChange[0].number_of_parts_ADAM;
+                    if (lastAdamValue !== null) {
+                      partsSinceLastChange = currentValue - lastAdamValue;
+                    }
                   }
                 }
               } catch (error) {

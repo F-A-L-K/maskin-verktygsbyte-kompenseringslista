@@ -679,7 +679,7 @@ export type Database = {
           comment: string | null
           date_created: string
           id: string
-          machine_number: string | null
+          machine_id: string | null
           manufacturing_order: string | null
           number_of_parts_ADAM: number | null
           signature: string | null
@@ -691,7 +691,7 @@ export type Database = {
           comment?: string | null
           date_created?: string
           id?: string
-          machine_number?: string | null
+          machine_id?: string | null
           manufacturing_order?: string | null
           number_of_parts_ADAM?: number | null
           signature?: string | null
@@ -703,13 +703,20 @@ export type Database = {
           comment?: string | null
           date_created?: string
           id?: string
-          machine_number?: string | null
+          machine_id?: string | null
           manufacturing_order?: string | null
           number_of_parts_ADAM?: number | null
           signature?: string | null
           tool_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "verktygshanteringssystem_verktygsbyteslista_machine_id_fkey"
+            columns: ["machine_id"]
+            isOneToOne: false
+            referencedRelation: "verktygshanteringssystem_maskiner"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "verktygshanteringssystem_verktygsbyteslista_tool_id_fkey"
             columns: ["tool_id"]
