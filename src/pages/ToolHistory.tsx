@@ -186,99 +186,116 @@ export default function ToolHistory() {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <div className="bg-card p-4 rounded-lg border">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <span className="text-muted-foreground">Plats:</span>
-              <span className="ml-2 font-medium">T{tool.plats}</span>
+    <div className="p-6 space-y-6">
+      {/* Tool Information Card */}
+      <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border-2 border-primary/20 overflow-hidden">
+        <div className="bg-card/80 backdrop-blur-sm p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-primary rounded-full"></span>
+            Verktygsinformation
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Plats</p>
+              <p className="text-2xl font-bold text-primary">T{tool.plats}</p>
             </div>
-            <div>
-              <span className="text-muted-foreground">Benämning:</span>
-              <span className="ml-2 font-medium">{tool.benämning}</span>
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Benämning</p>
+              <p className="text-lg font-semibold text-foreground">{tool.benämning}</p>
             </div>
-            <div>
-              <span className="text-muted-foreground">Artikelnummer:</span>
-              <span className="ml-2 font-medium">{tool.artikelnummer || "-"}</span>
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Artikelnummer</p>
+              <p className="text-lg font-medium text-foreground">{tool.artikelnummer || "-"}</p>
             </div>
-            <div>
-              <span className="text-muted-foreground">Max gräns:</span>
-              <span className="ml-2 font-medium">
-                {tool.maxgräns || "-"} ST
-              </span>
+            <div className="space-y-1">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Max gräns</p>
+              <p className="text-lg font-semibold text-foreground">
+                {tool.maxgräns || "-"} <span className="text-sm text-muted-foreground">ST</span>
+              </p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filter Controls */}
-      <div className="mb-6">
-        <div className="bg-card p-4 rounded-lg border">
-          <div className="flex flex-wrap items-end gap-4">
+      <div className="bg-card rounded-xl border shadow-sm overflow-hidden">
+        <div className="bg-muted/30 px-6 py-3 border-b">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <Filter className="h-4 w-4 text-primary" />
+            Sökfilter
+          </h3>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Tillverkningsorder Input */}
-            <div className="flex-1 min-w-[200px]">
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
                 Tillverkningsorder
               </label>
               <Input
                 placeholder="Sök tillverkningsorder..."
                 value={manufacturingOrder}
                 onChange={(e) => setManufacturingOrder(e.target.value)}
-                className="h-9"
+                className="h-10"
               />
             </div>
 
             {/* Date From */}
-            <div className="min-w-[140px]">
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
                 Från datum
               </label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 pointer-events-none" />
                 <Input
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="pl-10 h-9"
+                  className="pl-10 h-10"
                 />
               </div>
             </div>
 
             {/* Date To */}
-            <div className="min-w-[140px]">
-              <label className="text-xs font-medium text-muted-foreground mb-1 block">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
                 Till datum
               </label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4 pointer-events-none" />
                 <Input
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="pl-10 h-9"
+                  className="pl-10 h-10"
                 />
               </div>
             </div>
 
             {/* Filter Dropdown */}
-            <div className="flex items-end">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-foreground uppercase tracking-wide">
+                Avancerade filter
+              </label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-9 px-3">
-                    <Filter className="h-4 w-4 mr-1" />
-                    Filter
+                  <Button variant="outline" className="w-full h-10 justify-start">
+                    <Filter className="h-4 w-4 mr-2" />
+                    Anledning & Signatur
                     {(selectedCauses.length + selectedSignatures.length) > 0 && (
-                      <span className="ml-1 bg-primary text-primary-foreground rounded-full px-1.5 py-0.5 text-xs min-w-[18px] h-[18px] flex items-center justify-center">
+                      <span className="ml-auto bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs font-semibold">
                         {selectedCauses.length + selectedSignatures.length}
                       </span>
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-80" align="end">
-                  <div className="p-3">
+                <DropdownMenuContent className="w-80 bg-popover" align="end">
+                  <div className="p-4">
                     <div className="mb-4">
-                      <h4 className="font-medium text-sm mb-2 text-foreground">Anledning</h4>
+                      <h4 className="font-semibold text-sm mb-3 text-foreground flex items-center gap-2">
+                        <span className="w-1 h-4 bg-primary rounded-full"></span>
+                        Anledning
+                      </h4>
                       <div className="space-y-1 max-h-32 overflow-y-auto">
                         {availableCauses.length > 0 ? (
                           availableCauses.map((cause) => (
@@ -292,12 +309,15 @@ export default function ToolHistory() {
                             </DropdownMenuCheckboxItem>
                           ))
                         ) : (
-                          <div className="text-sm text-muted-foreground py-2">Inga anledningar tillgängliga</div>
+                          <div className="text-sm text-muted-foreground py-2 px-2">Inga anledningar tillgängliga</div>
                         )}
                       </div>
                     </div>
                     <div className="mb-4">
-                      <h4 className="font-medium text-sm mb-2 text-foreground">Signatur</h4>
+                      <h4 className="font-semibold text-sm mb-3 text-foreground flex items-center gap-2">
+                        <span className="w-1 h-4 bg-primary rounded-full"></span>
+                        Signatur
+                      </h4>
                       <div className="space-y-1 max-h-32 overflow-y-auto">
                         {availableSignatures.length > 0 ? (
                           availableSignatures.map((signature) => (
@@ -311,7 +331,7 @@ export default function ToolHistory() {
                             </DropdownMenuCheckboxItem>
                           ))
                         ) : (
-                          <div className="text-sm text-muted-foreground py-2">Inga signaturer tillgängliga</div>
+                          <div className="text-sm text-muted-foreground py-2 px-2">Inga signaturer tillgängliga</div>
                         )}
                       </div>
                     </div>
@@ -320,12 +340,12 @@ export default function ToolHistory() {
                         variant="ghost"
                         size="sm"
                         onClick={clearAllFilters}
-                        className="text-xs h-7 px-2"
+                        className="text-xs h-8"
                       >
                         <X className="h-3 w-3 mr-1" />
                         Rensa alla
                       </Button>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-xs font-medium text-muted-foreground">
                         {selectedCauses.length + selectedSignatures.length} valda
                       </div>
                     </div>
