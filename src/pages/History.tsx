@@ -64,13 +64,13 @@ export default function History({ activeMachine }: HistoryProps) {
           tools.map(async (tool) => {
             let partsSinceLastChange = null;
             
-            if (currentValue !== null && tool.plats) {
+            if (currentValue !== null && tool.id) {
               try {
                 // Get the latest tool change for this tool on this specific machine
                 const { data: latestToolChange } = await (supabase as any)
                   .from("verktygshanteringssystem_verktygsbyteslista")
                   .select("number_of_parts_ADAM")
-                  .eq("tool_number", tool.plats)
+                  .eq("tool_id", tool.id)
                   .eq("machine_id", activeMachine)
                   .order("date_created", { ascending: false })
                   .limit(1);
@@ -82,7 +82,7 @@ export default function History({ activeMachine }: HistoryProps) {
                   }
                 }
               } catch (error) {
-                console.error(`Error fetching tool change for tool ${tool.plats}:`, error);
+                console.error(`Error fetching tool change for tool ${tool.id}:`, error);
               }
             }
 

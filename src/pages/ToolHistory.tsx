@@ -48,7 +48,7 @@ export default function ToolHistory() {
       const { data, error } = await supabase
         .from('verktygshanteringssystem_verktygsbyteslista')
         .select('*')
-        .eq('tool_number', toolId)
+        .eq('tool_id', toolId)
         .eq('machine_number', machineNumber)
         .order('date_created', { ascending: false });
       

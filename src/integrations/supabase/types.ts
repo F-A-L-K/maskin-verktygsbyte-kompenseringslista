@@ -649,7 +649,6 @@ export type Database = {
           created_at: string
           id: string
           maxgräns: number | null
-          mingräns: number | null
           plats: string | null
           updated_at: string
         }
@@ -659,7 +658,6 @@ export type Database = {
           created_at?: string
           id?: string
           maxgräns?: number | null
-          mingräns?: number | null
           plats?: string | null
           updated_at?: string
         }
@@ -669,7 +667,6 @@ export type Database = {
           created_at?: string
           id?: string
           maxgräns?: number | null
-          mingräns?: number | null
           plats?: string | null
           updated_at?: string
         }
@@ -686,6 +683,7 @@ export type Database = {
           manufacturing_order: string | null
           number_of_parts_ADAM: number | null
           signature: string | null
+          tool_id: string | null
           tool_number: string | null
         }
         Insert: {
@@ -698,6 +696,7 @@ export type Database = {
           manufacturing_order?: string | null
           number_of_parts_ADAM?: number | null
           signature?: string | null
+          tool_id?: string | null
           tool_number?: string | null
         }
         Update: {
@@ -710,9 +709,18 @@ export type Database = {
           manufacturing_order?: string | null
           number_of_parts_ADAM?: number | null
           signature?: string | null
+          tool_id?: string | null
           tool_number?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "verktygshanteringssystem_verktygsbyteslista_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "verktygshanteringssystem_verktyg"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       visitors: {
         Row: {

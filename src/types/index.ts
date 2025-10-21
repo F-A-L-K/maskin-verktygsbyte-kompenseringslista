@@ -42,7 +42,6 @@ export interface Tool {
   plats: string | null;
   benämning: string;
   artikelnummer: string | null;
-  mingräns: number | null;
   maxgräns: number | null;
   created_at: string;
   updated_at: string;

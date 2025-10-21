@@ -128,12 +128,12 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
 
     // Get the previous tool change for this tool to calculate the difference
     let amountSinceLastChange = null;
-    if (adamBoxValue !== null && toolNumber) {
+    if (adamBoxValue !== null && values.toolNumber) {
       try {
         const { data: previousChanges } = await (supabase as any)
           .from("verktygshanteringssystem_verktygsbyteslista")
           .select("number_of_parts_ADAM")
-          .eq("tool_number", toolNumber)
+          .eq("tool_id", values.toolNumber)
           .order("date_created", { ascending: false })
           .limit(1);
 
@@ -166,6 +166,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       id: newToolChange.id,
       machine_number: newToolChange.machineId,
       manufacturing_order: newToolChange.manufacturingOrder,
+      tool_id: values.toolNumber,
       tool_number: toolNumber,
       cause: newToolChange.reason,
       comment: newToolChange.comment,
