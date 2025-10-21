@@ -31,6 +31,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { getAdamBoxValue } from "@/lib/adambox";
 import { useTools } from "@/hooks/useTools";
+import { getMachineStatus, extractWorkCenterFromMachineId } from "@/lib/machinestatus";
 
 const formSchema = z.object({
   toolNumber: z.string().min(1, "Verktygsnummer är obligatoriskt"),
@@ -39,6 +40,7 @@ const formSchema = z.object({
   }),
   signature: z.string().min(1, "Signatur är obligatoriskt"),
   comment: z.string().optional(),
+  manufacturingOrder: z.string().optional(),
 }).refine((data) => {
   // If reason is "Övrigt", comment must be filled
   if (data.reason === "Övrigt") {
@@ -59,6 +61,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
   const [adamBoxValue, setAdamBoxValue] = useState<number | null>(null);
   const [toolDropdownOpen, setToolDropdownOpen] = useState(false);
   const [reasonDropdownOpen, setReasonDropdownOpen] = useState(false);
+  const [activeManufacturingOrder, setActiveManufacturingOrder] = useState<string>("");
   const { data: tools } = useTools();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -68,6 +71,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       reason: undefined,
       signature: "",
       comment: "",
+      manufacturingOrder: "",
     },
   });
 
@@ -79,10 +83,30 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
     watchedValues.signature &&
     (watchedValues.reason !== "Övrigt" || (watchedValues.comment && watchedValues.comment.trim().length > 0));
 
-  // Get AdamBox value when component mounts
+  // Get AdamBox value and manufacturing order when component mounts
   useEffect(() => {
     fetchAdamBoxValue();
+    fetchManufacturingOrder();
   }, [activeMachine]);
+
+  const fetchManufacturingOrder = async () => {
+    try {
+      const workCenter = extractWorkCenterFromMachineId(activeMachine);
+      const statusData = await getMachineStatus(workCenter);
+      
+      if (statusData.active_order?.order_number) {
+        setActiveManufacturingOrder(statusData.active_order.order_number);
+        form.setValue("manufacturingOrder", statusData.active_order.order_number);
+      } else {
+        setActiveManufacturingOrder("");
+        form.setValue("manufacturingOrder", "");
+      }
+    } catch (error) {
+      console.error('Error fetching manufacturing order:', error);
+      setActiveManufacturingOrder("");
+      form.setValue("manufacturingOrder", "");
+    }
+  };
 
   const fetchAdamBoxValue = async () => {
     setIsLoadingAdamBox(true);
@@ -98,29 +122,57 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // Find the tool ID from the tool number
+    const selectedTool = tools?.find(tool => tool.id === values.toolNumber);
+    const toolNumber = selectedTool?.plats || "";
+
+    // Get the previous tool change for this tool to calculate the difference
+    let amountSinceLastChange = null;
+    if (adamBoxValue !== null && toolNumber) {
+      try {
+        const { data: previousChanges } = await (supabase as any)
+          .from("verktygshanteringssystem_verktygsbyteslista")
+          .select("number_of_parts_ADAM")
+          .eq("tool_number", toolNumber)
+          .order("date_created", { ascending: false })
+          .limit(1);
+
+        if (previousChanges && previousChanges.length > 0) {
+          const previousAdamValue = previousChanges[0].number_of_parts_ADAM;
+          if (previousAdamValue !== null) {
+            amountSinceLastChange = adamBoxValue - previousAdamValue;
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching previous tool change:", error);
+      }
+    }
+
     const newToolChange: ToolChange = {
       id: generateUUID(),
       machineId: activeMachine,
-      manufacturingOrder: "", // No longer needed
+      manufacturingOrder: values.manufacturingOrder || "",
       toolNumber: values.toolNumber,
       reason: values.reason,
       comment: values.comment || "",
       signature: values.signature,
       timestamp: new Date(),
       number_of_parts_ADAM: adamBoxValue || null,
+      amount_since_last_change: amountSinceLastChange,
     };
 
     // Save to Supabase
     const { error } = await (supabase as any).from("verktygshanteringssystem_verktygsbyteslista").insert({
       id: newToolChange.id,
       machine_number: newToolChange.machineId,
-      manufacturing_order: "",
-      tool_number: newToolChange.toolNumber,
+      manufacturing_order: newToolChange.manufacturingOrder,
+      tool_number: toolNumber,
       cause: newToolChange.reason,
       comment: newToolChange.comment,
       signature: newToolChange.signature,
       date_created: newToolChange.timestamp.toISOString(),
       number_of_parts_ADAM: adamBoxValue || null,
+      amount_since_last_change: amountSinceLastChange,
     });
 
     if (error) {
@@ -136,6 +188,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       reason: undefined,
       signature: "",
       comment: "",
+      manufacturingOrder: activeManufacturingOrder, // Keep the manufacturing order
     });
   };
 
@@ -248,7 +301,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
                       <FormControl>
                         <Popover open={reasonDropdownOpen} onOpenChange={setReasonDropdownOpen}>
                           <PopoverTrigger asChild>
-                            <Button
+        <Button 
                               variant="outline"
                               role="combobox"
                               aria-expanded={reasonDropdownOpen}
@@ -260,7 +313,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
                                 "Välj anledning"
                               )}
                               <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
+        </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-full p-0" align="start">
                             <div className="max-h-96 overflow-y-auto">
@@ -308,6 +361,24 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
                     <FormLabel className="text-gray-600 text-sm font-medium">Signatur</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Ange signatur" />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="manufacturingOrder"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-600 text-sm font-medium">Tillverkningsorder</FormLabel>
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Tillverkningsorder" 
+                        readOnly
+                        className="bg-gray-50"
+                      />
                     </FormControl>
                   </FormItem>
                 )}

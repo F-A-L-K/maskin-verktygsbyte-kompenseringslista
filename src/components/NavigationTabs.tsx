@@ -5,7 +5,6 @@ export default function NavigationTabs() {
   const location = useLocation();
 
   const tabs = [
-    { path: "mi", label: "MI" },
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
     { path: "historik", label: "Historisk Verktygsbyte" },
     { path: "mätplan", label: "Mätplan" },

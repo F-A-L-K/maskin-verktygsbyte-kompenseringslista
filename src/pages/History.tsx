@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { MachineId } from "@/types";
 import { useTools } from "@/hooks/useTools";
 import {
@@ -10,21 +11,92 @@ import {
 } from "@/components/ui/table";
 import { Loader2, ChevronsRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getAdamBoxValue } from "@/lib/adambox";
+import { supabase } from "@/integrations/supabase/client";
 
 interface HistoryProps {
   activeMachine: MachineId;
 }
 
+interface ToolWithCount {
+  id: string;
+  plats: string | null;
+  benämning: string;
+  artikelnummer: string | null;
+  maxgräns: number | null;
+  partsSinceLastChange?: number | null;
+}
+
 export default function History({ activeMachine }: HistoryProps) {
   const { data: tools, isLoading, error } = useTools();
   const navigate = useNavigate();
+  const [currentAdamBoxValue, setCurrentAdamBoxValue] = useState<number | null>(null);
+  const [toolsWithCounts, setToolsWithCounts] = useState<ToolWithCount[]>([]);
+  const [loadingCounts, setLoadingCounts] = useState(true);
 
   const handleToolHistory = (toolId: string) => {
     const machineId = activeMachine.split(' ')[0];
     navigate(`/${machineId}/verktygshistorik/${toolId}`);
   };
 
-  if (isLoading) {
+  // Fetch current AdamBox value and calculate parts since last change for each tool
+  useEffect(() => {
+    const fetchCurrentData = async () => {
+      if (!tools || tools.length === 0) return;
+
+      setLoadingCounts(true);
+      
+      try {
+        // Get current AdamBox value
+        const currentValue = await getAdamBoxValue(activeMachine);
+        setCurrentAdamBoxValue(currentValue);
+
+        // Calculate parts since last change for each tool
+        const toolsWithCountsData = await Promise.all(
+          tools.map(async (tool) => {
+            let partsSinceLastChange = null;
+            
+            if (currentValue !== null && tool.plats) {
+              try {
+                // Get the latest tool change for this tool on this specific machine
+                const { data: latestToolChange } = await (supabase as any)
+                  .from("verktygshanteringssystem_verktygsbyteslista")
+                  .select("number_of_parts_ADAM")
+                  .eq("tool_number", tool.plats)
+                  .eq("machine_id", activeMachine)
+                  .order("date_created", { ascending: false })
+                  .limit(1);
+
+                if (latestToolChange && latestToolChange.length > 0) {
+                  const lastAdamValue = latestToolChange[0].number_of_parts_ADAM;
+                  if (lastAdamValue !== null) {
+                    partsSinceLastChange = currentValue - lastAdamValue;
+                  }
+                }
+              } catch (error) {
+                console.error(`Error fetching tool change for tool ${tool.plats}:`, error);
+              }
+            }
+
+            return {
+              ...tool,
+              partsSinceLastChange
+            };
+          })
+        );
+
+        setToolsWithCounts(toolsWithCountsData);
+      } catch (error) {
+        console.error("Error fetching current data:", error);
+      } finally {
+        setLoadingCounts(false);
+      }
+    };
+
+    fetchCurrentData();
+  }, [tools, activeMachine]);
+
+  if (isLoading || loadingCounts) {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -55,15 +127,19 @@ export default function History({ activeMachine }: HistoryProps) {
             </TableRow>
           </TableHeader>
           <TableBody >
-            {tools && tools.length > 0 ? (
-             [...tools]
+            {toolsWithCounts && toolsWithCounts.length > 0 ? (
+             [...toolsWithCounts]
              .sort((a, b) => (a.plats || "").localeCompare(b.plats || "", undefined, { numeric: true }))
              .map((tool) => (
                 <TableRow key={tool.id} >
                   <TableCell className="text-center">T{tool.plats || "-"}</TableCell>
                   <TableCell className="font-medium text-center">{tool.benämning}</TableCell>
                   <TableCell className="text-center">{tool.artikelnummer || "-"}</TableCell>
-                  <TableCell className="text-center">-</TableCell>
+                  <TableCell className="text-center">
+                    {tool.partsSinceLastChange !== null ? (
+                      <span>{tool.partsSinceLastChange} <span className="text-blue-500">ST</span></span>
+                    ) : "-"}
+                  </TableCell>
                   <TableCell className="text-center" >
                     {tool.maxgräns !== null ? (
                       <span>{tool.maxgräns} <span className="text-blue-500">ST</span></span>
