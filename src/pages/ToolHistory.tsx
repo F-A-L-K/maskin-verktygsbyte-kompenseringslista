@@ -13,10 +13,12 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
+import { useMachineFromUrl } from "@/hooks/useMachineFromUrl";
 
 export default function ToolHistory() {
   const { toolId } = useParams();
   const navigate = useNavigate();
+  const { activeMachine } = useMachineFromUrl();
 
   // Fetch tool details
   const { data: tool, isLoading: toolLoading } = useQuery({
@@ -34,22 +36,26 @@ export default function ToolHistory() {
     enabled: !!toolId,
   });
 
-  // Fetch tool changes for this tool
+  // Fetch tool changes for this tool on this specific machine
   const { data: toolChanges, isLoading: changesLoading } = useQuery({
-    queryKey: ['toolChanges', toolId],
+    queryKey: ['toolChanges', toolId, activeMachine],
     queryFn: async () => {
-      if (!toolId) return [];
+      if (!toolId || !activeMachine) return [];
+      
+      // Extract machine number from activeMachine (e.g., "5702 Fanuc Robodrill" -> "5702")
+      const machineNumber = activeMachine.split(' ')[0];
       
       const { data, error } = await supabase
         .from('verktygshanteringssystem_verktygsbyteslista')
         .select('*')
         .eq('tool_number', toolId)
+        .eq('machine_number', machineNumber)
         .order('date_created', { ascending: false });
       
       if (error) throw error;
       return data;
     },
-    enabled: !!toolId,
+    enabled: !!toolId && !!activeMachine,
   });
 
   const isLoading = toolLoading || changesLoading;

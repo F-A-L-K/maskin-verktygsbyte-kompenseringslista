@@ -22,17 +22,17 @@ export default function StatusBar({ activeMachine }: StatusBarProps) {
   };
 
   return (
-    <div className="bg-statusbar text-white px-6 py-2 flex items-center justify-between">
+    <div className="bg-[#507E95] text-white px-6 py-2 flex items-center justify-between h-12">
       <div className="flex items-center gap-4">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-white fill-white" />
-            <span className="font-semibold text-xs">{activeMachine}</span>
+            <Shield className="h-4 w-4 fill-white" />
+            <span className="font-semibold text-md">{activeMachine}</span>
           </div>
-          <div className="flex items-center gap-2 mt-1">
-            <User className="h-4 w-4 text-white fill-white" />
+          {/* <div className="flex items-center gap-2 mt-1">
+            <User className="h-4 w-4 fill-white" />
             <span className="font-medium text-xs">Fredrik Falk</span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex items-center gap-4">

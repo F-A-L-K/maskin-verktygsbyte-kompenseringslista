@@ -32,12 +32,20 @@ export default function History({ activeMachine }: HistoryProps) {
   const navigate = useNavigate();
   const [currentAdamBoxValue, setCurrentAdamBoxValue] = useState<number | null>(null);
   const [toolsWithCounts, setToolsWithCounts] = useState<ToolWithCount[]>([]);
-  const [loadingCounts, setLoadingCounts] = useState(true);
+  const [loadingCounts, setLoadingCounts] = useState(false);
 
   const handleToolHistory = (toolId: string) => {
     const machineId = activeMachine.split(' ')[0];
     navigate(`/${machineId}/verktygshistorik/${toolId}`);
   };
+
+  // Initialize tools with counts immediately, then load AdamBox data in background
+  useEffect(() => {
+    if (tools && tools.length > 0) {
+      // Set tools immediately without counts
+      setToolsWithCounts(tools.map(tool => ({ ...tool, partsSinceLastChange: null })));
+    }
+  }, [tools]);
 
   // Fetch current AdamBox value and calculate parts since last change for each tool
   useEffect(() => {
@@ -96,7 +104,7 @@ export default function History({ activeMachine }: HistoryProps) {
     fetchCurrentData();
   }, [tools, activeMachine]);
 
-  if (isLoading || loadingCounts) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -136,7 +144,11 @@ export default function History({ activeMachine }: HistoryProps) {
                   <TableCell className="font-medium text-center">{tool.benämning}</TableCell>
                   <TableCell className="text-center">{tool.artikelnummer || "-"}</TableCell>
                   <TableCell className="text-center">
-                    {tool.partsSinceLastChange !== null ? (
+                    {loadingCounts ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                      </div>
+                    ) : tool.partsSinceLastChange !== null ? (
                       <span>{tool.partsSinceLastChange} <span className="text-blue-500">ST</span></span>
                     ) : "-"}
                   </TableCell>
