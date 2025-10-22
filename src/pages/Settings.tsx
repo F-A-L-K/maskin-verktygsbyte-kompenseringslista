@@ -10,22 +10,31 @@ import { Loader2, Save } from "lucide-react";
 export default function SettingsPage() {
   const { data: tools, isLoading, refetch } = useTools();
   const [maxValues, setMaxValues] = useState<Record<string, string>>({});
+  const [warningValues, setWarningValues] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Initialize maxValues when tools are loaded
+  // Initialize maxValues and warningValues when tools are loaded
   useEffect(() => {
     if (tools) {
-      const initialValues: Record<string, string> = {};
+      const initialMaxValues: Record<string, string> = {};
+      const initialWarningValues: Record<string, string> = {};
       tools.forEach(tool => {
-        initialValues[tool.id] = tool.maxgräns !== null ? tool.maxgräns.toString() : "";
+        initialMaxValues[tool.id] = tool.maxgräns !== null ? tool.maxgräns.toString() : "";
+        initialWarningValues[tool.id] = tool.maxgräns_varning !== null ? tool.maxgräns_varning.toString() : "";
       });
-      setMaxValues(initialValues);
+      setMaxValues(initialMaxValues);
+      setWarningValues(initialWarningValues);
     }
   }, [tools]);
 
-  const handleInputChange = (toolId: string, value: string) => {
+  const handleMaxInputChange = (toolId: string, value: string) => {
     setMaxValues({ ...maxValues, [toolId]: value });
+    setHasChanges(true);
+  };
+
+  const handleWarningInputChange = (toolId: string, value: string) => {
+    setWarningValues({ ...warningValues, [toolId]: value });
     setHasChanges(true);
   };
 
@@ -37,16 +46,23 @@ export default function SettingsPage() {
         return;
       }
     }
+    for (const [toolId, value] of Object.entries(warningValues)) {
+      if (value && (isNaN(Number(value)) || Number(value) < 0)) {
+        toast.error("Maxgräns varning måste vara ett positivt tal");
+        return;
+      }
+    }
 
     setIsSaving(true);
     
     try {
       // Update all changed tools
-      const updates = Object.entries(maxValues).map(async ([toolId, value]) => {
+      const updates = Object.keys(maxValues).map(async (toolId) => {
         return supabase
           .from('verktygshanteringssystem_verktyg')
           .update({ 
-            maxgräns: value ? Number(value) : null,
+            maxgräns: maxValues[toolId] ? Number(maxValues[toolId]) : null,
+            maxgräns_varning: warningValues[toolId] ? Number(warningValues[toolId]) : null,
             updated_at: new Date().toISOString()
           })
           .eq('id', toolId);
@@ -111,8 +127,9 @@ export default function SettingsPage() {
         <Table maxHeight="70vh">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[40%]">Verktyg</TableHead>  
-              <TableHead className="w-[60%]">Maxgräns</TableHead>
+              <TableHead className="w-[33%]">Verktyg</TableHead>  
+              <TableHead className="w-[33%]">Maxgräns</TableHead>
+              <TableHead className="w-[34%]">Maxgräns Varning</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -134,8 +151,19 @@ export default function SettingsPage() {
                         type="number"
                         min="0"
                         value={maxValues[tool.id] || ""}
-                        onChange={(e) => handleInputChange(tool.id, e.target.value)}
+                        onChange={(e) => handleMaxInputChange(tool.id, e.target.value)}
                         placeholder="Ange maxgräns"
+                        className="h-9 max-w-[200px]"
+                        disabled={isSaving}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={warningValues[tool.id] || ""}
+                        onChange={(e) => handleWarningInputChange(tool.id, e.target.value)}
+                        placeholder="Ange varningsgräns"
                         className="h-9 max-w-[200px]"
                         disabled={isSaving}
                       />

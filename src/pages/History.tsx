@@ -24,6 +24,7 @@ interface ToolWithCount {
   benämning: string;
   artikelnummer: string | null;
   maxgräns: number | null;
+  maxgräns_varning: number | null;
   partsSinceLastChange?: number | null;
 }
 
@@ -159,7 +160,16 @@ export default function History({ activeMachine }: HistoryProps) {
                         <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                       </div>
                     ) : tool.partsSinceLastChange !== null ? (
-                      <span>{tool.partsSinceLastChange} <span className="text-blue-500">ST</span></span>
+                      <span className={
+                        tool.maxgräns !== null && tool.partsSinceLastChange > tool.maxgräns
+                          ? "text-red-500 font-bold"
+                          : tool.maxgräns !== null && tool.maxgräns_varning !== null && 
+                            tool.partsSinceLastChange >= (tool.maxgräns - tool.maxgräns_varning)
+                          ? "text-orange-500 font-bold"
+                          : ""
+                      }>
+                        {tool.partsSinceLastChange} <span className="text-blue-500">ST</span>
+                      </span>
                     ) : "-"}
                   </TableCell>
                   <TableCell className="text-center" >

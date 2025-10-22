@@ -43,6 +43,7 @@ export interface Tool {
   benämning: string;
   artikelnummer: string | null;
   maxgräns: number | null;
+  maxgräns_varning: number | null;
   created_at: string;
   updated_at: string;
 }
