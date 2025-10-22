@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
@@ -25,6 +25,8 @@ const queryClient = new QueryClient();
 const AppContent = () => {
   const { availableMachines, activeMachine: defaultMachine, isValidUrl, isLoading } = useMachineFromUrl();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
+  const navigate = useNavigate();
+  const location = useLocation();
   
   // Update active machine when URL changes
   useEffect(() => {
@@ -32,6 +34,28 @@ const AppContent = () => {
       setActiveMachine(defaultMachine);
     }
   }, [defaultMachine]);
+
+  // Handle machine change - navigate to skapa-verktygsbyte
+  const handleMachineChange = (machine: MachineId) => {
+    setActiveMachine(machine);
+    
+    // Extract the machine pattern from current URL
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const currentMachinePattern = pathParts.find(part => /^\d{4}(-\d{4})*$/.test(part));
+    
+    // Get the new machine number
+    const newMachineNumber = machine.split(' ')[0];
+    
+    // If we have multiple machines in URL, preserve all except change the active one
+    if (currentMachinePattern && currentMachinePattern.includes('-')) {
+      // For now, just navigate to the new machine pattern with all machines
+      // This keeps the sidebar intact
+      navigate(`/${currentMachinePattern}/skapa-verktygsbyte`);
+    } else {
+      // Single machine or no pattern found - navigate to the new machine
+      navigate(`/${newMachineNumber}/skapa-verktygsbyte`);
+    }
+  };
   
   // Show loading while checking machines
   if (isLoading) {
@@ -51,7 +75,7 @@ const AppContent = () => {
         {hasMultipleMachines && (
           <AppSidebar
             activeMachine={activeMachine}
-            onMachineChange={setActiveMachine}
+            onMachineChange={handleMachineChange}
             availableMachines={availableMachines}
           />
         )}

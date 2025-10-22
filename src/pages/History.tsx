@@ -36,8 +36,17 @@ export default function History({ activeMachine }: HistoryProps) {
   const [loadingCounts, setLoadingCounts] = useState(false);
 
   const handleToolHistory = (toolId: string) => {
-    const machineId = activeMachine.split(' ')[0];
-    navigate(`/${machineId}/verktygshistorik/${toolId}`);
+    // Extract the machine pattern from current URL to preserve all machines
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const machinePattern = pathParts.find(part => /^\d{4}(-\d{4})*$/.test(part));
+    
+    if (machinePattern) {
+      navigate(`/${machinePattern}/verktygshistorik/${toolId}`);
+    } else {
+      // Fallback to single machine if pattern not found
+      const machineId = activeMachine.split(' ')[0];
+      navigate(`/${machineId}/verktygshistorik/${toolId}`);
+    }
   };
 
   // Initialize tools with counts immediately, then load AdamBox data in background
