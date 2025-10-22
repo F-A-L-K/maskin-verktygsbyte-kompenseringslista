@@ -112,7 +112,15 @@ export default function History({ activeMachine }: HistoryProps) {
       }
     };
 
+    // Fetch immediately on mount/change
     fetchCurrentData();
+
+    // Then fetch every 10 minutes
+    const interval = setInterval(() => {
+      fetchCurrentData();
+    }, 10 * 60 * 1000); // 10 minutes
+
+    return () => clearInterval(interval);
   }, [tools, activeMachine]);
 
   if (isLoading) {
