@@ -2,3 +2,5 @@
 pymodbus==3.5.2  # Modbus TCP client library
 flask==3.0.0  # Web framework for API
 flask-cors==4.0.0  # CORS support for frontend
+python-dotenv==1.0.0  # Environment variable loading
+pyodbc==5.0.1  # SQL Server database connectivity

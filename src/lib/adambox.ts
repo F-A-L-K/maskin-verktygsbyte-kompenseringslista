@@ -34,7 +34,8 @@ export async function getAdamBoxValue(machineId: string): Promise<number | null>
     const ipAddress = machine.ip_adambox;
 
     // Call the backend API
-    const response = await fetch(`http://localhost:8000/api/adambox?ip=${encodeURIComponent(ipAddress)}`);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const response = await fetch(`${API_BASE_URL}/api/adambox?ip=${encodeURIComponent(ipAddress)}`);
     
     if (!response.ok) {
       console.error(`Failed to get AdamBox value: ${response.statusText}`);

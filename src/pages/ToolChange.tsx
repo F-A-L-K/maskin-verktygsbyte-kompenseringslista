@@ -68,7 +68,7 @@ export default function ToolChangePage({ activeMachine }: ToolChangePageProps) {
       tool_number: toolChange.toolNumber,
       cause: toolChange.reason,
       comment: toolChange.comment,
-      signature: toolChange.signature,
+      signature: toolChange.signature.toUpperCase(),
       date_created: toolChange.timestamp.toISOString(),
       number_of_parts_ADAM: toolChange.number_of_parts_ADAM ? Number(toolChange.number_of_parts_ADAM) : 0,
     });

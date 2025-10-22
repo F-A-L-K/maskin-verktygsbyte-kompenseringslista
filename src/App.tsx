@@ -15,6 +15,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import CreateToolChange from "./pages/CreateToolChange";
 import History from "./pages/History";
 import ToolHistory from "./pages/ToolHistory";
+import Settings from "./pages/Settings";
 import MI from "./pages/MI";
 import Matplan from "./pages/Matplan";
 import CMM from "./pages/CMM";
@@ -64,6 +65,7 @@ const AppContent = () => {
               <Route path="skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
               <Route path="historik" element={<History activeMachine={activeMachine} />} />
               <Route path="verktygshistorik/:toolId" element={<ToolHistory />} />
+              <Route path="inställningar" element={<Settings />} />
               <Route path="mätplan" element={<Matplan />} />
               <Route path="cmm" element={<CMM />} />
             </Routes>

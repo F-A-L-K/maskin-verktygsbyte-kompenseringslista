@@ -183,7 +183,7 @@ export default function CreateToolChange({ activeMachine }: CreateToolChangeProp
       tool_id: values.toolNumber,
       cause: newToolChange.reason,
       comment: newToolChange.comment,
-      signature: newToolChange.signature,
+      signature: values.signature.toUpperCase(),
       date_created: newToolChange.timestamp.toISOString(),
       number_of_parts_ADAM: adamBoxValue || null,
       amount_since_last_change: amountSinceLastChange,

@@ -9,8 +9,22 @@ from flask_cors import CORS
 import socket
 import struct
 import pyodbc
+import os
 from datetime import datetime
 from typing import Optional, Tuple
+
+# Load environment variables from .env file if it exists
+try:
+    from dotenv import load_dotenv
+    # Look for .env file in parent directory
+    env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+        print(f"Loaded environment variables from {env_path}")
+    else:
+        print("No .env file found, using system environment variables")
+except ImportError:
+    print("python-dotenv not installed, using system environment variables only")
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -339,9 +353,17 @@ def health_check():
     })
 
 if __name__ == '__main__':
+    # Get configuration from environment variables
+    API_HOST = os.getenv('API_HOST', '0.0.0.0')
+    API_PORT = int(os.getenv('API_PORT', '5001'))
+    DEBUG_MODE = os.getenv('DEBUG', 'true').lower() == 'true'
+    
     print("Starting AdamBox API server with Monitor MI integration...")
     print("=" * 50)
-    print("API will be available at: http://localhost:8000")
+    print(f"API will be available at: http://{API_HOST}:{API_PORT}")
+    print(f"Host: {API_HOST}")
+    print(f"Port: {API_PORT}")
+    print(f"Debug: {DEBUG_MODE}")
     print("\nEndpoints:")
     print("  GET /api/adambox?ip=<ip_address> - Get AdamBox value")
     print("  GET /api/machine-status?wc=<work_center> - Get machine status from Monitor MI")
@@ -352,4 +374,4 @@ if __name__ == '__main__':
     print("\nPress Ctrl+C to stop the server")
     print("=" * 50)
     
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host=API_HOST, port=API_PORT, debug=DEBUG_MODE)

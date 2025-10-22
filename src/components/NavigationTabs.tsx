@@ -4,8 +4,9 @@ import { cn } from "@/lib/utils";
 export default function NavigationTabs() {
   const tabs = [
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
-    { path: "historik", label: "Historisk Verktygsbyte" },
-    { path: "mätplan", label: "Mätplan" },
+    { path: "historik", label: "Verktyg" },
+    { path: "inställningar", label: "Inställningar" },
+    // { path: "mätplan", label: "Mätplan" },
     // { path: "cmm", label: "CMM" },
   ];
 

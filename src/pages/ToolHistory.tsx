@@ -197,7 +197,7 @@ export default function ToolHistory() {
         >
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-2xl font-bold text-primary">T{tool.plats}</span>
+              <span className="text-2xl font-bold text-foreground">T{tool.plats}</span>
               <div className="h-6 w-px bg-border"></div>
               <span className="text-base font-semibold text-foreground">{tool.benämning}</span>
             </div>
@@ -225,10 +225,6 @@ export default function ToolHistory() {
 
               {/* Search Filters */}
               <div className="space-y-3">
-                <h4 className="text-xs font-semibold text-foreground uppercase tracking-wide flex items-center gap-2">
-                  <Filter className="h-3 w-3 text-primary" />
-                  Sökfilter
-                </h4>
                 
                 {/* Tillverkningsorder and Avancerade filter row */}
                 <div className="grid grid-cols-2 gap-3">

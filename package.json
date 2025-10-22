@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "start:backend": "cd backend && python app.py",
     "full": "concurrently \"vite\" \"python ./backend/app.py\""
   },
   "dependencies": {
