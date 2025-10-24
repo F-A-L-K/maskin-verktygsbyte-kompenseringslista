@@ -126,9 +126,7 @@ export default function Matrixkod({ activeMachine }: MatrixkodProps) {
                   <FormControl>
                     <Input 
                       {...field} 
-                      placeholder="Tillverkningsorder" 
-                      readOnly
-                      className="bg-gray-50"
+                      placeholder="Tillverkningsorder"
                     />
                   </FormControl>
                 </FormItem>

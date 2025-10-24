@@ -252,27 +252,6 @@ export type Database = {
         }
         Relationships: []
       }
-      matrixkoder: {
-        Row: {
-          created_at: string
-          id: number
-          matrixkod_string: string | null
-          tillverkningsorder: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          matrixkod_string?: string | null
-          tillverkningsorder?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          matrixkod_string?: string | null
-          tillverkningsorder?: string | null
-        }
-        Relationships: []
-      }
       operatorsbyte_maskiner: {
         Row: {
           created_at: string
@@ -622,6 +601,8 @@ export type Database = {
           ip_adambox: string | null
           maskin_namn: string
           maskiner_nummer: string
+          tillgång_matrixkod: boolean | null
+          tillgång_verktygsbyte: boolean | null
           updated_at: string
         }
         Insert: {
@@ -630,6 +611,8 @@ export type Database = {
           ip_adambox?: string | null
           maskin_namn: string
           maskiner_nummer: string
+          tillgång_matrixkod?: boolean | null
+          tillgång_verktygsbyte?: boolean | null
           updated_at?: string
         }
         Update: {
@@ -638,7 +621,33 @@ export type Database = {
           ip_adambox?: string | null
           maskin_namn?: string
           maskiner_nummer?: string
+          tillgång_matrixkod?: boolean | null
+          tillgång_verktygsbyte?: boolean | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      verktygshanteringssystem_matrixkoder: {
+        Row: {
+          created_at: string
+          id: number
+          kommentar: string | null
+          matrixkod_datum: string | null
+          tillverkningsorder: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          kommentar?: string | null
+          matrixkod_datum?: string | null
+          tillverkningsorder: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          kommentar?: string | null
+          matrixkod_datum?: string | null
+          tillverkningsorder?: string
         }
         Relationships: []
       }
@@ -649,6 +658,7 @@ export type Database = {
           created_at: string
           id: string
           maxgräns: number | null
+          maxgräns_varning: number | null
           plats: string | null
           updated_at: string
         }
@@ -658,6 +668,7 @@ export type Database = {
           created_at?: string
           id?: string
           maxgräns?: number | null
+          maxgräns_varning?: number | null
           plats?: string | null
           updated_at?: string
         }
@@ -667,6 +678,7 @@ export type Database = {
           created_at?: string
           id?: string
           maxgräns?: number | null
+          maxgräns_varning?: number | null
           plats?: string | null
           updated_at?: string
         }
@@ -768,14 +780,8 @@ export type Database = {
         Args: { p_password: string; p_username: string }
         Returns: Json
       }
-      cleanup_expired_franvaro: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
-      cleanup_expired_news: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
+      cleanup_expired_franvaro: { Args: never; Returns: number }
+      cleanup_expired_news: { Args: never; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["user_role"]
