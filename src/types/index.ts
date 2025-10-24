@@ -19,6 +19,8 @@ export interface Machine {
   maskiner_nummer: string;
   maskin_namn: string;
   ip_adambox: string | null;
+  tillgång_verktygsbyte: boolean | null;
+  tillgång_matrixkod: boolean | null;
   created_at: string;
   updated_at: string;
 }

@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import { MachineId } from "./types";
 import { NumericInputProvider } from "./hooks/useNumericInput";
 import { useMachineFromUrl } from "./hooks/useMachineFromUrl";
+import { useMachines } from "./hooks/useMachines";
 import StatusBar from "./components/StatusBar";
 import NavigationTabs from "./components/NavigationTabs";
 import { AppSidebar } from "./components/AppSidebar";
@@ -25,6 +26,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const { availableMachines, activeMachine: defaultMachine, isValidUrl, isLoading } = useMachineFromUrl();
+  const { data: allMachines = [] } = useMachines();
   const [activeMachine, setActiveMachine] = useState<MachineId>(defaultMachine);
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,6 +72,10 @@ const AppContent = () => {
 
   const hasMultipleMachines = availableMachines.length > 1;
   
+  // Find the actual machine object from activeMachine string
+  const machineNumber = activeMachine.split(' ')[0];
+  const currentMachine = allMachines.find(m => m.maskiner_nummer === machineNumber) || null;
+  
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full">
@@ -82,7 +88,7 @@ const AppContent = () => {
         )}
         <div className="flex-1 flex flex-col">
           <StatusBar activeMachine={activeMachine} />
-          <NavigationTabs />
+          <NavigationTabs machine={currentMachine} />
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Navigate to="skapa-verktygsbyte" replace />} />

@@ -1,18 +1,28 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { Machine } from "@/types";
 
-export default function NavigationTabs() {
+interface NavigationTabsProps {
+  machine: Machine | null;
+}
+
+export default function NavigationTabs({ machine }: NavigationTabsProps) {
+  const hasVerktygsbyte = machine?.tillgång_verktygsbyte ?? true;
+  const hasMatrixkod = machine?.tillgång_matrixkod ?? true;
+
   const leftTabs = [
-    { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
-    { path: "historik", label: "Verktyg" },
-    { path: "matrixkod", label: "Matrixkod" },
-    // { path: "mätplan", label: "Mätplan" },
-    // { path: "cmm", label: "CMM" },
+    ...(hasVerktygsbyte ? [
+      { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
+      { path: "historik", label: "Verktyg" },
+    ] : []),
+    ...(hasMatrixkod ? [
+      { path: "matrixkod", label: "Matrixkod" },
+    ] : []),
   ];
 
-  const rightTabs = [
+  const rightTabs = hasVerktygsbyte ? [
     { path: "inställningar", label: "Inställningar" },
-  ];
+  ] : [];
 
   return (
     <nav className="bg-background border-b">
