@@ -16,7 +16,8 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
       { path: "historik", label: "Verktyg" },
     ] : []),
     ...(hasMatrixkod ? [
-      { path: "matrixkod", label: "Matrixkod" },
+      { path: "matrixkod", label: "Skapa Matrixkod" },
+      { path: "matrixkod-historik", label: "Matrixkoder" },
     ] : []),
   ];
 

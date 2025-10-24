@@ -21,6 +21,7 @@ import MI from "./pages/MI";
 import Matplan from "./pages/Matplan";
 import CMM from "./pages/CMM";
 import Matrixkod from "./pages/Matrixkod";
+import MatrixkodHistorik from "./pages/MatrixkodHistorik";
 
 const queryClient = new QueryClient();
 
@@ -100,6 +101,7 @@ const AppContent = () => {
               <Route path="mätplan" element={<Matplan />} />
               <Route path="cmm" element={<CMM />} />
               <Route path="matrixkod" element={<Matrixkod activeMachine={activeMachine} />} />
+              <Route path="matrixkod-historik" element={<MatrixkodHistorik activeMachine={activeMachine} />} />
             </Routes>
           </main>
         </div>
