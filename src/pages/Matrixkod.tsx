@@ -15,6 +15,8 @@ import { z } from "zod";
 import { MachineId } from "@/types";
 import { Save } from "lucide-react";
 import { getMachineStatus, extractWorkCenterFromMachineId } from "@/lib/machinestatus";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
@@ -69,8 +71,29 @@ export default function Matrixkod({ activeMachine }: MatrixkodProps) {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // When save is clicked, nothing happens as requested
-    console.log("Matrixkod form submitted:", values);
+    try {
+      const { error } = await supabase
+        .from('verktygshanteringssystem_matrixkoder' as any)
+        .insert({
+          tillverkningsorder: values.manufacturingOrder,
+          matrixkod_datum: values.date,
+          kommentar: values.comment || null,
+        });
+
+      if (error) throw error;
+
+      toast.success("Matrixkod sparad!");
+      
+      // Reset form after successful save
+      form.reset({
+        manufacturingOrder: activeManufacturingOrder,
+        date: "",
+        comment: "",
+      });
+    } catch (error) {
+      console.error('Error saving matrixkod:', error);
+      toast.error("Kunde inte spara matrixkod");
+    }
   };
 
   return (
