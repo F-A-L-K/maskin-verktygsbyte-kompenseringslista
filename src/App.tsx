@@ -19,6 +19,7 @@ import Settings from "./pages/Settings";
 import MI from "./pages/MI";
 import Matplan from "./pages/Matplan";
 import CMM from "./pages/CMM";
+import Matrixkod from "./pages/Matrixkod";
 
 const queryClient = new QueryClient();
 
@@ -92,6 +93,7 @@ const AppContent = () => {
               <Route path="inställningar" element={<Settings />} />
               <Route path="mätplan" element={<Matplan />} />
               <Route path="cmm" element={<CMM />} />
+              <Route path="matrixkod" element={<Matrixkod activeMachine={activeMachine} />} />
             </Routes>
           </main>
         </div>

@@ -5,6 +5,7 @@ export default function NavigationTabs() {
   const leftTabs = [
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
     { path: "historik", label: "Verktyg" },
+    { path: "matrixkod", label: "Matrixkod" },
     // { path: "mätplan", label: "Mätplan" },
     // { path: "cmm", label: "CMM" },
   ];

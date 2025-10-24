@@ -21,7 +21,6 @@ export function AppSidebar({ activeMachine, onMachineChange, availableMachines }
     <Sidebar collapsible="none">
       <SidebarContent className="">
         <SidebarGroup>
-
           <SidebarGroupContent>
             <SidebarMenu>
               {availableMachines.map((machine) => {
