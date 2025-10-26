@@ -11,45 +11,62 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
   const hasMatrixkod = machine?.tillgång_matrixkod ?? true;
   const hasStorningar = machine?.tillgång_störningar ?? true;
 
-  const leftTabs = [
-    ...(hasVerktygsbyte ? [
-      { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
-      { path: "historik", label: "Verktyg" },
-    ] : []),
-    ...(hasMatrixkod ? [
-      { path: "matrixkod", label: "Skapa Matrixkod" },
-      { path: "matrixkod-historik", label: "Matrixkoder" },
-    ] : []),
-    ...(hasStorningar ? [
-      { path: "skapa-storning", label: "Skapa Störning" },
-      { path: "storningar", label: "Störningar" },
-    ] : []),
-  ];
+  const verktygsbyteTabs = hasVerktygsbyte ? [
+    { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
+    { path: "historik", label: "Verktyg" },
+  ] : [];
+
+  const matrixkodTabs = hasMatrixkod ? [
+    { path: "matrixkod", label: "Skapa Matrixkod" },
+    { path: "matrixkod-historik", label: "Matrixkoder" },
+  ] : [];
+
+  const storningarTabs = hasStorningar ? [
+    { path: "skapa-storning", label: "Skapa Störning" },
+    { path: "storningar", label: "Störningar" },
+  ] : [];
 
   const rightTabs = hasVerktygsbyte ? [
     { path: "inställningar", label: "Inställningar" },
   ] : [];
 
+  const renderTab = (tab: { path: string; label: string }) => (
+    <NavLink
+      key={tab.path}
+      to={tab.path}
+      className={({ isActive }) => cn(
+        "px-6 py-3 font-medium transition-colors relative",
+        isActive
+          ? "text-[#507E95] border-b-[2px] border-[#507E95]"
+          : "text-muted-foreground hover:text-foreground"
+      )}
+    >
+      {tab.label}
+    </NavLink>
+  );
+
+  const renderSeparator = () => (
+    <div className="h-8 w-px bg-gray-300 self-center mx-2"></div>
+  );
+
   return (
     <nav className="bg-background border-b">
       <div className="flex justify-between">
-        <div className="flex">
-          {leftTabs.map((tab) => {
-            return (
-              <NavLink
-                key={tab.path}
-                to={tab.path}
-                className={({ isActive }) => cn(
-                  "px-6 py-3 font-medium transition-colors relative",
-                  isActive
-                    ? "text-[#507E95] border-b-[2px] border-[#507E95]"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {tab.label}
-              </NavLink>
-            );
-          })}
+        <div className="flex items-center">
+          {/* Verktygsbyte tabs */}
+          {verktygsbyteTabs.map(renderTab)}
+          
+          {/* Separator after verktygsbyte if any other area exists */}
+          {verktygsbyteTabs.length > 0 && (matrixkodTabs.length > 0 || storningarTabs.length > 0) && renderSeparator()}
+          
+          {/* Matrixkod tabs */}
+          {matrixkodTabs.map(renderTab)}
+          
+          {/* Separator after matrixkod if störningar exists */}
+          {matrixkodTabs.length > 0 && storningarTabs.length > 0 && renderSeparator()}
+          
+          {/* Störningar tabs */}
+          {storningarTabs.map(renderTab)}
         </div>
         <div className="flex">
           {rightTabs.map((tab) => {

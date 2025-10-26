@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { useMachineByNumber } from "@/hooks/useMachines";
 import { 
   Form, 
   FormControl, 
@@ -23,6 +20,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { MachineId } from "@/types";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 import { Save } from "lucide-react";
 
 const formSchema = z.object({
@@ -39,11 +38,6 @@ interface CreateDisturbanceProps {
 
 export default function CreateDisturbance({ activeMachine }: CreateDisturbanceProps) {
   const [areaDropdownOpen, setAreaDropdownOpen] = useState(false);
-  const { toast } = useToast();
-  
-  // Extract machine number from activeMachine (format: "5701 Machine Name")
-  const machineNumber = activeMachine.split(' ')[0];
-  const { data: machine } = useMachineByNumber(machineNumber);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,7 +61,7 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
         ];
       case "Spåntransportör":
         return [
-          "Översväming"
+          "Översvämning"
         ];
       case "In- och utbana":
         return [
@@ -90,53 +84,46 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
     watchedValues.signature;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!machine?.id) {
-      toast({
-        title: "Fel",
-        description: "Kunde inte hitta maskinen",
-        variant: "destructive",
-      });
-      return;
-    }
-
     try {
-      const { error } = await supabase
-        .from('verktygshanteringssystem_störningar')
-        .insert({
-          maskin_id: machine.id,
-          område: values.area,
-          kommentar: values.comment,
-          signatur: values.signature,
-        });
+      // Get machine ID from database
+      const machineNumber = activeMachine.split(' ')[0];
+      const { data: machineData } = await supabase
+        .from('verktygshanteringssystem_maskiner')
+        .select('id')
+        .eq('maskiner_nummer', machineNumber)
+        .single();
 
-      if (error) {
-        console.error("Error saving disturbance:", error);
-        toast({
-          title: "Fel",
-          description: "Kunde inte spara störningen",
-          variant: "destructive",
-        });
+      if (!machineData) {
+        toast.error("Maskin hittades inte");
         return;
       }
 
-      toast({
-        title: "Sparat",
-        description: "Störningen har sparats",
+      // Save to Supabase
+      const { error } = await supabase.from("verktygshanteringssystem_störningar").insert({
+        id: generateUUID(),
+        maskin_id: machineData.id,
+        område: values.area,
+        kommentar: values.comment,
+        signatur: values.signature.toUpperCase(),
+        created_at: new Date().toISOString(),
       });
 
-      // Reset form on success
+      if (error) {
+        toast.error("Kunde inte spara störning");
+        return;
+      }
+
+      toast.success("Störning sparad");
+      
+      // Reset form
       form.reset({
         area: undefined,
         comment: "",
         signature: "",
       });
     } catch (error) {
-      console.error("Error saving disturbance:", error);
-      toast({
-        title: "Fel",
-        description: "Ett oväntat fel uppstod",
-        variant: "destructive",
-      });
+      console.error('Error saving disturbance:', error);
+      toast.error("Ett fel uppstod vid sparning");
     }
   };
 
