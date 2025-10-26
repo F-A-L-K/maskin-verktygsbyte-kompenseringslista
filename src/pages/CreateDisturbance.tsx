@@ -2,6 +2,8 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useMachineByNumber } from "@/hooks/useMachines";
 import { 
   Form, 
   FormControl, 
@@ -37,6 +39,11 @@ interface CreateDisturbanceProps {
 
 export default function CreateDisturbance({ activeMachine }: CreateDisturbanceProps) {
   const [areaDropdownOpen, setAreaDropdownOpen] = useState(false);
+  const { toast } = useToast();
+  
+  // Extract machine number from activeMachine (format: "5701 Machine Name")
+  const machineNumber = activeMachine.split(' ')[0];
+  const { data: machine } = useMachineByNumber(machineNumber);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,11 +90,20 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
     watchedValues.signature;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!machine?.id) {
+      toast({
+        title: "Fel",
+        description: "Kunde inte hitta maskinen",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('verktygshanteringssystem_störningar')
         .insert({
-          maskin_id: activeMachine,
+          maskin_id: machine.id,
           område: values.area,
           kommentar: values.comment,
           signatur: values.signature,
@@ -95,8 +111,18 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
 
       if (error) {
         console.error("Error saving disturbance:", error);
+        toast({
+          title: "Fel",
+          description: "Kunde inte spara störningen",
+          variant: "destructive",
+        });
         return;
       }
+
+      toast({
+        title: "Sparat",
+        description: "Störningen har sparats",
+      });
 
       // Reset form on success
       form.reset({
@@ -106,6 +132,11 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
       });
     } catch (error) {
       console.error("Error saving disturbance:", error);
+      toast({
+        title: "Fel",
+        description: "Ett oväntat fel uppstod",
+        variant: "destructive",
+      });
     }
   };
 

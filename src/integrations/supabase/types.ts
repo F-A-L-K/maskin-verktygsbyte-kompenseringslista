@@ -679,7 +679,15 @@ export type Database = {
           område?: string
           signatur?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_maskin_id"
+            columns: ["maskin_id"]
+            isOneToOne: false
+            referencedRelation: "verktygshanteringssystem_maskiner"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       verktygshanteringssystem_verktyg: {
         Row: {
