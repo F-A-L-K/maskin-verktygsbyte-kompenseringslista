@@ -9,6 +9,7 @@ interface NavigationTabsProps {
 export default function NavigationTabs({ machine }: NavigationTabsProps) {
   const hasVerktygsbyte = machine?.tillgång_verktygsbyte ?? true;
   const hasMatrixkod = machine?.tillgång_matrixkod ?? true;
+  const hasStorningar = machine?.tillgång_störningar ?? true;
 
   const leftTabs = [
     ...(hasVerktygsbyte ? [
@@ -18,6 +19,10 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
     ...(hasMatrixkod ? [
       { path: "matrixkod", label: "Skapa Matrixkod" },
       { path: "matrixkod-historik", label: "Matrixkoder" },
+    ] : []),
+    ...(hasStorningar ? [
+      { path: "skapa-storning", label: "Skapa Störning" },
+      { path: "storningar", label: "Störningar" },
     ] : []),
   ];
 

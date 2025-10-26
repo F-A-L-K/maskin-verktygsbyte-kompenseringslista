@@ -21,6 +21,7 @@ export interface Machine {
   ip_adambox: string | null;
   tillgång_verktygsbyte: boolean | null;
   tillgång_matrixkod: boolean | null;
+  tillgång_störningar: boolean | null;
   created_at: string;
   updated_at: string;
 }
@@ -48,5 +49,14 @@ export interface Tool {
   maxgräns_varning: number | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface Disturbance {
+  id: string;
+  machineId: string;
+  area: "Robot" | "Spåntransportör" | "In- och utbana" | "Annat";
+  comment: string;
+  signature: string;
+  timestamp: Date;
 }
 
