@@ -602,6 +602,7 @@ export type Database = {
           maskin_namn: string
           maskiner_nummer: string
           tillgång_matrixkod: boolean | null
+          tillgång_störningar: boolean | null
           tillgång_verktygsbyte: boolean | null
           updated_at: string
         }
@@ -612,6 +613,7 @@ export type Database = {
           maskin_namn: string
           maskiner_nummer: string
           tillgång_matrixkod?: boolean | null
+          tillgång_störningar?: boolean | null
           tillgång_verktygsbyte?: boolean | null
           updated_at?: string
         }
@@ -622,6 +624,7 @@ export type Database = {
           maskin_namn?: string
           maskiner_nummer?: string
           tillgång_matrixkod?: boolean | null
+          tillgång_störningar?: boolean | null
           tillgång_verktygsbyte?: boolean | null
           updated_at?: string
         }
@@ -648,6 +651,33 @@ export type Database = {
           kommentar?: string | null
           matrixkod_datum?: string | null
           tillverkningsorder?: string
+        }
+        Relationships: []
+      }
+      verktygshanteringssystem_störningar: {
+        Row: {
+          created_at: string
+          id: string
+          kommentar: string
+          maskin_id: string
+          område: string
+          signatur: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kommentar: string
+          maskin_id: string
+          område: string
+          signatur: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kommentar?: string
+          maskin_id?: string
+          område?: string
+          signatur?: string
         }
         Relationships: []
       }

@@ -17,7 +17,7 @@ interface MatrixkodHistorikProps {
 }
 
 interface MatrixkodData {
-  id: string;
+  id: number;
   tillverkningsorder: string;
   matrixkod_datum: string;
   kommentar: string | null;
@@ -61,14 +61,14 @@ export default function MatrixkodHistorik({ activeMachine }: MatrixkodHistorikPr
       setError(null);
 
       const { data, error } = await supabase
-        .from('verktygshanteringssystem_matrixkoder' as any)
+        .from('verktygshanteringssystem_matrixkoder')
         .select('*')
         .order('matrixkod_datum', { ascending: false });
 
       if (error) throw error;
 
-      setMatrixkoder(data || []);
-      setFilteredMatrixkoder(data || []);
+      setMatrixkoder((data as MatrixkodData[]) || []);
+      setFilteredMatrixkoder((data as MatrixkodData[]) || []);
     } catch (error) {
       console.error('Error fetching matrixkoder:', error);
       setError('Ett fel uppstod vid laddning av matrixkoder');

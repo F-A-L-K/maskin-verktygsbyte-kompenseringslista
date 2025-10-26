@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { generateUUID } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
@@ -82,15 +83,30 @@ export default function CreateDisturbance({ activeMachine }: CreateDisturbancePr
     watchedValues.signature;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // As requested, nothing happens when clicking save
-    console.log("Disturbance form submitted:", values);
-    
-    // Reset form
-    form.reset({
-      area: undefined,
-      comment: "",
-      signature: "",
-    });
+    try {
+      const { error } = await supabase
+        .from('verktygshanteringssystem_störningar')
+        .insert({
+          maskin_id: activeMachine,
+          område: values.area,
+          kommentar: values.comment,
+          signatur: values.signature,
+        });
+
+      if (error) {
+        console.error("Error saving disturbance:", error);
+        return;
+      }
+
+      // Reset form on success
+      form.reset({
+        area: undefined,
+        comment: "",
+        signature: "",
+      });
+    } catch (error) {
+      console.error("Error saving disturbance:", error);
+    }
   };
 
   return (
