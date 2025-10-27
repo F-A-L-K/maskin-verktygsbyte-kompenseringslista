@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Loader2, Filter, X, Calendar, ChevronDown, ChevronUp, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Loader2, Filter, X, Calendar, ChevronDown, ChevronUp, Eye, EyeOff, Plus, Minus } from "lucide-react";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
@@ -27,6 +28,7 @@ export default function ToolHistory() {
   const { toolId } = useParams();
   const navigate = useNavigate();
   const { activeMachine } = useMachineFromUrl();
+  const queryClient = useQueryClient();
   const [filteredData, setFilteredData] = useState<any[]>([]);
   
   // Filter states
@@ -38,6 +40,22 @@ export default function ToolHistory() {
   const [availableCauses, setAvailableCauses] = useState<string[]>([]);
   const [availableSignatures, setAvailableSignatures] = useState<string[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Editing state
+  const [editingRowId, setEditingRowId] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Close editing mode when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (editingRowId && !(event.target as Element).closest('.editing-controls')) {
+        setEditingRowId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [editingRowId]);
 
   // Fetch tool details
   const { data: tool, isLoading: toolLoading } = useQuery({
@@ -164,6 +182,69 @@ export default function ToolHistory() {
         ? prev.filter(s => s !== signature)
         : [...prev, signature]
     );
+  };
+
+  // Function to update the number of parts
+  const updatePartsCount = async (changeId: string, delta: number) => {
+    if (isUpdating) return;
+    
+    setIsUpdating(true);
+    try {
+      // Get the current change
+      const currentChange = filteredData.find(change => change.id === changeId);
+      if (!currentChange) return;
+
+      // Calculate new values for current change
+      const currentParts = currentChange.number_of_parts_ADAM || 0;
+      const currentAmount = currentChange.amount_since_last_change || 0;
+      
+      const newParts = currentParts + delta;
+      const newAmount = currentAmount + delta;
+
+      // Update the current change
+      const { error: updateError } = await supabase
+        .from('verktygshanteringssystem_verktygsbyteslista')
+        .update({ 
+          number_of_parts_ADAM: newParts,
+          amount_since_last_change: newAmount
+        })
+        .eq('id', changeId);
+
+      if (updateError) throw updateError;
+
+      // Update the next change (the one that was made after this one)
+      // Since data is ordered by date_created DESC, the "next" change is at currentIndex - 1
+      const currentIndex = filteredData.findIndex(change => change.id === changeId);
+      const nextChange = filteredData[currentIndex - 1]; // Previous in chronological order (descending)
+      
+      if (nextChange) {
+        // The next change's amount_since_last_change should be updated
+        // because the difference between the changes has changed
+        const nextCurrentAmount = nextChange.amount_since_last_change || 0;
+        const nextNewAmount = nextCurrentAmount - delta; // Opposite delta because it's the difference
+        
+        const { error: nextUpdateError } = await supabase
+          .from('verktygshanteringssystem_verktygsbyteslista')
+          .update({ 
+            amount_since_last_change: nextNewAmount
+          })
+          .eq('id', nextChange.id);
+
+        if (nextUpdateError) throw nextUpdateError;
+      }
+
+      // Refresh the data
+      await queryClient.invalidateQueries({ queryKey: ['toolChanges', toolId, activeMachine] });
+      
+      toast.success(`Antal körda uppdaterat med ${delta > 0 ? '+' : ''}${delta}`);
+      
+    } catch (error) {
+      console.error('Error updating parts count:', error);
+      toast.error('Kunde inte uppdatera antal körda');
+    } finally {
+      setIsUpdating(false);
+      setEditingRowId(null);
+    }
   };
 
   const isLoading = toolLoading || changesLoading;
@@ -381,7 +462,41 @@ export default function ToolHistory() {
                   </TableCell>
                   <TableCell className="text-center">{change.cause || "-"}</TableCell>
                   <TableCell className="text-center">{change.manufacturing_order || "-"}</TableCell>
-                  <TableCell className="text-center">{change.amount_since_last_change || "-"}</TableCell>
+                  <TableCell className="text-center">
+                    {editingRowId === change.id ? (
+                      <div className="flex items-center justify-center gap-2 editing-controls">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updatePartsCount(change.id, -1)}
+                          disabled={isUpdating}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="min-w-[2rem] text-center font-medium">
+                          {change.amount_since_last_change ?? "-"}
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updatePartsCount(change.id, 1)}
+                          disabled={isUpdating}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setEditingRowId(change.id)}
+                        className="hover:bg-muted rounded px-2 py-1 transition-colors"
+                        disabled={isUpdating}
+                      >
+                        {change.amount_since_last_change ?? "-"}
+                      </button>
+                    )}
+                  </TableCell>
                   <TableCell className="text-center">{change.signature || "-"}</TableCell>
                   <TableCell className="text-center">{change.comment || "-"}</TableCell>
                 </TableRow>
