@@ -25,9 +25,12 @@ import { useMachineFromUrl } from "@/hooks/useMachineFromUrl";
 import { useState, useEffect } from "react";
 
 export default function ToolHistory() {
-  const { toolId } = useParams();
+  const { toolId, machineNumber } = useParams();
   const navigate = useNavigate();
-  const { activeMachine } = useMachineFromUrl();
+  const { availableMachines } = useMachineFromUrl();
+  
+  // Find the active machine based on the machineNumber from URL
+  const activeMachine = availableMachines.find(machine => machine.startsWith(machineNumber || '')) || availableMachines[0];
   const queryClient = useQueryClient();
   const [filteredData, setFilteredData] = useState<any[]>([]);
   

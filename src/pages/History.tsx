@@ -40,12 +40,15 @@ export default function History({ activeMachine }: HistoryProps) {
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const machinePattern = pathParts.find(part => /^\d{4}(-\d{4})*$/.test(part));
     
+    // Extract the machine number from activeMachine (format: "5701 Machine Name")
+    const machineNumber = activeMachine.split(' ')[0];
+    
     if (machinePattern) {
-      navigate(`/${machinePattern}/verktygshistorik/${toolId}`);
+      navigate(`/${machinePattern}/verktygshistorik/${machineNumber}/${toolId}`);
     } else {
       // Fallback to single machine if pattern not found
       const machineId = activeMachine.split(' ')[0];
-      navigate(`/${machineId}/verktygshistorik/${toolId}`);
+      navigate(`/${machineId}/verktygshistorik/${machineId}/${toolId}`);
     }
   };
 

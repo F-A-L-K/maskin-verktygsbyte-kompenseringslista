@@ -98,7 +98,7 @@ const AppContent = () => {
               <Route path="mi" element={<MI />} />
               <Route path="skapa-verktygsbyte" element={<CreateToolChange activeMachine={activeMachine} />} />
               <Route path="historik" element={<History activeMachine={activeMachine} />} />
-              <Route path="verktygshistorik/:toolId" element={<ToolHistory />} />
+              <Route path="verktygshistorik/:machineNumber/:toolId" element={<ToolHistory />} />
               <Route path="inställningar" element={<Settings />} />
               <Route path="mätplan" element={<Matplan />} />
               <Route path="cmm" element={<CMM />} />
