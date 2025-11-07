@@ -18,6 +18,14 @@ import { getMachineStatus, extractWorkCenterFromMachineId } from "@/lib/machines
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+const getTodayYYMMDD = () => {
+  const now = new Date();
+  const year = now.getFullYear().toString().slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}${month}${day}`;
+};
+
 const formSchema = z.object({
   manufacturingOrder: z.string().min(1, "Tillverkningsorder är obligatoriskt"),
   date: z.string().min(6, "Datum måste vara i format ÅÅMMDD").max(6, "Datum måste vara i format ÅÅMMDD"),
@@ -35,7 +43,7 @@ export default function Matrixkod({ activeMachine }: MatrixkodProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       manufacturingOrder: "",
-      date: "",
+      date: getTodayYYMMDD(),
       comment: "",
     },
   });
@@ -87,7 +95,7 @@ export default function Matrixkod({ activeMachine }: MatrixkodProps) {
       // Reset form after successful save
       form.reset({
         manufacturingOrder: activeManufacturingOrder,
-        date: "",
+        date: getTodayYYMMDD(),
         comment: "",
       });
     } catch (error) {

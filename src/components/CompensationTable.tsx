@@ -184,12 +184,12 @@ export function CompensationTable({ source }: CompensationTableProps) {
           <table className="min-w-full divide-y divide-border text-sm">
             <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-3 py-2 text-center">ID</th>
+                <th className="px-3 py-2 text-center">ID (Måttnummer)</th>
                 <th className="px-3 py-2 text-center">Egenskap</th>
-                <th className="px-3 py-2 text-center">Nr</th>
+                <th className="px-3 py-2 text-center">Nummer <br /> T#=Verktyg, P#=Koordinat</th>
                 <th className="px-3 py-2 text-center">Verktyg/Benämning</th>
-                <th className="px-3 py-2 text-center">Primär kompenseringriktning</th>
-                <th className="px-3 py-2 text-center">Sekundär kompenseringriktning</th>
+                <th className="px-3 py-2 text-center">Primär <br /> kompenseringriktning</th>
+                <th className="px-3 py-2 text-center">Sekundär <br /> kompenseringriktning</th>
                 <th className="px-3 py-2 text-center">Verktygsbunden</th>
                 <th className="px-3 py-2 text-center">Programbunden</th>
                 <th className="px-3 py-2 text-center">Kommentar</th>
