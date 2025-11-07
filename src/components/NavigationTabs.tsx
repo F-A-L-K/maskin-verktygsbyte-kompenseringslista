@@ -10,6 +10,7 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
   const hasVerktygsbyte = machine?.tillgång_verktygsbyte ?? true;
   const hasMatrixkod = machine?.tillgång_matrixkod ?? true;
   const hasStorningar = machine?.tillgång_störningar ?? true;
+  const hasKompensering = machine?.tillgång_kompenseringslista ?? true;
 
   const verktygsbyteTabs = hasVerktygsbyte ? [
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
@@ -24,6 +25,11 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
   const storningarTabs = hasStorningar ? [
     { path: "skapa-storning", label: "Skapa Störning" },
     { path: "storningar", label: "Störningar" },
+  ] : [];
+
+  const kompenseringTabs = hasKompensering ? [
+    { path: "kompensering-verktyg", label: "Kompensering verktyg" },
+    { path: "kompensering-egenskaper", label: "Kompensering egenskaper" },
   ] : [];
 
   const rightTabs = hasVerktygsbyte ? [
@@ -57,16 +63,22 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
           {verktygsbyteTabs.map(renderTab)}
           
           {/* Separator after verktygsbyte if any other area exists */}
-          {verktygsbyteTabs.length > 0 && (matrixkodTabs.length > 0 || storningarTabs.length > 0) && renderSeparator()}
+          {verktygsbyteTabs.length > 0 && (matrixkodTabs.length > 0 || storningarTabs.length > 0 || kompenseringTabs.length > 0) && renderSeparator()}
           
           {/* Matrixkod tabs */}
           {matrixkodTabs.map(renderTab)}
           
-          {/* Separator after matrixkod if störningar exists */}
-          {matrixkodTabs.length > 0 && storningarTabs.length > 0 && renderSeparator()}
+          {/* Separator after matrixkod if störningar or kompensering exists */}
+          {matrixkodTabs.length > 0 && (storningarTabs.length > 0 || kompenseringTabs.length > 0) && renderSeparator()}
           
           {/* Störningar tabs */}
           {storningarTabs.map(renderTab)}
+          
+          {/* Separator after störningar if kompensering exists */}
+          {storningarTabs.length > 0 && kompenseringTabs.length > 0 && renderSeparator()}
+          
+          {/* Kompensering tabs */}
+          {kompenseringTabs.map(renderTab)}
         </div>
         <div className="flex">
           {rightTabs.map((tab) => {

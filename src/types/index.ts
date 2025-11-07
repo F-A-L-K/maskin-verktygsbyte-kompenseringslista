@@ -22,6 +22,7 @@ export interface Machine {
   tillgång_verktygsbyte: boolean | null;
   tillgång_matrixkod: boolean | null;
   tillgång_störningar: boolean | null;
+  tillgång_kompenseringslista: boolean | null;
   created_at: string;
   updated_at: string;
 }
