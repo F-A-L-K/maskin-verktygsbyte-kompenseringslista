@@ -8,7 +8,7 @@ interface KompenseringEgenskaperProps {
 export default function KompenseringEgenskaper({ activeMachine }: KompenseringEgenskaperProps) {
   return (
     <div className="flex h-full w-full flex-col gap-4 p-6">
-      <CompensationTable source="/Komp1.csv" />
+      <CompensationTable source="/api/kompensering/egenskaper" />
     </div>
   );
 }

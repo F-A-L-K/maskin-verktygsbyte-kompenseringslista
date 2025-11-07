@@ -59,6 +59,17 @@ export function CompensationTable({ source }: CompensationTableProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const resolveSource = useMemo(() => {
+    const backendBase = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
+    if (/^https?:\/\//i.test(source) || source.startsWith("//")) {
+      return source;
+    }
+    if (source.startsWith("/")) {
+      return `${backendBase}${source}` || source;
+    }
+    return source;
+  }, [source]);
+
   useEffect(() => {
     let isActive = true;
 
@@ -67,9 +78,9 @@ export function CompensationTable({ source }: CompensationTableProps) {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch(source);
+        const response = await fetch(resolveSource);
         if (!response.ok) {
-          throw new Error(`Kunde inte läsa filen (${response.status})`);
+          throw new Error(`Kunde inte läsa in EXCEL fil. (${response.status})`);
         }
 
         const csv = await response.text();
@@ -129,7 +140,7 @@ export function CompensationTable({ source }: CompensationTableProps) {
     return () => {
       isActive = false;
     };
-  }, [source]);
+  }, [resolveSource]);
 
   const filteredRows = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -180,19 +191,19 @@ export function CompensationTable({ source }: CompensationTableProps) {
           {error}
         </div>
       ) : (
-        <div className="flex-1 overflow-auto rounded-md border">
+        <div className="flex-1 overflow-auto rounded-md border max-h-[70vh]">
           <table className="min-w-full divide-y divide-border text-sm">
-            <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
+            <thead className="text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-3 py-2 text-center">ID-# <br /> (Måttnr.)</th>
-                <th className="px-3 py-2 text-center">Egenskap</th>
-                <th className="border-l border-border px-3 py-2 text-center">Nummer <br /> T#=Verktyg, P#=Koord.</th>
-                <th className="px-3 py-2 text-center">Verktyg/Benämning</th>
-                <th className="border-l border-border px-3 py-2 text-center">Primär <br /> komp. riktning</th>
-                <th className="px-3 py-2 text-center">Sekundär <br /> komp. riktning</th>
-                <th className="border-l border-border px-3 py-2 text-center">Verktygsbunden</th>
-                <th className="px-3 py-2 text-center">Programbunden</th>
-                <th className="border-l border-border px-3 py-2 text-center">Kommentar</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">ID-# <br /> (Måttnr.)</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Egenskap</th>
+                <th className="sticky top-0 z-10 border-l border-border px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Nummer <br /> T#=Verktyg, P#=Koord.</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Verktyg/Benämning</th>
+                <th className="sticky top-0 z-10 border-l border-border px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Primär <br /> komp. riktning</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Sekundär <br /> komp. riktning</th>
+                <th className="sticky top-0 z-10 border-l border-border px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Verktygsbunden</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Programbunden</th>
+                <th className="sticky top-0 z-10 border-l border-border px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Kommentar</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border bg-background">
@@ -209,8 +220,8 @@ export function CompensationTable({ source }: CompensationTableProps) {
                     <td className="px-3 py-2 text-center">{row.property || "—"}</td>
                     <td className="border-l border-border whitespace-nowrap px-3 py-2 text-center">{row.toolNumber || "—"}</td>
                     <td className="px-3 py-2 text-center">{row.toolDescription || "—"}</td>
-                    <td className="border-l border-border whitespace-nowrap px-3 py-2 text-center">{row.axisPrimary || "—"}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-center">{row.axisSecondary || "—"}</td>
+                    <td className="border-l border-border whitespace-nowrap px-3 py-2 text-center">{row.axisPrimary || ""}</td>
+                    <td className="whitespace-nowrap px-3 py-2 text-center">{row.axisSecondary || ""}</td>
                     <td className="border-l border-border px-3 py-2 text-center">
                       <BooleanIndicator value={machineLabel} />
                     </td>

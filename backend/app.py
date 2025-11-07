@@ -70,6 +70,14 @@ ORDER BY (cw.end_time IS NULL) DESC, cw.start_time DESC
 LIMIT 1
 '''
 
+# Compensation list file paths
+DEFAULT_KOMPENSERING_DIR = r"\\alpha\Interna System\Maskinterminal\Kompenseringslista"
+
+KOMPENSERING_DIR = os.environ.get(
+    "KOMPENSERING_EGENSKAPER_DIR",
+    DEFAULT_KOMPENSERING_DIR,
+)
+
 # Database connection configuration
 DB_CONFIG = {
     "dsn": "monitormi",
@@ -172,7 +180,6 @@ def read_adambox_value(ip_address, port=502, unit_id=1, register_address=2):
                 "error": f"Response too short: {len(response)} bytes",
                 "timestamp": datetime.now().isoformat()
             }
-        
         # Parse response header
         (t_id, p_id, l_id, u_id, f_code) = struct.unpack('>HHHBB', response[:8])
         
@@ -259,6 +266,62 @@ def get_adambox_value():
         return jsonify(result), 500
     
     return jsonify(result)
+
+
+def load_csv_content(file_path: str) -> Tuple[Optional[str], Optional[str]]:
+    """Return csv file content as string and error message if any."""
+    try:
+        with open(file_path, 'r', encoding='utf-8-sig') as f:
+            return f.read(), None
+    except FileNotFoundError:
+        return None, f"File not found: {file_path}"
+    except PermissionError:
+        return None, f"Permission denied when accessing: {file_path}"
+    except Exception as exc:  # pragma: no cover - unexpected errors
+        return None, str(exc)
+
+
+@app.route('/api/kompensering/egenskaper', methods=['GET'])
+def get_kompensering_egenskaper():
+    """Return the egenskaper compensation list CSV from network share."""
+    try:
+        entries = sorted(
+            os.path.join(KOMPENSERING_DIR, name)
+            for name in os.listdir(KOMPENSERING_DIR)
+            if name.lower().endswith('.csv')
+        )
+        file_path = entries[0] if entries else None
+    except FileNotFoundError:
+        return jsonify({
+            "error": f"Directory not found: {KOMPENSERING_DIR}",
+            "path": KOMPENSERING_DIR
+        }), 404
+    except PermissionError:
+        return jsonify({
+            "error": f"Permission denied when accessing directory: {KOMPENSERING_DIR}",
+            "path": KOMPENSERING_DIR
+        }), 500
+
+    if not file_path:
+        return jsonify({
+            "error": "No CSV files found in directory",
+            "path": KOMPENSERING_DIR
+        }), 404
+
+    content, error = load_csv_content(file_path)
+    if error:
+        status = 404 if "not found" in error.lower() else 500
+        return jsonify({
+            "error": error,
+            "path": file_path
+        }), status
+
+    return app.response_class(
+        response=content,
+        status=200,
+        mimetype='text/csv'
+    )
+
 
 @app.route('/api/machine-status', methods=['GET'])
 def get_machine_status():

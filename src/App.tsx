@@ -24,7 +24,6 @@ import Matrixkod from "./pages/Matrixkod";
 import MatrixkodHistorik from "./pages/MatrixkodHistorik";
 import CreateDisturbance from "./pages/CreateDisturbance";
 import Disturbances from "./pages/Disturbances";
-import KompenseringVerktyg from "./pages/KompenseringVerktyg";
 import KompenseringEgenskaper from "./pages/KompenseringEgenskaper";
 
 const queryClient = new QueryClient();
@@ -108,7 +107,6 @@ const AppContent = () => {
               <Route path="matrixkod-historik" element={<MatrixkodHistorik activeMachine={activeMachine} />} />
               <Route path="skapa-storning" element={<CreateDisturbance activeMachine={activeMachine} />} />
               <Route path="storningar" element={<Disturbances activeMachine={activeMachine} />} />
-              <Route path="kompensering-verktyg" element={<KompenseringVerktyg activeMachine={activeMachine} />} />
               <Route path="kompensering-egenskaper" element={<KompenseringEgenskaper activeMachine={activeMachine} />} />
             </Routes>
           </main>

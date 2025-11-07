@@ -27,6 +27,17 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const resolvedSource = useMemo(() => {
+    const backendBase = (import.meta.env.VITE_BACKEND_URL || "").replace(/\/$/, "");
+    if (/^https?:\/\//i.test(source) || source.startsWith("//")) {
+      return source;
+    }
+    if (source.startsWith("/")) {
+      return `${backendBase}${source}` || source;
+    }
+    return source;
+  }, [source]);
+
   useEffect(() => {
     let isActive = true;
 
@@ -35,7 +46,7 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch(source);
+        const response = await fetch(resolvedSource);
         if (!response.ok) {
           throw new Error(`Kunde inte läsa filen (${response.status})`);
         }
@@ -104,7 +115,7 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
     return () => {
       isActive = false;
     };
-  }, [source]);
+  }, [resolvedSource]);
 
   const filteredRows = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
@@ -147,13 +158,13 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
           {error}
         </div>
       ) : (
-        <div className="flex-1 overflow-auto rounded-md border">
+        <div className="flex-1 overflow-auto rounded-md border max-h-[70vh]">
           <table className="min-w-full divide-y divide-border text-sm">
-            <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
+            <thead className="text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-3 py-2 text-center">Plats/Koord.</th>
-                <th className="px-3 py-2 text-center">Benämning</th>
-                <th className="px-3 py-2 whitespace-nowrap text-center">Komp. Nr</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Plats/Koord.</th>
+                <th className="sticky top-0 z-10 px-3 py-2 text-center bg-muted/80 backdrop-blur-sm">Benämning</th>
+                <th className="sticky top-0 z-10 px-3 py-2 whitespace-nowrap text-center bg-muted/80 backdrop-blur-sm">Komp. Nr</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border bg-background">
