@@ -1,3 +1,4 @@
+import { ToolCompensationTable } from "@/components/ToolCompensationTable";
 import { MachineId } from "@/types";
 
 interface KompenseringVerktygProps {
@@ -6,10 +7,8 @@ interface KompenseringVerktygProps {
 
 export default function KompenseringVerktyg({ activeMachine }: KompenseringVerktygProps) {
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Kompensering verktyg</h1>
-      <p className="text-muted-foreground">Aktiv maskin: {activeMachine}</p>
-      {/* Content will be implemented */}
+    <div className="flex h-full w-full flex-col gap-4 p-6">
+      <ToolCompensationTable source="/Komp2.csv" />
     </div>
   );
 }

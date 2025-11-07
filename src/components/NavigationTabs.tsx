@@ -13,8 +13,8 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
   const hasKompensering = machine?.tillgång_kompenseringslista ?? true;
 
   const verktygsbyteTabs = hasVerktygsbyte ? [
+    { path: "historik", label: "Verktygsbyte" },
     { path: "skapa-verktygsbyte", label: "Skapa Verktygsbyte" },
-    { path: "historik", label: "Verktyg" },
   ] : [];
 
   const matrixkodTabs = hasMatrixkod ? [
@@ -28,8 +28,9 @@ export default function NavigationTabs({ machine }: NavigationTabsProps) {
   ] : [];
 
   const kompenseringTabs = hasKompensering ? [
-    { path: "kompensering-verktyg", label: "Kompensering verktyg" },
-    { path: "kompensering-egenskaper", label: "Kompensering egenskaper" },
+    { path: "kompensering-egenskaper", label: "Komp. Lista Egenskaper" },
+    { path: "kompensering-verktyg", label: "Komp. Lista Vtg./Koord." },
+    
   ] : [];
 
   const rightTabs = hasVerktygsbyte ? [

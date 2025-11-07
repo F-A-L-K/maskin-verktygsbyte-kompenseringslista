@@ -1,0 +1,207 @@
+﻿;;;;;;;;
+Egenskap:;;Verktygs-/Koordinatnummer:;;Komp. rikt.: (X, Y, Z, R o.s.v…);;;;
+ID-#;Benämning:;Nr:;Benämning: ;#1:;#2:;V.B.;P.B.;Kommentar:
+1;V 20° (x2);T02;Pinnfräs Ø12;;;FALSKT;SANT;Första på sida 2.
+2;R 3,5 (x4);T16;Fasfräs 45° (special);;;FALSKT;SANT;
+3;"Rätv. 0,1/A
+Parall. 0,1/C";T02;Pinnfräs Ø12;;;SANT;SANT;
+4;V 15° (x2);T02;Pinnfräs Ø12;;;FALSKT;SANT;
+5;L 24 ±0,1;T02;Pinnfräs Ø12;R;;FALSKT;FALSKT;
+6;"Vinkelrikt. 0,05/A
+Rätv. 0,05/E";T16;Fasfräs 45° (special);;;SANT;SANT;
+7;L 40,5 ±0,1 (x2);P13;Tempo 2.;X;;FALSKT;FALSKT;
+8;L 6,3 ±0,05 (x2);P13;Tempo 2.;X;;FALSKT;FALSKT;
+9;Planhet 0,05;T30;Pinnfräs Ø12 (T2);;;SANT;FALSKT;
+10;L 1,6;T11;Profilfräs 7° - Ø16;R;;FALSKT;FALSKT;
+11;L 42,4 ±0,1;T07;Profilfräs (7°) - Ø16;R;Z;FALSKT;FALSKT;
+12;L 44,7 ±0,1;T02;Pinnfräs Ø12;R;;FALSKT;FALSKT;"Styrs av ""ID-5""."
+13;V 45°;T11;Profilfräs 7° - Ø16;;;SANT;FALSKT;
+14;V 45°;T02;Pinnfräs Ø12;;;FALSKT;SANT;
+15;L 2,3 ±0,05;T02;Pinnfräs Ø12;Z;;FALSKT;FALSKT;"""ID-45"" måste vara rätt innan denne kompenseras!
+Kontrollera hjälpmått i löpande mätning."
+16;Vinkelrikt. 0,05/A;T02;Pinnfräs Ø12;;;FALSKT;SANT;
+17;L 2,2 ±0,05;T11;Profilfräs 7° - Ø16;Z;;FALSKT;FALSKT;"""ID-45"" måste vara rätt innan denne kompenseras!
+Kontrollera hjälpmått i löpande mätning."
+18;Vinkelrikt. 0,05/A;T11;Profilfräs 7° - Ø16;;;SANT;FALSKT;
+19;F 1x45° (x2);T16;Fasfräs 45° (special);;;FALSKT;SANT;"Styrs av ""ID-27""."
+20;iR 18,8;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+21;iR 17,7;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+22;iR 2,2 (x2);T04;Pinnfräs Ø4;;;FALSKT;SANT;
+23;iR 2,2 (x4);T04;Pinnfräs Ø4;;;FALSKT;SANT;
+24;iR 2,1 (x4);T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+25;V 45° (x2);T16;Fasfräs 45° (special);;;SANT;FALSKT;
+26;Symm. 0,1/C (x2);P13;Tempo 2.;Y;;FALSKT;FALSKT;
+27;L 15,4 ±0,05 (x2);T16;Fasfräs 45° (special);R;Z;FALSKT;FALSKT;
+28;L 1,5 ±0,05;T30;Pinnfräs Ø12 (T2);;;FALSKT;SANT;
+29;iL 0,35 ±0,05;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+30;iL 18,6 ±0,05;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+31;iL 17,55 ±0,1;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+32;iL 6,55 ±0,05;P13;Tempo 2.;Z;;FALSKT;FALSKT;"""ID-45"" måste vara rätt innan denne kompenseras!"
+33;iL 0,3 ±0,05 (x3);T04;Pinnfräs Ø4;;;FALSKT;SANT;
+34;"Rätv. 0,05/A
+Rätv. 0,1/B";T04;Pinnfräs Ø4;;;FALSKT;SANT;
+35;Symm. 0,1/C;T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+36;iL 19,1 ±0,05;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+37;iL 17 ±0,1;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+38;"R 0,1
+Step 0,1 is OK";"T16
+T30";För många T#/P# angivna!;"Z
+Z";"-
+R";FALSKT;FALSKT;
+39;iL 3,5;T04;Pinnfräs Ø4;;;FALSKT;SANT;Första på sida 3.
+40;iL 4,6 (x2);T04;Pinnfräs Ø4;;;FALSKT;SANT;
+41;iL 11,2 ±0,1;"T04
+P03";För många T#/P# angivna!;"Z
+Z";;FALSKT;FALSKT;"""ID-12"" måste vara rätt innan denne kompenseras!"
+42;iL 6,2;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+43;F 0,5x45°;T16;Fasfräs 45° (special);;;FALSKT;SANT;"Styrs av ""ID-27""."
+44;F 0,2x45° (x4);T16;Fasfräs 45° (special);;;FALSKT;SANT;"Styrs av ""ID-27""."
+45;Parall. 0,05/A;"T02
+T31";För många T#/P# angivna!;"R
+R";;FALSKT;FALSKT;"Styrs av ""hjälpmått L 6,55"" (x2). Se Löpande mätning."
+46;F 0,6x45° (x2);T16;Fasfräs 45° (special);Z;R;FALSKT;FALSKT;"Styrs av ""ID-27""."
+47;Rätv. 0,05/D;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+48;iL 5,55 ±0,05;T10;Pinnfräs Ø4 (lång);Z;;FALSKT;FALSKT;
+49;iL 0,05 ±0,05;T10;Pinnfräs Ø4 (lång);Z;;FALSKT;FALSKT;
+50;iL 1,55;"P02
+T04";För många T#/P# angivna!;"X
+R";;FALSKT;FALSKT;
+51;iL 28,9 ±0,1;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+52;iL 19,3 ±0,1;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+54;iL 2,7 (x2);T04;Pinnfräs Ø4;Z;;FALSKT;FALSKT;
+55;M9x0,5 - 6H (x2);T20;Gängfräs M9x0.5;R;;FALSKT;FALSKT;
+56;Läge 0,2/DE;"P04
+P05";För många T#/P# angivna!;"X
+X";"Y
+Y";FALSKT;FALSKT;
+57;iD 8,1 ±0,05 (x2);T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+59;iL 9,6 ±0,05 (x2);T09;T-spårsfräs Ø8;Z;;FALSKT;FALSKT;Kompensera lika på T20 (Gängfräs M9x0.5).
+60;Symm. 0,2/C;T13;Pinnfräs Ø2;;;FALSKT;SANT;
+61;iR 2,2 (x4);T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+62;iR 2,5 (x2);T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+63;iR 1,6 (x4);T12;Pinnfräs Ø3;;;FALSKT;SANT;
+64;Symm. 0,1/C;T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+65;iL 14,5 ±0,1;T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;
+66;Läge 0,1/EC (x2);T18;Gängtapp M2x0.4;;;FALSKT;SANT;"Styrs av ""ID-41""."
+67;"Ø1,6 ↓ 4,7 (x2)
+M2 - 6H ↓ 3,2 (x2)
+Ø2,1x90°, Near side (x2)";"T14
+T18
+T16";För många T#/P# angivna!;"Z
+Z
+-";;FALSKT;FALSKT;"Styrs av Djup på maskinmärkning.
+-
+Styrs av ""ID-27""."
+68;iL 14,5 ±0,1;T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;"Styrs av ""ID-76""."
+69;F 0,35x45° (x2);T16;Fasfräs 45° (special);;;FALSKT;SANT;"Styrs av ""ID-27""."
+70;L 23,2 ±0,1;T13;Pinnfräs Ø2;Z;;FALSKT;FALSKT;
+71;L 4,4;P05;Sida (batterificka).;Y;;FALSKT;FALSKT;Påverkas av R-komp. på T34.
+72;L 1,4;P05;Sida (batterificka).;X;;FALSKT;FALSKT;Påverkas av R-komp. på T34.
+73;iL 23 +0,05/-0,04;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+74;iR 2,1;T10;Pinnfräs Ø4 (lång);;;FALSKT;SANT;"Styrs av ""ID-76""."
+75;L 4,6;T11;Profilfräs 7° - Ø16;Z;;FALSKT;FALSKT;"Styrs av ""ID-17""."
+76;iR 2,1 +0,07/-0,05 (x4);T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+77;iL 4,3 +0,05/-0,04;T10;Pinnfräs Ø4 (lång);R;;FALSKT;FALSKT;
+78;Läge 0,2/AB;P04;Sida (elektronikficka).;X;Y;FALSKT;FALSKT;
+79;"Ø2,5 ↓ 2,9
+M3 - 6H ↓ 2,7
+Ø3,6x90°, Near side";"T13
+T17
+T16";För många T#/P# angivna!;"R
+R
+-";"Z
+Z
+-";FALSKT;FALSKT;"Djup styrs av Z-axeln.
+Djup styrs av Z-axeln.
+Styrs av ""ID-27""."
+80;Ø2,5 ↓ 1,0 (x2);T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;"Djup styrs av ""ID-70"" & ""ID-5""."
+81;L 3,5;"P04
+P05";För många T#/P# angivna!;"Y
+Y";;FALSKT;FALSKT;
+82;L 3;T16;Fasfräs 45° (special);;;FALSKT;FALSKT;"Styrs av ""ID-27""."
+83;L 10,6;"P04
+P05";För många T#/P# angivna!;"X
+X";;FALSKT;FALSKT;"Styrs av ""ID-32""."
+84;L 28,6;T02;Pinnfräs Ø12;R;;FALSKT;FALSKT;"Styrande för ""ID-45""."
+85;V 7°;T11;Profilfräs 7° - Ø16;;;SANT;FALSKT;
+86;iR 19;T06;Profilfräs Ø4;R;;FALSKT;FALSKT;Första på sida 4.
+87;iR 2,6 (x4);T06;Profilfräs Ø4;R;;FALSKT;FALSKT;
+88;iL 8,1 ±0,1;T04;Pinnfräs Ø4;P2;X;FALSKT;FALSKT;"Styrs av ""ID-32""."
+89;V 20° (x2);T02;Pinnfräs Ø12;;;FALSKT;SANT;
+90;Symm. 0,1/C;P02;Baksida.;Y;;FALSKT;FALSKT;
+91;iL 19,2 ±0,05;T06;Profilfräs Ø4;R;;FALSKT;FALSKT;
+92;L 0,5 ±0,05;T03;Pinnfräs Ø6;R;;FALSKT;FALSKT;
+93;L 7 ±0,1;T06;Profilfräs Ø4;R;Z;FALSKT;FALSKT;"Styrs av ""ID-32""."
+94;iL 18,2 ±0,05;T06;Profilfräs Ø4;R;;FALSKT;FALSKT;
+95;L 0,8;T05;Profilfräs Ø12;R;;FALSKT;FALSKT;
+96;iL 2,3;T04;Pinnfräs Ø4;Z;;FALSKT;FALSKT;
+97;F 0,2x45°;T16;Fasfräs 45° (special);;;FALSKT;FALSKT;"Styrs av ""ID-27""."
+98;"F 0,3
+Chamfer all around";T06;Profilfräs Ø4;;;SANT;FALSKT;
+99;L 1,5;T02;Pinnfräs Ø12;;;FALSKT;SANT;
+100;iL 17,5 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+101;iL 15,5 ±0,05;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+102;Symm. 0,1/C;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+103;iL 18,95 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+104;iL 16,95 ±0,05;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+105;iL 1 (x4);T04;Pinnfräs Ø4;;;FALSKT;SANT;
+106;iR 3,2 (x8);T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+107;iL 40,3 ±0,1;"T02
+T04";För många T#/P# angivna!;R;;FALSKT;FALSKT;"""ID-12"" måste vara rätt innan denne kompenseras!"
+108;iV 10°;T20;Gängfräs M9x0.5;;;FALSKT;SANT;
+109;iL 6,9;T20;Gängfräs M9x0.5;;;FALSKT;SANT;
+110;F 0,6;P10;45° (för 'F 0,6').;;;FALSKT;FALSKT;
+111;L 9,7;T07;Profilfräs (7°) - Ø16;Z;;FALSKT;FALSKT;
+112;L 26;T07;Profilfräs (7°) - Ø16;Z;;FALSKT;FALSKT;
+113;L 28,2;T02;Pinnfräs Ø12;R;;FALSKT;FALSKT;"Styrande för ""ID-45""."
+114;L 2;T07;Profilfräs (7°) - Ø16;;;SANT;FALSKT;
+115;Parall. 0,15/A;T15;Konisk Pinnfräs 5°;;;FALSKT;SANT;"Första på sida 5. Styrs av ""ID-45""."
+117;iL 0,85 ±0,05;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+118;iL 1,15;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+119;"iL 2,85
+Outer flat surface";"T04
+T35";För många T#/P# angivna!;"Z
+R";;FALSKT;FALSKT;
+120;iV 95°;T15;Konisk Pinnfräs 5°;;;SANT;FALSKT;
+121;F 0,3x45°;T16;Fasfräs 45° (special);;;FALSKT;FALSKT;"Styrs av ""ID-27""."
+122;iL 18,8 ±0,1;T10;Pinnfräs Ø4 (lång);Z;;FALSKT;FALSKT;
+123;iL 21,8 ±0,1;T10;Pinnfräs Ø4 (lång);Z;;FALSKT;FALSKT;
+124;L 12,5 ±0,1*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;
+125;iL 11,2 ±0,1*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;"Styrs av ""ID-127"" & ""ID-134""."
+126;iR 5,1 (x4)*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;"Styrs av ""ID-127"" & ""ID-134""."
+127;iL 23,1 ±0,1*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;
+128;iV 135°;T15;Konisk Pinnfräs 5°;;;FALSKT;SANT;
+129;iR 1,1 (x4);T13;Pinnfräs Ø2;;;FALSKT;SANT;
+130;iL 5,25;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;"Styrs av ""ID-32""."
+131;iV 120°;T15;Konisk Pinnfräs 5°;;;FALSKT;SANT;
+132;iL 3,61*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;"Styrs av ""ID-127""."
+133;L 0,45*;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;"Styrs av ""ID-32""."
+134;iL 19,8 ±0,1;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;
+135;iL 11,8 ±0,1;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+136;iL 16,46 ±0,1;T15;Konisk Pinnfräs 5°;R;;FALSKT;FALSKT;"Styrs av ""ID-134""."
+137;iL 1,9;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+138;iR 2,2 (x2)*;T15;Konisk Pinnfräs 5°;;;FALSKT;SANT;
+139;iL 3,4;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+140;Rätv. 0,15/A;T15;Konisk Pinnfräs 5°;;;SANT;FALSKT;"Styrs av ""ID-45""."
+141;iR 2,35 (x2);T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+142;iL 7,32 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+143;iL 14 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+144;iL 13,2 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+145;iR 2,1 (x5);T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+146;iL 12,3 ±0,1;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+147;iL 11,2 ±0,1;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+148;iL 7,3 ±0,1;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+149;iL 7,2 ±0,1;T04;Pinnfräs Ø4;R;;FALSKT;FALSKT;
+150;iL 15,8 ±0,1;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+151;iL 13,7 ±0,1;T13;Pinnfräs Ø2;R;;FALSKT;FALSKT;
+152;iL 11,8 ±0,1;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+153;iL 2,8;T04;Pinnfräs Ø4;;;FALSKT;SANT;
+154;iL 0,3 ±0,05 (x2);T12;Pinnfräs Ø3;Z;;FALSKT;FALSKT;Sida 3.
+155;iL 1,50 ±0,05;T06;Profilfräs Ø4;Z;;FALSKT;FALSKT;Sida 4.
+156;iL 0,47;T21;T-spårsfräs Ø6;R;;FALSKT;FALSKT;Sida 4.
+157;iL 2,55;T21;T-spårsfräs Ø6;Z;;FALSKT;FALSKT;Sida 4.
+158;iL 1,11;T21;T-spårsfräs Ø6;R;;FALSKT;FALSKT;Sida 4.
+163;"2x F 0,4 x 45°
+((Fas) Ø9,3 x 90°)";T16;Fasfräs 45° (special);R;;FALSKT;FALSKT;Sida 3.
+999;"Max depth 0.2 (x0-x3)
+(Ø0,7)";T14;Borr Ø1.85;Z;;FALSKT;FALSKT;Sida 8.
