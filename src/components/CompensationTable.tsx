@@ -184,15 +184,15 @@ export function CompensationTable({ source }: CompensationTableProps) {
           <table className="min-w-full divide-y divide-border text-sm">
             <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-3 py-2 text-center">ID (Måttnummer)</th>
+                <th className="px-3 py-2 text-center">ID-# <br /> (Måttnr.)</th>
                 <th className="px-3 py-2 text-center">Egenskap</th>
-                <th className="px-3 py-2 text-center">Nummer <br /> T#=Verktyg, P#=Koordinat</th>
+                <th className="border-l border-border px-3 py-2 text-center">Nummer <br /> T#=Verktyg, P#=Koord.</th>
                 <th className="px-3 py-2 text-center">Verktyg/Benämning</th>
-                <th className="px-3 py-2 text-center">Primär <br /> kompenseringriktning</th>
-                <th className="px-3 py-2 text-center">Sekundär <br /> kompenseringriktning</th>
-                <th className="px-3 py-2 text-center">Verktygsbunden</th>
+                <th className="border-l border-border px-3 py-2 text-center">Primär <br /> komp. riktning</th>
+                <th className="px-3 py-2 text-center">Sekundär <br /> komp. riktning</th>
+                <th className="border-l border-border px-3 py-2 text-center">Verktygsbunden</th>
                 <th className="px-3 py-2 text-center">Programbunden</th>
-                <th className="px-3 py-2 text-center">Kommentar</th>
+                <th className="border-l border-border px-3 py-2 text-center">Kommentar</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border bg-background">
@@ -207,17 +207,17 @@ export function CompensationTable({ source }: CompensationTableProps) {
                   >
                     <td className="whitespace-nowrap px-3 py-2 text-center font-mono text-xs text-muted-foreground">{row.id}</td>
                     <td className="px-3 py-2 text-center">{row.property || "—"}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-center">{row.toolNumber || "—"}</td>
+                    <td className="border-l border-border whitespace-nowrap px-3 py-2 text-center">{row.toolNumber || "—"}</td>
                     <td className="px-3 py-2 text-center">{row.toolDescription || "—"}</td>
-                    <td className="whitespace-nowrap px-3 py-2 text-center">{row.axisPrimary || "—"}</td>
+                    <td className="border-l border-border whitespace-nowrap px-3 py-2 text-center">{row.axisPrimary || "—"}</td>
                     <td className="whitespace-nowrap px-3 py-2 text-center">{row.axisSecondary || "—"}</td>
-                    <td className="px-3 py-2 text-center">
+                    <td className="border-l border-border px-3 py-2 text-center">
                       <BooleanIndicator value={machineLabel} />
-                  </td>
-                  <td className="px-3 py-2 text-center">
+                    </td>
+                    <td className="px-3 py-2 text-center">
                       <BooleanIndicator value={operatorLabel} />
-                  </td>
-                    <td className="px-3 py-2 whitespace-pre-wrap text-sm leading-relaxed text-center">{row.comment || ""}</td>
+                    </td>
+                    <td className="border-l border-border px-3 py-2 whitespace-pre-wrap text-sm leading-relaxed text-center">{row.comment || ""}</td>
                   </tr>
                 );
               })}

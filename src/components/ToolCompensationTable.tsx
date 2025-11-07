@@ -151,9 +151,9 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
           <table className="min-w-full divide-y divide-border text-sm">
             <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="px-3 py-2">Plats/Koord.</th>
-                <th className="px-3 py-2">Benämning</th>
-                <th className="px-3 py-2 whitespace-nowrap">Komp. Nr</th>
+                <th className="px-3 py-2 text-center">Plats/Koord.</th>
+                <th className="px-3 py-2 text-center">Benämning</th>
+                <th className="px-3 py-2 whitespace-nowrap text-center">Komp. Nr</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border bg-background">
@@ -162,9 +162,9 @@ export function ToolCompensationTable({ source }: ToolCompensationTableProps) {
                   key={`${row.location}-${row.name}`}
                   className={index % 2 === 0 ? "bg-background" : "bg-muted/30"}
                 >
-                  <td className="whitespace-nowrap px-3 py-2 font-mono text-xs text-muted-foreground">{row.location || "—"}</td>
-                  <td className="px-3 py-2">{row.name || "—"}</td>
-                  <td className="whitespace-nowrap px-3 py-2">{row.compensation || "—"}</td>
+                  <td className="whitespace-nowrap px-3 py-2 font-mono text-xs text-muted-foreground text-center">{row.location || "—"}</td>
+                  <td className="px-3 py-2 text-center">{row.name || "—"}</td>
+                  <td className="whitespace-nowrap px-3 py-2 text-center">{row.compensation || "—"}</td>
                 </tr>
               ))}
             </tbody>
